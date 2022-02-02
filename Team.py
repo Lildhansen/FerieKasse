@@ -33,6 +33,7 @@ class Team:
                 file.close()
                 break
     def TeamInFile():
+        pass
         #se om dette team er i teams.txt
 
 
