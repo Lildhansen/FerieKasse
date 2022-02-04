@@ -1,13 +1,44 @@
+from distutils.spawn import spawn
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-import Team
+from Team import Team
+from Player import Player
+import util
+import random
 
 service = Service("./chromedriver.exe")
 options = Options()
-#options.headless = True
+options.headless = True
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 driver = webdriver.Chrome(service=service, options=options)
 
-aTeam = Team.Team("Liverpool","premier-League","england","Mads",driver)
-aTeam.getTeamURL()
+def setupPlayers():
+    numOfPlayers = ""
+    players = []
+    while (util.parseIntOrNone(numOfPlayers,1,8) == None):
+        numOfPlayers = input("number of players: ")
+    numOfPlayers = int(numOfPlayers)
+    print(f"write the {numOfPlayers} players (seperated by enter)")
+    while len(players) < numOfPlayers:
+        players.append(input())
+    random.shuffle(players)
+    #create menu - dem der er valgt skal være greyed out - og når en liga ikke kan vælges skal den greyes out.
+def selectTeams(): 
+    setupPlayers()
+    #kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
+def IntiateFerieKasse():
+    pass
+
+def UpdateFerieKasse():
+    pass
+
+selectTeams()
+
+engTeam = Team("Arsenal","premier-League","england","Mads",driver)
+itaTeam = Team("Empoli","serie-a","italien","Mads",driver)
+gerTeam = Team("Hertha","bundesliga","tyskland","Mads",driver)
+spaTeam = Team("Alaves","laliga","spanien","Mads",driver)
+Mads = Player([engTeam,itaTeam,gerTeam,spaTeam])
+for team in Mads.teams:
+    print(team.name,team.Url)
