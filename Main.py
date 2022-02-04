@@ -23,7 +23,8 @@ def setupPlayers():
     while len(players) < numOfPlayers:
         players.append(input())
     random.shuffle(players)
-    #create menu - dem der er valgt skal være greyed out - og når en liga ikke kan vælges skal den greyes out.
+    #menu kunne være lidt federe her
+    #den skal dog stadig hente data fra resultat - og skrive holdene, og fjerne de hold som er taget. måske menu alligvel
 def selectTeams(): 
     setupPlayers()
     #kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
