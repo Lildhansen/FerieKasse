@@ -24,7 +24,8 @@ def setupPlayers():
     while len(players) < numOfPlayers:
         players.append(input())
     random.shuffle(players)
-    SimpleMenu(players,driver)
+    myMenu = SimpleMenu(players,driver)
+    myMenu.run()
     #menu kunne være lidt federe her
     #den skal dog stadig hente data fra resultat - og skrive holdene, og fjerne de hold som er taget. måske menu alligvel
 def selectTeams(): 
@@ -36,7 +37,8 @@ def IntiateFerieKasse():
 def UpdateFerieKasse():
     pass
 
-selectTeams()
+#selectTeams()
+SimpleMenu(["1","2","3","4"],driver).run()
 
 engTeam = Team("Arsenal","premier-League","england","Mads",driver)
 itaTeam = Team("Empoli","serie-a","italien","Mads",driver)

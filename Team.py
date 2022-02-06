@@ -1,6 +1,7 @@
 from logging import exception
 from selenium.webdriver.common.by import By
 import os
+import webdriverHelper as wdHelper
 
 import bs4, requests
 import constants as const
@@ -17,16 +18,10 @@ class Team:
         url = self.GetURLFromFile()
         if url == None:
             self.webdriver.get(f"{const.LINK}/fodbold/{self.country}/{self.league}/tabeloversigt")
-            self.acceptCookies()
+            wdHelper.acceptCookies(self.webdriver)
             allTeamRows = self.webdriver.find_elements_by_css_selector("div.ui-table__row")
             url = self.addTeamAndUrlToFileAndReturnURL(allTeamRows)
         return url
-    def acceptCookies(self):
-        #time.sleep(3)#wait for it to show up
-        try:
-            self.webdriver.find_element_by_css_selector("#onetrust-reject-all-handler").click()
-        except:
-            pass
     def addTeamAndUrlToFileAndReturnURL(self,allTeamRows):
         for row in allTeamRows:
             teamRow = row.find_element(By.CLASS_NAME, "tableCellParticipant__name")
