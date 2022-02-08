@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from Team import Team
 from Player import Player
-from menuStuff.SimpleMenu import SimpleMenu
+from menuStuff.Menu import Menu
 import util
 import random
 
@@ -24,7 +24,7 @@ def setupPlayers():
     while len(players) < numOfPlayers:
         players.append(input())
     random.shuffle(players)
-    myMenu = SimpleMenu(players,driver)
+    myMenu = Menu(players,"Select a league/country",driver)
     myMenu.run()
     #menu kunne være lidt federe her
     #den skal dog stadig hente data fra resultat - og skrive holdene, og fjerne de hold som er taget. måske menu alligvel
@@ -38,7 +38,7 @@ def UpdateFerieKasse():
     pass
 
 #selectTeams()
-SimpleMenu(["1","2","3","4"],driver).run()
+Menu(["1","2","3","4"],driver).run()
 
 engTeam = Team("Arsenal","premier-League","england","Mads",driver)
 itaTeam = Team("Empoli","serie-a","italien","Mads",driver)
