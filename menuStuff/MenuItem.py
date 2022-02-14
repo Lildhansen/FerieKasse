@@ -1,4 +1,3 @@
-from Menu import Menu
 
 class MenuItem:
     __undermenu = None

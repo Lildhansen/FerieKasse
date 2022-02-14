@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 import os
 import webdriverHelper as wdHelper
 
-import bs4, requests
 import constants as const
 import time
 class Team:

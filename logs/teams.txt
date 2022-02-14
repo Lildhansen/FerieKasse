@@ -1,4 +1,4 @@
 Arsenal,https://www.flashscore.dk/hold/arsenal/hA1Zm19f/
 Empoli,https://www.flashscore.dk/hold/empoli/0ESCnI1H/
-Hertha,https://www.flashscore.dk/hold/hertha/2y0u8Wrq/
 Alaves,https://www.flashscore.dk/hold/alaves/hxt57t2q/
+Hertha,https://www.flashscore.dk/hold/hertha/2y0u8Wrq/
