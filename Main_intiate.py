@@ -1,3 +1,5 @@
+#æøå skal fjernes når de tilføjes til txt-filer samt når de skal bruges i flashscore link(her skal de erstattes af -)
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -11,8 +13,8 @@ service = Service("./chromedriver.exe")
 options = Options()
 options.headless = True
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
-driver = webdriver.Chrome(service=service, options=options)
-
+driver = webdriver.Chrome( options=options)
+    #service=service,
 def setupPlayers():
     numOfPlayers = ""
     players = []
@@ -36,14 +38,14 @@ def IntiateFerieKasse():
 
 
 #selectTeams()
-Menu(["1","2","3","4"],"Select a league/country",driver).run()
+#Menu(["1","2","3","4"],"Select a league/country",driver).run()
 
 
-if False:
-    engTeam = Team("Arsenal","premier-League","england","Mads",driver)
-    itaTeam = Team("Empoli","serie-a","italien","Mads",driver)
-    gerTeam = Team("Hertha","bundesliga","tyskland","Mads",driver)
-    spaTeam = Team("Alaves","laliga","spanien","Mads",driver)
-    Mads = Player([engTeam,itaTeam,gerTeam,spaTeam])
-    for team in Mads.teams:
-        print(team.name,team.Url)
+
+engTeam = Team("Arsenal","premier-League","england","Mads",driver)
+itaTeam = Team("Empoli","serie-a","italien","Mads",driver)
+gerTeam = Team("Hertha","bundesliga","tyskland","Mads",driver)
+spaTeam = Team("Alaves","laliga","spanien","Mads",driver)
+Mads = Player([engTeam,itaTeam,gerTeam,spaTeam])
+for team in Mads.teams:
+    print(team.name,team.Url)

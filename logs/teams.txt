@@ -1,4 +1,5 @@
-Arsenal,https://www.flashscore.dk/hold/arsenal/hA1Zm19f/
-Empoli,https://www.flashscore.dk/hold/empoli/0ESCnI1H/
-Alaves,https://www.flashscore.dk/hold/alaves/hxt57t2q/
-Hertha,https://www.flashscore.dk/hold/hertha/2y0u8Wrq/
+Bologna,https://www.flashscore.dk/hold/bologna/0M9xNN8N/
+Atalanta,https://www.flashscore.dk/hold/atalanta/8C9JjMXu/
+AC Milan,https://www.flashscore.dk/hold/ac-milan/8Sa8HInO/
+Torino,https://www.flashscore.dk/hold/torino/MZFZnvX4/
+Juventus,https://www.flashscore.dk/hold/juventus/C06aJvIB/

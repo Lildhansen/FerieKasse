@@ -6,11 +6,10 @@ import webdriverHelper as wdHelper
 import constants as const
 import time
 class Team:
-    def __init__(self,name,league,country,player,webdriver):
+    def __init__(self,name,league,country,webdriver=None):
         self.name = name
         self.league = league
         self.country = country
-        self.player = player
         self.webdriver = webdriver
         self.Url = self.getTeamURL()
     def getTeamURL(self):
