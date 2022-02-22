@@ -4,6 +4,8 @@
 #optimeringsmuligheder:
     #når den skal finde holdene, skal den samle dem alle i lande, så den laver minimal søgninger til chrome
 
+#initiate skal kunne gøres enten gennem en fil - eller gennem en menu
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service

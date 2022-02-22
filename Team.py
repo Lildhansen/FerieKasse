@@ -8,7 +8,7 @@ import constants as const
 import time
 class Team:
     def __init__(self,name,league,country,webdriver=None):
-        self.name = name
+        self.name = util.removeInvalidLetters(name)
         self.league = league
         self.country = country.lower()
         self.webdriver = webdriver

@@ -7,5 +7,10 @@ class Player:
         pass
     def addTeam(self,team):
         self.teams.append(team)
+    def addToPlayersTeamsAndLinksFile(self):
+        file = open(r"./logs/playersTeamsAndLinks.txt","a+")
+        file.write(f"{self.name}:\n")
+        for team in self.teams:
+            file.write(f"{team.name},{team.Url}\n")
+        file.close()
 
-#kan enten definere 

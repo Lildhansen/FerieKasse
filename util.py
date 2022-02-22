@@ -1,4 +1,4 @@
-invalidLetters = "æøåÆØÅ"
+invalidLetters = "æøå"
 
 def parseIntOrNone(input,minValue=0,maxValue=0):
     output = None
@@ -13,7 +13,7 @@ def parseIntOrNone(input,minValue=0,maxValue=0):
 
 def removeInvalidLetters(myStr):
     for letter in invalidLetters:
-        if (letter in myStr):
+        if (letter in myStr.lower()):
             myStr = myStr.replace(letter,"")
     return myStr
         
