@@ -1,4 +1,8 @@
 #æøå skal fjernes når de tilføjes til txt-filer samt når de skal bruges i flashscore link(her skal de erstattes af -)
+#landene må ikke stå med stort
+
+#optimeringsmuligheder:
+    #når den skal finde holdene, skal den samle dem alle i lande, så den laver minimal søgninger til chrome
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options

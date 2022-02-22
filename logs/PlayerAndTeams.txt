@@ -1,28 +1,28 @@
 Kim:
-Chelsea,premier-league,England
-Barcelona,laliga,Spanien
-RB Leipzig,Bundesliga,Tyskland
-AGF,Superliga,Danmark
+Chelsea,premier-league,england
+Barcelona,laliga,spanien
+RB Leipzig,Bundesliga,tyskland
+AGF,Superliga,danmark
 Bologna,serie-a,italien
-OB,Superliga,Danmark
+OB,Superliga,danmark
 Emil:
-Dortmund,Bundesliga,Tyskland
+Dortmund,Bundesliga,tyskland
 Atalanta,serie-a,italien
-Real sociedad,laliga,Spanien
-Tottenham,premier-league,England
-Br-ndby IF,Superliga,Danmark
-Leicester,premier-league,England
+Real sociedad,laliga,spanien
+Tottenham,premier-league,england
+Br-ndby-IF,Superliga,danmark
+Leicester,premier-league,england
 Mads:
 Ac Milan,serie-a,italien
-FC k-benhavn,Superliga,Danmark
-Frankfurt,Bundesliga,Tyskland
-Arsenal,premier-league,England
-Valencia,laliga,Spanien
-Hoffenheim,Bundesliga,Tyskland
+fc-k-benhavn,Superliga,danmark
+Frankfurt,Bundesliga,tyskland
+Arsenal,premier-league,england
+Valencia,laliga,spanien
+Hoffenheim,Bundesliga,tyskland
 Soren:
-Fc midtjylland,Superliga,Danmark
-sevilla,laliga,Spanien
+Fc midtjylland,Superliga,danmark
+sevilla,laliga,spanien
 juventus,serie-a,italien
-Manchester Utd,premier-league,England
-Leverkusen,Bundesliga,Tyskland
+Manchester Utd,premier-league,england
+Leverkusen,Bundesliga,tyskland
 Torino,serie-a,italien
