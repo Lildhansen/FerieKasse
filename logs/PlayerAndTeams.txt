@@ -10,11 +10,11 @@ Dortmund,Bundesliga,tyskland
 Atalanta,serie-a,italien
 Real sociedad,laliga,spanien
 Tottenham,premier-league,england
-Br-ndby-IF,Superliga,danmark
+Brøndby IF,Superliga,danmark
 Leicester,premier-league,england
 Mads:
 Ac Milan,serie-a,italien
-fc-k-benhavn,Superliga,danmark
+FC København,Superliga,danmark
 Frankfurt,Bundesliga,tyskland
 Arsenal,premier-league,england
 Valencia,laliga,spanien

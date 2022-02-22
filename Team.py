@@ -2,6 +2,7 @@ from logging import exception
 from selenium.webdriver.common.by import By
 import os
 import webdriverHelper as wdHelper
+import util
 
 import constants as const
 import time
@@ -9,7 +10,7 @@ class Team:
     def __init__(self,name,league,country,webdriver=None):
         self.name = name
         self.league = league
-        self.country = country
+        self.country = country.lower()
         self.webdriver = webdriver
         self.Url = self.getTeamURL()
     def getTeamURL(self):
@@ -23,9 +24,9 @@ class Team:
     def addTeamAndUrlToFileAndReturnURL(self,allTeamRows):
         for row in allTeamRows:
             teamRow = row.find_element(By.CLASS_NAME, "tableCellParticipant__name")
-            if teamRow.get_attribute("innerHTML").lower() == self.name.lower():
+            if util.removeInvalidLetters(teamRow.get_attribute("innerHTML").lower()) == self.name.lower():
                 file = open(r"./logs/teams.txt","a+")
-                file.write(f"{teamRow.get_attribute('innerHTML')},{teamRow.get_attribute('href')}\n")
+                file.write(f"{self.name.lower()},{teamRow.get_attribute('href')}\n")
                 file.close()
                 return teamRow.get_attribute('href')
     def GetURLFromFile(self):

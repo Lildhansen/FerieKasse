@@ -1,4 +1,4 @@
-invalidLetters = "æøå"
+invalidLetters = "æøåÆØÅ"
 
 def parseIntOrNone(input,minValue=0,maxValue=0):
     output = None
