@@ -21,6 +21,8 @@ et xlsx dokument skal genereres - med spillerne og holdene - i samme stil som "f
 
 
 # hvornår / hvordan filerne skal køres
+## initiate
+    skal køre menuen hvis den .txt-fil med holdene og spillerne enten er tom eller ikke eksisterer 
 # extra shit:
     check danskerscoringer
     check specielt spillernavn scoring
