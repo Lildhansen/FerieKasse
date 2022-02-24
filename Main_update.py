@@ -19,7 +19,6 @@ from selenium.webdriver.common.by import By
 from Team import Team
 from Player import Player
 import util
-import random
 
 service = Service("./chromedriver.exe")
 options = Options()
@@ -28,8 +27,6 @@ options.add_experimental_option("excludeSwitches", ["enable-logging"])
 driver = webdriver.Chrome(service=service,options=options)
 driver.close
 
-
-#testing purposes
 players = []
 def readFromPlayerAndTeamsFile(): # dette burde nok også være i initiate
     file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
@@ -44,23 +41,12 @@ def readFromPlayerAndTeamsFile(): # dette burde nok også være i initiate
 readFromPlayerAndTeamsFile()
 
 for player in players:
-    print(player.name)
     player.addToPlayersTeamsAndLinksFile()
     
-
-
-readFromPlayerAndTeamsFile()
-def printTeams():
-    for x in players:
-        for y in x.teams:
-            print(f"{x.name} {y.Url}")
-#printTeams()
 
 
 def UpdateFerieKasse():
     pass
 
 
-
-driver.quit() #sørg for at brug den oftere
 

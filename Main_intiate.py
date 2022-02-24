@@ -40,7 +40,7 @@ def selectTeams():
 def IntiateFerieKasse():
     pass
 
-
+driver.quit()
 
 #selectTeams()
 #Menu(["1","2","3","4"],"Select a league/country",driver).run()
