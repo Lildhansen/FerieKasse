@@ -19,8 +19,7 @@ service = Service("./chromedriver.exe")
 options = Options()
 options.headless = True
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
-driver = webdriver.Chrome( options=options)
-    #service=service,
+driver = webdriver.Chrome(service=service,options=options)
 def setupPlayers():
     numOfPlayers = ""
     players = []
@@ -46,12 +45,3 @@ def IntiateFerieKasse():
 #selectTeams()
 #Menu(["1","2","3","4"],"Select a league/country",driver).run()
 
-
-
-engTeam = Team("Arsenal","premier-League","england","Mads",driver)
-itaTeam = Team("Empoli","serie-a","italien","Mads",driver)
-gerTeam = Team("Hertha","bundesliga","tyskland","Mads",driver)
-spaTeam = Team("Alaves","laliga","spanien","Mads",driver)
-Mads = Player([engTeam,itaTeam,gerTeam,spaTeam])
-for team in Mads.teams:
-    print(team.name,team.Url)
