@@ -1,17 +1,3 @@
-#todo:
-    #oprydning - sørg for at lukke connections samt filer
-    #
-
-    #find kampe
-        #find info om kampene
-    #beregn point
-        #vinder,taber,mål scoret,indbyrdes,egne hold
-    #hold styr på datoer - den skal kun regne de kampe den ikke har regnet
-    #skriv til excel
-    #send mail
-
-
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
