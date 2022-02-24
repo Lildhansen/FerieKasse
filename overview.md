@@ -71,6 +71,7 @@ sørg for at lukke **ALLE** connections samt filer
         team
         match
     måske en selvstændig class med forbindelse til webdriver
+    lav folder til tests
 
 # comments needed
 ~~Util~~
