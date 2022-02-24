@@ -1,4 +1,24 @@
-Arsenal,https://www.flashscore.dk/hold/arsenal/hA1Zm19f/
-Empoli,https://www.flashscore.dk/hold/empoli/0ESCnI1H/
-Alaves,https://www.flashscore.dk/hold/alaves/hxt57t2q/
-Hertha,https://www.flashscore.dk/hold/hertha/2y0u8Wrq/
+chelsea,https://www.flashscore.dk/hold/chelsea/4fGZN2oK/
+barcelona,https://www.flashscore.dk/hold/barcelona/SKbpVP5K/
+rb leipzig,https://www.flashscore.dk/hold/rb-leipzig/KbS1suSm/
+agf,https://www.flashscore.dk/hold/agf/OOXnKGbO/
+bologna,https://www.flashscore.dk/hold/bologna/0M9xNN8N/
+ob,https://www.flashscore.dk/hold/ob/tUXLozTN/
+dortmund,https://www.flashscore.dk/hold/dortmund/nP1i5US1/
+atalanta,https://www.flashscore.dk/hold/atalanta/8C9JjMXu/
+real sociedad,https://www.flashscore.dk/hold/real-sociedad/jNvak2f3/
+tottenham,https://www.flashscore.dk/hold/tottenham/UDg08Ohm/
+brndby if,https://www.flashscore.dk/hold/br-ndby/67R5vKqt/
+leicester,https://www.flashscore.dk/hold/leicester/KrrdAMyI/
+ac milan,https://www.flashscore.dk/hold/ac-milan/8Sa8HInO/
+fc kbenhavn,https://www.flashscore.dk/hold/fc-k-benhavn/hSPZwbEh/
+frankfurt,https://www.flashscore.dk/hold/frankfurt/8vndvXTk/
+arsenal,https://www.flashscore.dk/hold/arsenal/hA1Zm19f/
+valencia,https://www.flashscore.dk/hold/valencia/CQeaytrD/
+hoffenheim,https://www.flashscore.dk/hold/hoffenheim/hQAtP9Sl/
+fc midtjylland,https://www.flashscore.dk/hold/fc-midtjylland/8GZDmdbB/
+sevilla,https://www.flashscore.dk/hold/sevilla/h8oAv4Ts/
+juventus,https://www.flashscore.dk/hold/juventus/C06aJvIB/
+manchester utd,https://www.flashscore.dk/hold/manchester-utd/ppjDR086/
+leverkusen,https://www.flashscore.dk/hold/leverkusen/4jcj2zMd/
+torino,https://www.flashscore.dk/hold/torino/MZFZnvX4/

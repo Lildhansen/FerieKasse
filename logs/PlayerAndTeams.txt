@@ -1,0 +1,28 @@
+Kim:
+Chelsea,premier-league,england
+Barcelona,laliga,spanien
+RB Leipzig,Bundesliga,tyskland
+AGF,Superliga,danmark
+Bologna,serie-a,italien
+OB,Superliga,danmark
+Emil:
+Dortmund,Bundesliga,tyskland
+Atalanta,serie-a,italien
+Real sociedad,laliga,spanien
+Tottenham,premier-league,england
+Brøndby IF,Superliga,danmark
+Leicester,premier-league,england
+Mads:
+Ac Milan,serie-a,italien
+FC København,Superliga,danmark
+Frankfurt,Bundesliga,tyskland
+Arsenal,premier-league,england
+Valencia,laliga,spanien
+Hoffenheim,Bundesliga,tyskland
+Soren:
+Fc midtjylland,Superliga,danmark
+sevilla,laliga,spanien
+juventus,serie-a,italien
+Manchester Utd,premier-league,england
+Leverkusen,Bundesliga,tyskland
+Torino,serie-a,italien

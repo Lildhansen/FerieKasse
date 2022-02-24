@@ -1,8 +1,16 @@
 class Player:
-    def __init__(self,teams=None):
+    def __init__(self,name,teams):
+        self.name = name
         self.teams = teams 
         self.menu = None
     def getMatchesForTeams(self):
         pass
+    def addTeam(self,team):
+        self.teams.append(team)
+    def addToPlayersTeamsAndLinksFile(self):
+        file = open(r"./logs/playersTeamsAndLinks.txt","a+")
+        file.write(f"{self.name}:\n")
+        for team in self.teams:
+            file.write(f"{team.name},{team.Url}\n")
+        file.close()
 
-#kan enten definere 
