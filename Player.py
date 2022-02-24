@@ -3,10 +3,10 @@ class Player:
         self.name = name
         self.teams = teams 
         self.menu = None
-    def getMatchesForTeams(self):
-        pass
+    #how teams are to be added - by appending to the list
     def addTeam(self,team):
         self.teams.append(team)
+    #adds players and teams to the .txt-file with players, teams and URLs
     def addToPlayersTeamsAndLinksFile(self):
         file = open(r"./logs/playersTeamsAndLinks.txt","a+")
         file.write(f"{self.name}:\n")

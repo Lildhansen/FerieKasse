@@ -1,5 +1,7 @@
-invalidLetters = "æøå"
+#consts
+INVALID_LETTERS = "æøå"
 
+#parses input into an int if possible - otherwise returns None (rather than throwing an exception)
 def parseIntOrNone(input,minValue=0,maxValue=0):
     output = None
     try:
@@ -11,8 +13,9 @@ def parseIntOrNone(input,minValue=0,maxValue=0):
             return None
     return output
 
+#.txt files have issues reading æøå so these are simply removed when used for comparison and URL generation fx
 def removeInvalidLetters(myStr):
-    for letter in invalidLetters:
+    for letter in INVALID_LETTERS:
         if (letter in myStr.lower()):
             myStr = myStr.replace(letter,"")
     return myStr

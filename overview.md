@@ -54,7 +54,7 @@ ikke clear:
 # extra shit:
     check danskerscoringer
     check specielt spillernavn scoring
-
+    LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
 
 # optimeringsmuligheder:
 når den skal finde holdene, skal den samle dem alle i lande, så den laver minimal søgninger til chrome
@@ -63,9 +63,41 @@ sørg for at lukke **ALLE** connections samt filer
 # small todo
     fix casing
     add comments - til hver funktion
+    fix file locations - flyt filerne i mapper. kunne lave en for: 
+    utility stuff 
+        (constants, util, webdriverhelper)
+    classes:
+        player
+        team
+        match
+    måske en selvstændig class med forbindelse til webdriver
+
+# comments needed
+~~Util~~
+~~WebdriverHelper~~ 
+~~Team~~
+~~player~~
+~~Match~~
+Main_update
+~~Main_remove_feriekasse~~
+Main_initiate
     
 
 
+# naming conventions:
+## general naming conventions:
+    variables = camelCase
+    functions = camelCase
+    constants (defined globally) = MACRO_CASE
+## class stuff:
+    ClassName
+    classAttributes
+    classMethods
+
+## file names
+    main files = Main_snake_case
+    ClassFiles = PascalCase
+    other files = camelCase
 
 
 
