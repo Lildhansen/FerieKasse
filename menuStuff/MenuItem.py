@@ -1,4 +1,3 @@
-
 class MenuItem:
     __undermenu = None
     def __init__(self,title):
