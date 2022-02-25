@@ -79,7 +79,7 @@ sørg for at lukke **ALLE** connections samt filer
 ~~Team~~
 ~~player~~
 ~~Match~~
-Main_update
+~~Main_update~~
 ~~Main_remove_feriekasse~~
 Main_initiate
     

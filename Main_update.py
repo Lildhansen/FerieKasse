@@ -14,6 +14,7 @@ driver = webdriver.Chrome(service=service,options=options)
 driver.close
 
 players = []
+#create all players and add their teams based on playersandteams.txt
 def readFromPlayerAndTeamsFile(): # dette burde nok også være i initiate
     file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
     for line in file.readlines(): 
