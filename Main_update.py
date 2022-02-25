@@ -1,7 +1,9 @@
+#libraries - standard or pip
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+#own modules
 from Team import Team
 from Player import Player
 import util
@@ -14,6 +16,7 @@ driver = webdriver.Chrome(service=service,options=options)
 driver.close
 
 players = []
+#create all players and add their teams based on playersandteams.txt
 def readFromPlayerAndTeamsFile(): # dette burde nok også være i initiate
     file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
     for line in file.readlines(): 
