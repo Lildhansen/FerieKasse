@@ -11,6 +11,6 @@ class Player:
         file = open(r"./logs/playersTeamsAndLinks.txt","a+")
         file.write(f"{self.name}:\n")
         for team in self.teams:
-            file.write(f"{team.name},{team.Url}\n")
+            file.write(f"{team.name},{team.url}\n")
         file.close()
 

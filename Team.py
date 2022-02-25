@@ -13,10 +13,10 @@ class Team:
         self.league = league
         self.country = country.lower()
         self.webdriver = webdriver
-        self.Url = self.getTeamURL()
+        self.url = self.getTeamURL()
     #get URL for a team - either from the team.txt or with the webdriver
     def getTeamURL(self):
-        url = self.GetURLFromFile()
+        url = self.getURLFromFile()
         if url == None:
             self.webdriver.get(f"{const.LINK}/fodbold/{self.country}/{self.league}/tabeloversigt")
             wdHelper.acceptCookies(self.webdriver)
@@ -24,7 +24,7 @@ class Team:
             url = self.addTeamAndUrlToFileAndReturnURL(allTeamRows)
         return url
     #gets the team's URL from "teams.txt"
-    def GetURLFromFile(self):
+    def getURLFromFile(self):
         if not os.path.isfile(r"./logs/teams.txt"):
             return None
         file = open(r"./logs/teams.txt","r")

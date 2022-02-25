@@ -55,7 +55,7 @@ ikke clear:
     check danskerscoringer
     check specielt spillernavn scoring
     LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
-
+    kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
 # optimeringsmuligheder:
 når den skal finde holdene, skal den samle dem alle i lande, så den laver minimal søgninger til chrome
 sørg for at lukke **ALLE** connections samt filer
@@ -72,6 +72,8 @@ sørg for at lukke **ALLE** connections samt filer
         match
     måske en selvstændig class med forbindelse til webdriver
     lav folder til tests
+    fix menu - både comments og mere 
+        og hvordan kan de importere ud af filen
 
 # comments needed
 ~~Util~~
@@ -81,7 +83,7 @@ sørg for at lukke **ALLE** connections samt filer
 ~~Match~~
 ~~Main_update~~
 ~~Main_remove_feriekasse~~
-Main_initiate
+~~Main_initiate~~
     
 
 
