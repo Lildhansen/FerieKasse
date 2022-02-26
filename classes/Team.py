@@ -3,9 +3,9 @@ from selenium.webdriver.common.by import By
 import os
 
 #own modules
-import webdriverHelper as wdHelper
-import util
-import constants as const
+import utilities.webdriverHelper as wdHelper
+import utilities.util as util
+import utilities.constants as const
 
 class Team:
     def __init__(self,name,league,country,webdriver=None):
