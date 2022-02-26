@@ -6,9 +6,9 @@ import random
 import os
 #own modules
 from menuStuff.Menu import Menu
-import util
-from Player import Player
-from Team import Team
+import utilities.util as util
+from classes.Player import Player
+from classes.Team import Team
 
 service = Service("./chromedriver.exe")
 options = Options()
@@ -41,6 +41,9 @@ def setupFileInitiation():
             strippedSplitLine = util.removeInvalidLetters(line.rstrip()).split(",")
             players[-1].addTeam(Team(strippedSplitLine[0],strippedSplitLine[1],strippedSplitLine[2],driver))  
     driver.quit()
+    file = open(r"./logs/playersTeamsAndLinks.txt","a+")
+    file.truncate(0)
+    file.close
     for player in players:
         player.addToPlayersTeamsAndLinksFile()
 
@@ -55,4 +58,7 @@ driver.quit()
 
 
 if __name__ == "__main__":
+    #if excel sheet er tom - eller slettet:
+        #print "a round has already been started" - or something
+        #return
     initiateFerieKasse()

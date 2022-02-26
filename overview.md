@@ -66,13 +66,6 @@ sørg for at lukke **ALLE** connections samt filer
 # small todo
     fix casing
     add comments - til hver funktion
-    fix file locations - flyt filerne i mapper. kunne lave en for: 
-    utility stuff 
-        (constants, util, webdriverhelper)
-    classes:
-        player
-        team
-        match
     måske en selvstændig class med forbindelse til webdriver
     lav folder til tests
     fix menu - både comments og mere 
@@ -107,8 +100,8 @@ sørg for at lukke **ALLE** connections samt filer
 
 
 
-
-
+# notes:
+when reading from "playersTeamsAndLinks.txt" skip the last newline
 
 
 
@@ -121,7 +114,7 @@ sørg for at lukke **ALLE** connections samt filer
 **bold**
 `code here`
 ```python
-def thisIsCodeblock():
+def isCodeblock():
     return True
 ```
 [link](www.thisisalink.com)
