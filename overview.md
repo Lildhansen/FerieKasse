@@ -1,5 +1,6 @@
 # initiate
-skal have alle holdene fra de 5 ligaer et eller andet sted
+skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
+skal have alle holdene fra de 5 ligaer et eller andet sted - til indsætning i menuen
 Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med holdene og spillerne i formatet:
     spiller1:
     hold1,liga1,land1
@@ -7,7 +8,7 @@ Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med hol
     ...
     spiller2
     ... etc
-denne .txt fil så enten konverteres (eller en ny skal genereres) med spillerne, holdene, og URL i formatet:
+denne .txt fil skal så enten konverteres (eller en ny skal genereres (nok en ny)) med spillerne, holdene, og URL i formatet:
     spiller1:
     hold1,URL1
     hold2,URL2
@@ -27,12 +28,14 @@ for hver spiller
                 vinder,taber,mål scoret,indbyrdes,egne hold
                 evt. hvis hold har vundet - skip den
                     medmindre målscorene skal gemmes.
-                    på den måde sikrer vi at indbyrdes hold ikke tælles for begge hold
+                    på den måde sikrer vi at indbyrdes kampe ikke tælles for begge hold
     opdater datoer
     skriv til excel
         sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
     send mail
+        hver uge/anden uge / måned
 # remove
+skal have en "are you sure you want to remove"
 clear:
     excel sheet
     players and teams / players and teams and links
