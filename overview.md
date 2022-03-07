@@ -8,7 +8,7 @@ Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med hol
     ...
     spiller2
     ... etc
-denne .txt fil skal så enten konverteres (eller en ny skal genereres (nok en ny)) med spillerne, holdene, og URL i formatet:
+denne .txt fil skal så genereres med spillerne, holdene, og URL i formatet:
     spiller1:
     hold1,URL1
     hold2,URL2
