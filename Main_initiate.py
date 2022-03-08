@@ -9,6 +9,7 @@ from menuStuff.Menu import Menu
 import utilities.util as util
 from classes.Player import Player
 from classes.Team import Team
+from Excel import Excel
 
 service = Service("./chromedriver.exe")
 options = Options()
@@ -16,10 +17,11 @@ options.headless = True
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 driver = webdriver.Chrome(service=service,options=options)
 
+players = []
+
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
     numOfPlayers = ""
-    players = []
     while (util.parseIntOrNone(numOfPlayers,1,8) == None):
         numOfPlayers = input("number of players: ")
     numOfPlayers = int(numOfPlayers)
@@ -32,7 +34,6 @@ def setupMenuInitiation():
 
 #setting up the feriekasse with the existence of a PlayerAndTeams.txt-file 
 def setupFileInitiation():
-    players = []
     file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
     for line in file.readlines(): 
         if ":" in line.lower():
@@ -53,12 +54,17 @@ def initiateFerieKasse():
         setupFileInitiation()
     else:
         setupMenuInitiation()
+    myExcel = Excel(players)
+    myExcel.deleteExcelFile() #should not to this in the end - or maybe
+    myExcel.setupExcelFile()
+    
+
 
 driver.quit()
 
 
 if __name__ == "__main__":
-    #if excel sheet er tom - eller slettet:
+    #if (not) excel sheet er tom - eller slettet:
         #print "a round has already been started" - or something
         #return
     initiateFerieKasse()
