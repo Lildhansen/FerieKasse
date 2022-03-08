@@ -9,8 +9,9 @@ import os
 
 class Excel:
     def __init__(self,players=None):
-        self.players = []
+        self.players = players
         if players == None:
+            self.players = []
             self.__getPlayers()
     def __getPlayers(self):#for testing purposes
         file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
@@ -34,7 +35,7 @@ class Excel:
             ws.cell(row,column,player.name)
             for team in player.teams:
                 row += 1
-                ws.cell(row,column,team) #when using real one this should be team.name instead
+                ws.cell(row,column,team.name) #when testing internally this should be just team (not team.name) instead
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
@@ -53,11 +54,6 @@ class Excel:
         wb.save("Feriekasse.xlsx")
         wb.close()
 
-myExcel = Excel()
-myExcel.deleteExcelFile()
-myExcel.setupExcelFile()
-if (False):
-    for x in myExcel.players:
-        print(x.name)
-        for y in x.teams:
-            print(y)
+#myExcel = Excel()
+#myExcel.deleteExcelFile()
+#myExcel.setupExcelFile()

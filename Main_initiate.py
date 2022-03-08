@@ -55,13 +55,16 @@ def initiateFerieKasse():
     else:
         setupMenuInitiation()
     myExcel = Excel(players)
+    myExcel.deleteExcelFile() #should not to this in the end - or maybe
+    myExcel.setupExcelFile()
+    
 
 
 driver.quit()
 
 
 if __name__ == "__main__":
-    #if excel sheet er tom - eller slettet:
+    #if (not) excel sheet er tom - eller slettet:
         #print "a round has already been started" - or something
         #return
     initiateFerieKasse()

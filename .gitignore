@@ -1,5 +1,6 @@
-#my logs:
+#my logs + excel file:
 .txt
+/Feriekasse.xlsx
 
 # config:
 /app.config
