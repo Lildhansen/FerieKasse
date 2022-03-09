@@ -8,15 +8,15 @@ Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med hol
     ...
     spiller2
     ... etc
-denne .txt fil skal så enten konverteres (eller en ny skal genereres (nok en ny)) med spillerne, holdene, og URL i formatet:
+denne .txt fil skal så genereres med spillerne, holdene, og URL i formatet:
     spiller1:
     hold1,URL1
     hold2,URL2
     ...
     spiller2:
     ... etc
-et xlsx dokument skal genereres - med spillerne og holdene - i samme stil som "feriekasse 2" (evt kunne den farve med landene/ligaerne som den gør nu)
-lav .txt med datoer/uger der er covered
+~~et xlsx dokument skal genereres - med spillerne og holdene - i samme stil som "feriekasse 2"~~ (evt kunne den farve med landene/ligaerne som den gør nu)
+~~lav .txt med datoer/uger der er covered~~
 evt. mail med holdene til alle spillerne
 # update
 for hver spiller
@@ -47,6 +47,7 @@ ikke clear:
 - .txt format generes i rigtig format (find linjer og tjek, samt sørg for der ikke er extra \n)
 - korrekt pointtælling
 - korrekt excelskrivning
+    - ~~indsættes i rigtig kolonne~~
 - mail sendes ordentligt - rigtig vedhæftning, connection til SMTP, rigtig modtagere
 
 
