@@ -1,6 +1,5 @@
 import utilities.constants as const
 from selenium.webdriver.common.by import By
-import utilities.webdriverHelper as wdHelper
 import os
 from .MenuItem import MenuItem
 import keyboard
@@ -28,7 +27,7 @@ class Menu:
         return options
     def addUnderMenu(self,country,league,i):
         self.webDriver.get(f"{const.LINK}/fodbold/{country}/{league}/tabeloversigt")
-        wdHelper.acceptCookies(self.webDriver)
+        self.webDriver.acceptCookies()
         allTeamRows = self.webDriver.find_elements_by_css_selector("div.ui-table__row")
         for row in allTeamRows:
             teamRow = row.find_element(By.CLASS_NAME, "tableCellParticipant__name")

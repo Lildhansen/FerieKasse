@@ -1,7 +1,4 @@
 #libraries - standard or pip
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 import random
 import os
 #own modules
@@ -10,12 +7,9 @@ import utilities.util as util
 from classes.Player import Player
 from classes.Team import Team
 from Excel import Excel
+from utilities.Webdriver import Webdriver
 
-service = Service("./chromedriver.exe")
-options = Options()
-options.headless = True
-options.add_experimental_option("excludeSwitches", ["enable-logging"])
-driver = webdriver.Chrome(service=service,options=options)
+driver = Webdriver()
 
 players = []
 
