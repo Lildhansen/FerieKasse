@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 import os
 
 #own modules
-import utilities.webdriverHelper as wdHelper
 import utilities.util as util
 import utilities.constants as const
 
@@ -18,10 +17,7 @@ class Team:
     def getTeamURL(self):
         url = self.getURLFromFile()
         if url == None:
-            self.webdriver.get(f"{const.LINK}/fodbold/{self.country}/{self.league}/tabeloversigt")
-            wdHelper.acceptCookies(self.webdriver)
-            allTeamRows = self.webdriver.find_elements_by_css_selector("div.ui-table__row")
-            url = self.addTeamAndUrlToFileAndReturnURL(allTeamRows)
+            url = self.getURLWithWebdriver()
         return url
     #gets the team's URL from "teams.txt"
     def getURLFromFile(self):
@@ -32,6 +28,12 @@ class Team:
             if self.name.lower() in line.lower():
                 return line[line.index(",")+1:line.index("\n"):]
         return None
+    #gets the team's URL with the webdriver
+    def getURLWithWebdriver(self):
+        self.webdriver.get(f"{const.LINK}/fodbold/{self.country}/{self.league}/tabeloversigt")
+        self.webdriver.acceptCookies()
+        allTeamRows = self.webdriver.find_elements_by_css_selector("div.ui-table__row")
+        return self.addTeamAndUrlToFileAndReturnURL(allTeamRows)
     #adds the "team,URL" to the "teams.txt"-file for later use
     #this teams.txt serves as a database for the teams already used, making it easier
     # when a new iteration is run - avoiding that every team is recovered with the driver again
