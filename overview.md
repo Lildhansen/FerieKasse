@@ -60,6 +60,7 @@ ikke clear:
     check specielt spillernavn scoring
     LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
+    makefil?
 # optimeringsmuligheder:
 når den skal finde holdene, skal den samle dem alle i lande, så den laver minimal søgninger til chrome
 sørg for at lukke **ALLE** connections samt filer
