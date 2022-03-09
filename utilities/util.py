@@ -22,7 +22,8 @@ def removeInvalidLetters(myStr):
         
 #for excelfile
 #number is always at least 1
-def numberToCharValue(number):
+#max working output = ZZ
+def numberToExcelColumn(number):
     result = ""
     chars = " ABCDEFGHIJKLMNOPQRSTUVWXYZ" #first blank space is intended
     while number > len(chars)-1:
@@ -30,9 +31,11 @@ def numberToCharValue(number):
             nextLetterIndex = chars.index(result[-1])+1
             if nextLetterIndex == len(chars):
                 nextLetterIndex = 1
-            result = result[1:-2] + chars[nextLetterIndex]
+            result = result[1:-1] + chars[nextLetterIndex]
+            number -= len(chars)-1
         else:
             result += chars[1]
             number -= len(chars)-1
-    result += chars[number]
+    if (number != 0):
+        result += chars[number]
     return result

@@ -47,6 +47,7 @@ ikke clear:
 - .txt format generes i rigtig format (find linjer og tjek, samt sørg for der ikke er extra \n)
 - korrekt pointtælling
 - korrekt excelskrivning
+    - ~~indsættes i rigtig kolonne~~
 - mail sendes ordentligt - rigtig vedhæftning, connection til SMTP, rigtig modtagere
 
 

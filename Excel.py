@@ -46,7 +46,7 @@ class Excel:
                 row += 1
                 ws.cell(row,column,0)
             row += 1
-            ws.cell(row,column,f"=SUM({util.numberToCharValue(column)}{row-len(player.teams)}:{util.numberToCharValue(column)}{row-1})")
+            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
 
