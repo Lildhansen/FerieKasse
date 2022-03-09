@@ -26,7 +26,13 @@ def numberToCharValue(number):
     result = ""
     chars = " ABCDEFGHIJKLMNOPQRSTUVWXYZ" #first blank space is intended
     while number > len(chars)-1:
-        result += chars[1]
-        number -= len(chars)-1
+        if result != "":
+            nextLetterIndex = chars.index(result[-1])+1
+            if nextLetterIndex == len(chars):
+                nextLetterIndex = 1
+            result = result[1:-2] + chars[nextLetterIndex]
+        else:
+            result += chars[1]
+            number -= len(chars)-1
     result += chars[number]
     return result
