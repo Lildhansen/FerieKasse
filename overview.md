@@ -16,7 +16,7 @@ denne .txt fil skal så genereres med spillerne, holdene, og URL i formatet:
     spiller2:
     ... etc
 ~~et xlsx dokument skal genereres - med spillerne og holdene - i samme stil som "feriekasse 2"~~ (evt kunne den farve med landene/ligaerne som den gør nu)
-lav .txt med datoer/uger der er covered
+~~lav .txt med datoer/uger der er covered~~
 evt. mail med holdene til alle spillerne
 # update
 for hver spiller
@@ -47,6 +47,7 @@ ikke clear:
 - .txt format generes i rigtig format (find linjer og tjek, samt sørg for der ikke er extra \n)
 - korrekt pointtælling
 - korrekt excelskrivning
+    - ~~indsættes i rigtig kolonne~~
 - mail sendes ordentligt - rigtig vedhæftning, connection til SMTP, rigtig modtagere
 
 
