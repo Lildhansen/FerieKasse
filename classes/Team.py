@@ -33,7 +33,6 @@ class Team:
         self.webdriver.get(f"{const.LINK}/fodbold/{self.country}/{self.league}/tabeloversigt")
         self.webdriver.acceptCookies()
         allTeamRows = self.webdriver.find_elements_by_css_selector("div.ui-table__row")
-        print(allTeamRows)
         return self.addTeamAndUrlToFileAndReturnURL(allTeamRows)
     #adds the "team,URL" to the "teams.txt"-file for later use
     #this teams.txt serves as a database for the teams already used, making it easier
