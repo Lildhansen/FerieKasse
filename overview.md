@@ -106,7 +106,9 @@ sørg for at lukke **ALLE** connections samt filer
 when reading from "playersTeamsAndLinks.txt" skip the last newline
 
 
-
+# nice to haves:
+- send mail (both when initiation and each week(or month or some defined timeframe))
+- menu initiation
 
 
 
