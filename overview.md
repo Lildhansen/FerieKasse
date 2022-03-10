@@ -49,7 +49,7 @@ ikke clear:
 - korrekt excelskrivning
     - ~~indsættes i rigtig kolonne~~
 - mail sendes ordentligt - rigtig vedhæftning, connection til SMTP, rigtig modtagere
-
+- **Kan ikke teste for webdriver**
 
 # hvornår / hvordan filerne skal køres
 ## initiate
