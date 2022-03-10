@@ -5,14 +5,20 @@ import os
 #own modules
 import utilities.util as util
 import utilities.constants as const
-
+from classes.Match import Match
+from classes.Match import IndbyrdesMatch
 class Team:
-    def __init__(self,name,league,country,webdriver=None):
+    def __init__(self,name,league=None,country="",webdriver=None,url=None):
         self.name = util.removeInvalidLetters(name)
         self.league = league
         self.country = country.lower()
         self.webdriver = webdriver
-        self.url = self.getTeamURL()
+        if url == None:
+            self.url = self.getTeamURL()
+        else:
+            self.url = url
+        self.points = 0 #this will be changed with the main_update
+        self.currentMatch = None
     #get URL for a team - either from the team.txt or with the webdriver
     def getTeamURL(self):
         url = self.getURLFromFile()
@@ -45,7 +51,9 @@ class Team:
                 file.write(f"{self.name.lower()},{teamRow.get_attribute('href')}\n")
                 file.close()
                 return teamRow.get_attribute('href')
-
+    def getMatch():
+        pass
+        #should return a normal match object.
 
     
 
