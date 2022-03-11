@@ -2,6 +2,7 @@
 skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
 skal have alle holdene fra de 5 ligaer et eller andet sted - til indsætning i menuen
 Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med holdene og spillerne i formatet:
+**note: spillere må ikke indeholde ,** 
     spiller1:
     hold1,liga1,land1
     hold2,liga2,land2
