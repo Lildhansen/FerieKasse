@@ -6,8 +6,5 @@ class Match:
         self.awayGoals = awayGoals
     #should add more attributes
 
-class IndbyrdesMatch(Match): ##what is this called in english??
-    def __init__(self, homeTeam, homeGoals, awayTeam, awayGoals):
-        super().__init__(homeTeam, homeGoals, awayTeam, awayGoals)
-##match kunne have en subclass - indbyrdesMatch - som så beregnede på samme måde - men med x2
-#på den måde kunne alt beregningen ske i match objekterne    
+#match skal beregnes og i player skal vi derefter - måske - gange med 0 eller 2. not sure hvor vi ganger med 2 henne - burde nok gøres i
+#main_update
