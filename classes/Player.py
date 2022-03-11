@@ -17,7 +17,7 @@ class Player:
         file.close()
     def updateTeamPoints(self):
         for team in self.teams:
-            team.getMatch()
+            team.updatePointsForMatch()
             #now if this match is versus one of its his own teams - make sure nothing happens with that match
             #now if this match is versus some of the other players matches - creathe the indbyrdesMatch class with these parameters
             #otherwise just create it normally with match - who should have a method "calculatePoints"

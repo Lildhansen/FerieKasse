@@ -18,7 +18,7 @@ class Team:
         else:
             self.url = url
         self.points = 0 #this will be changed with the main_update
-        self.currentMatch = None
+        self.currentMatches = []
     #get URL for a team - either from the team.txt or with the webdriver
     def getTeamURL(self):
         url = self.getURLFromFile()
@@ -51,9 +51,11 @@ class Team:
                 file.write(f"{self.name.lower()},{teamRow.get_attribute('href')}\n")
                 file.close()
                 return teamRow.get_attribute('href')
-    def getMatch():
-        pass
-        #should return a normal match object.
+    def updatePointsForMatches():
+        
+        ##her skal der findes alle matches i denne uge - og på den måde sørge for at få alle med - og ingen duplicates
+        
+        
 
     
 

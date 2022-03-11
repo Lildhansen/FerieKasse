@@ -22,8 +22,14 @@ def getAllPlayers():
  
 def UpdateFerieKasse():
     players = getAllPlayers()
+    file = open("./logs/WeeksCovered.txt","r")
+    ##skal laves et check så den når igennem alle kampe i alle uger - måske nærmere et count for hver hold for hvor mange kampe
+    # den er kørt igennem
+    #men fuck, den skal ikke køre cl og andre ligaere igennem.
+    #og hvordan holder jeg styr på ugerne????
     for player in players:
         player.updateTeamPoints()
+
 
 if __name__ == "__main__":
     UpdateFerieKasse()
