@@ -4,14 +4,14 @@ import os
 #own modules
 from menuStuff.Menu import Menu
 import utilities.util as util
-from classes.Player import Player
+from classes.League import League
 from classes.Team import Team
 from Excel import Excel
 from utilities.Webdriver import Webdriver
 
 driver = Webdriver()
 
-players = []
+leagues = []
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
@@ -28,15 +28,17 @@ def setupMenuInitiation():
 
 #setting up the feriekasse with the existence of a PlayerAndTeams.txt-file 
 def setupFileInitiation():
-    file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
+    file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
     for line in file.readlines(): 
+        strippedSplitLine = ""
         if ":" in line.lower():
-            players.append(Player((line.rstrip()).strip(":"),[]))
+            strippedSplitLine = (line.rstrip()).strip(":").split(",")
+            leagues.append(leagues(strippedSplitLine[0],strippedSplitLine[1],[],None))
         else:
             strippedSplitLine = util.removeInvalidLetters(line.rstrip()).split(",")
-            players[-1].addTeam(Team(strippedSplitLine[0],strippedSplitLine[1],strippedSplitLine[2],driver))  
+            leagues[-1].teams.append(Team(strippedSplitLine[0],strippedSplitLine[1]))
     driver.quit()
-    file = open(r"./logs/playersTeamsAndLinks.txt","a+") #this is not unreachable lol- dunno why it says so
+    file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
     file.truncate(0)
     file.close
     for player in players:

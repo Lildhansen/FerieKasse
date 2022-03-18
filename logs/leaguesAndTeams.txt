@@ -1,0 +1,29 @@
+premier-league,england:
+Chelsea,Kim
+Leicester,Emil
+Tottenham,Emil
+Arsenal,Mads
+Manchester utd, Soren
+Bundesliga,tyskland:
+RB leipzig,Kim
+Dortmund,Emil
+Frankfurt,Mads
+Hoffenheim,Mads
+Leverkusen,Soren
+laliga,spanien:
+Barcelona,Kim
+Real sociedad,Emil
+Valencia,Mads
+sevilla,Soren
+serie-a,italien:
+Bologna,Kim
+Atalanta,Emil
+Ac Milan,Mads
+juventus,Soren
+Torino,Soren
+Superliga,danmark:
+OB,Kim
+AGF,Kim
+Brøndby IF,Emil
+FC København,Mads
+FC midtjylland,Soren
