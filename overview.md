@@ -1,3 +1,12 @@
+####
+den skal tage holdene i samme liga på samme tid. 
+og så skal den gemme den sidste dato den tog - og som backup den sidste kamp (hvis flere kampe spilles den dag)
+
+
+
+####
+
+
 # initiate
 skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
 skal have alle holdene fra de 5 ligaer et eller andet sted - til indsætning i menuen
