@@ -9,7 +9,6 @@ from classes.Team import Team
 from Excel import Excel
 from utilities.Webdriver import Webdriver
 
-driver = Webdriver()
 
 leagues = []
 
@@ -33,17 +32,15 @@ def setupFileInitiation():
         strippedSplitLine = ""
         if ":" in line.lower():
             strippedSplitLine = (line.rstrip()).strip(":").split(",")
-            leagues.append(leagues(strippedSplitLine[0],strippedSplitLine[1],[],None))
+            leagues.append(League(strippedSplitLine[0],strippedSplitLine[1]))
         else:
             strippedSplitLine = util.removeInvalidLetters(line.rstrip()).split(",")
             leagues[-1].teams.append(Team(strippedSplitLine[0],strippedSplitLine[1]))
-    driver.quit()
     file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
     file.truncate(0)
     file.close
-    for player in players:
-        player.addToPlayersTeamsAndLinksFile()
-
+    for league in leagues:
+        league.addToLeaguesTeamsAndLinksFile()
 def setupWeeksCoveredFile():
     file = open("./logs/WeeksCovered.txt","w+")
     file.close() 
@@ -51,18 +48,17 @@ def setupWeeksCoveredFile():
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
-    if (os.path.isfile(r"./logs/PlayerAndTeams.txt") and os.path.getsize(r"./logs/PlayerAndTeams.txt") > 0):
+    if (os.path.isfile(r"./logs/leaguesAndTeams.txt") and os.path.getsize(r"./logs/leaguesAndTeams.txt") > 0):
         setupFileInitiation()
     else:
-        setupMenuInitiation()
-    myExcel = Excel(players)
-    myExcel.deleteExcelFile() #should not to this in the end - or maybe
-    myExcel.setupExcelFile()
+        pass
+        #setupMenuInitiation()
+    myExcel = Excel(leagues)
+    #myExcel.deleteExcelFile() #should not to this in the end - or maybe
+    #myExcel.setupExcelFile()
     setupWeeksCoveredFile()
     
 
-
-driver.quit()
 
 
 if __name__ == "__main__":

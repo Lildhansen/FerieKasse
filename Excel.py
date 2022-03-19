@@ -8,19 +8,20 @@ import os
 #import xlsxwriter
 
 class Excel:
-    def __init__(self,players=None):
-        self.players = players
-        if players == None:
-            self.players = []
-            self.__getPlayers()
-    def __getPlayers(self):#for testing purposes
-        file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
+    def __init__(self,leagues):
+        self.leagues = leagues
+        self.playersTeamsDict = {}
+        self.__getPlayersTeams()
+    def __getPlayersTeams(self):
+        file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
         for line in file.readlines():
-            if ":" in line.lower():
-                self.players.append(Player((line.rstrip()).strip(":"),[]))
+            if ":" in line:
+                continue
             else:
-                strippedSplitLine = util.removeInvalidLetters(line.rstrip()).split(",")
-                self.players[-1].addTeam(strippedSplitLine[0])
+                splitLine = util.removeInvalidLetters(line.split(","))
+                if not (self.playersTeamsDict.has_key(splitLine[1])):
+                    self.playersTeamsDict[splitLine[1]] = []
+                self.playersTeamsDict[splitLine[1]].append(splitLine[0])
     def deleteExcelFile(self):
         if (os.path.isfile("Feriekasse.xlsx")):
             os.remove("Feriekasse.xlsx")
@@ -30,7 +31,7 @@ class Excel:
         ws.title = "Feriekasse"
         row = 1
         column = 1
-        for player in self.players:
+        for player in self.playersTeamsDict: #todo - fix skrivning til excel (håber __getPlayersTeams works as intended)
             #first column set
             ws.cell(row,column,player.name)
             for team in player.teams:
