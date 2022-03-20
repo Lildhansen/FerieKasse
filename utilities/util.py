@@ -39,3 +39,8 @@ def numberToExcelColumn(number):
     if (number != 0):
         result += chars[number]
     return result
+
+
+def compareFlashscoreDates(date1,date2):
+    #hvis det er efter måned 7 skal årstallet sættes til et år før
+    pass

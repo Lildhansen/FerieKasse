@@ -3,7 +3,7 @@ Chelsea,Kim
 Leicester,Emil
 Tottenham,Emil
 Arsenal,Mads
-Manchester utd, Soren
+Manchester utd,Soren
 Bundesliga,https://www.flashscore.dk/fodbold/tyskland/Bundesliga/resultater/:
 RB leipzig,Kim
 Dortmund,Emil

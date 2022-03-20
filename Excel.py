@@ -18,10 +18,12 @@ class Excel:
             if ":" in line:
                 continue
             else:
-                splitLine = util.removeInvalidLetters(line.split(","))
-                if not (self.playersTeamsDict.has_key(splitLine[1])):
+                splitLine = (util.removeInvalidLetters(line)).split(",")
+                if not (splitLine[1] in self.playersTeamsDict):
                     self.playersTeamsDict[splitLine[1]] = []
                 self.playersTeamsDict[splitLine[1]].append(splitLine[0])
+        for player,teams in self.playersTeamsDict.items():
+            print(player,teams)
     def deleteExcelFile(self):
         if (os.path.isfile("Feriekasse.xlsx")):
             os.remove("Feriekasse.xlsx")
@@ -31,23 +33,23 @@ class Excel:
         ws.title = "Feriekasse"
         row = 1
         column = 1
-        for player in self.playersTeamsDict: #todo - fix skrivning til excel (håber __getPlayersTeams works as intended)
+        for player,teams in self.playersTeamsDict.items(): #todo - fix skrivning til excel (håber __getPlayersTeams works as intended)
             #first column set
-            ws.cell(row,column,player.name)
-            for team in player.teams:
+            ws.cell(row,column,player)
+            for team in teams:
                 row += 1
-                ws.cell(row,column,team.name) #when testing internally this should be just team (not team.name) instead
+                ws.cell(row,column,team) #when testing internally this should be just team (not team.name) instead
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
             row = 1
             column += 1
-            ws.cell(row,column,"Point")
-            for team in player.teams:
+            ws.cell(row,column,"Point:")
+            for team in teams:
                 row += 1
                 ws.cell(row,column,0)
             row += 1
-            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
+            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
 

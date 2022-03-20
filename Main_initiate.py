@@ -8,6 +8,7 @@ from classes.League import League
 from classes.Team import Team
 from Excel import Excel
 from utilities.Webdriver import Webdriver
+import helperMain
 
 
 leagues = []
@@ -27,21 +28,14 @@ def setupMenuInitiation():
 
 #setting up the feriekasse with the existence of a PlayerAndTeams.txt-file 
 def setupFileInitiation():
-    file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
-    for line in file.readlines(): 
-        strippedSplitLine = ""
-        if ":" in line.lower():
-            strippedSplitLine = (line.rstrip()).strip(":").split(",")
-            leagues.append(League(strippedSplitLine[0],strippedSplitLine[1]))
-        else:
-            strippedSplitLine = util.removeInvalidLetters(line.rstrip()).split(",")
-            leagues[-1].teams.append(Team(strippedSplitLine[0],strippedSplitLine[1]))
+    leagues = helperMain.getAllLeagues()
     file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
     file.truncate(0)
     file.close
     for league in leagues:
         league.addToLeaguesTeamsAndLinksFile()
-def setupWeeksCoveredFile():
+
+def setupWeeksCoveredForEachLeagueFile():
     file = open("./logs/WeeksCovered.txt","w+")
     file.close() 
 
@@ -54,9 +48,9 @@ def initiateFerieKasse():
         pass
         #setupMenuInitiation()
     myExcel = Excel(leagues)
-    #myExcel.deleteExcelFile() #should not to this in the end - or maybe
-    #myExcel.setupExcelFile()
-    setupWeeksCoveredFile()
+    myExcel.deleteExcelFile() #should not to this in the end - or maybe
+    myExcel.setupExcelFile()
+    setupWeeksCoveredForEachLeagueFile()
     
 
 
