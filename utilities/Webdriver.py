@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 
@@ -25,15 +26,22 @@ class Webdriver:
             self.driver.find_element_by_css_selector("#onetrust-reject-all-handler").click()
         except:
             pass
-    #closes the webdriver
+    #clicks the "vis flere kampe"-button on flash score until all matches are shown
     def showAllMatches(self):
+        self.acceptCookies()
         while True:
-            time.sleep(2)
-            showMoreButton = self.driver.find_element_by_css_selector("#live-table > div.event.event--results > div > div > a")
-            print(showMoreButton)
-            #den skal se om den kan finde den fucking knap
-            #if showMoreButton
-        
+            showMoreButton = []
+            i = 0
+            while i < 10 or showMoreButton == []:
+                time.sleep(0.3)
+                i += 1
+                showMoreButton = self.driver.find_elements_by_css_selector("#live-table > div.event.event--results > div > div > a")
+            if showMoreButton == []:
+                return
+            actions = ActionChains(self.driver)
+            actions.move_to_element(showMoreButton[0]).perform()
+            showMoreButton[0].click()
+    #closes the webdriver
     def quit(self):
         self.driver.quit()
 

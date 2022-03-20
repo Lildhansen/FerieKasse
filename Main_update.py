@@ -15,7 +15,10 @@ def UpdateFerieKasse():
     #file = open("./logs/WeeksCovered.txt","r")
     for league in leagues:
         driver.goToUrl(league.url)
-        driver.showAllMatches()
+        driver.showAllMatches() #er kun nødvendigt hvis den ikke har nået den nederste kamp.
+        
+        driver.quit()
+        return
 
 
 if __name__ == "__main__":
