@@ -14,17 +14,17 @@ import helperMain
 leagues = []
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
-def setupMenuInitiation():
-    numOfPlayers = ""
-    while (util.parseIntOrNone(numOfPlayers,1,8) == None):
-        numOfPlayers = input("number of players: ")
-    numOfPlayers = int(numOfPlayers)
-    print(f"write the {numOfPlayers} players (seperated by enter)")
-    while len(players) < numOfPlayers:
-        players.append(input())
-    random.shuffle(players)
-    myMenu = Menu(players,"Select a league/country",driver)
-    myMenu.run()
+# def setupMenuInitiation():
+#     numOfPlayers = ""
+#     while (util.parseIntOrNone(numOfPlayers,1,8) == None):
+#         numOfPlayers = input("number of players: ")
+#     numOfPlayers = int(numOfPlayers)
+#     print(f"write the {numOfPlayers} players (seperated by enter)")
+#     while len(players) < numOfPlayers:
+#         players.append(input())
+#     random.shuffle(players)
+#     myMenu = Menu(players,"Select a league/country",driver)
+#     myMenu.run()
 
 #setting up the feriekasse with the existence of a PlayerAndTeams.txt-file 
 def setupFileInitiation():
