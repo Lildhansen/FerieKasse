@@ -4,18 +4,18 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
-
+from selenium.webdriver.common.by import By
 
 
 class Webdriver:
     def __init__(self):
         self.setupDriver()
-        self.driver = webdriver.Chrome(options=self.__options) #service=self.__service,
+        self.driver = webdriver.Chrome(service=self.__service,options=self.__options) #service=self.__service,
     #sets up services and options for the webdriver
     def setupDriver(self):
         self.__service = Service("./chromedriver.exe")
         self.__options = Options()
-        self.__options.headless = True
+        #self.__options.headless = True
         self.__options.add_experimental_option("excludeSwitches", ["enable-logging"])
     def goToUrl(self,url):
         self.driver.get(url)
@@ -28,11 +28,10 @@ class Webdriver:
             pass
     #clicks the "vis flere kampe"-button on flash score until all matches are shown
     def showAllMatches(self):
-        self.acceptCookies()
         while True:
             showMoreButton = []
             i = 0
-            while i < 10 or showMoreButton == []:
+            while i < 10 and showMoreButton == []:
                 time.sleep(0.3)
                 i += 1
                 showMoreButton = self.driver.find_elements_by_css_selector("#live-table > div.event.event--results > div > div > a")
@@ -40,7 +39,14 @@ class Webdriver:
                 return
             actions = ActionChains(self.driver)
             actions.move_to_element(showMoreButton[0]).perform()
+            self.driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
             showMoreButton[0].click()
+    def getMatchesAfterDateAndMatch(self,date,hometeam,awayTeam):
+        #allmatchesRow = self.driver.find_elements_by_css_selector("div.event__match event__match--static event__match--twoLine")
+        a = self.driver.find_elements(By.ID,"live-table") #den kan ikke finde mere end denne...
+        b = a[0].find_elements(By.CSS_SELECTOR,"div.event__match event__match--static event__match--twoLine")
+        print(len(b))
+        #print(len(allmatchesRow))
     #closes the webdriver
     def quit(self):
         self.driver.quit()

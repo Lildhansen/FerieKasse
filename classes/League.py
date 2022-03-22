@@ -9,9 +9,7 @@ class League:
         self.driver = None
         self.teams = []
         self.matches = []
-        self.url = self.getUrl()
-    def getUrl(self):
-        return f"https://www.flashscore.dk/fodbold/{self.country}/{self.name}/resultater/"
+        self.url = f"https://www.flashscore.dk/fodbold/{self.country}/{self.name}/resultater/"
     def addToLeaguesTeamsAndLinksFile(self):
         file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
         file.write(f"{self.name},{self.url}:\n")
@@ -20,7 +18,7 @@ class League:
         file.close()
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
-    def getMatchesAfterDateAndMatch(self,date=datetime.date(datetime.now().year,7,15),hometeam=None,awayTeam=None):  
-        anyMatchesLeft = True
-        while anyMatchesLeft:
-            anyMatchesLeft = False
+    def getMatchesAfterDateAndMatch(self,date=datetime.date(datetime.datetime.now().year,7,15),hometeam=None,awayTeam=None):
+        self.driver.goToUrl(self.url)
+        self.driver.acceptCookies()
+        self.driver.getMatchesAfterDateAndMatch(date,hometeam,awayTeam) 
