@@ -20,8 +20,7 @@ class League:
         file.close()
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
-    def getMatchesAfterDateAndMatch(date=datetime.date(datetime.now().year,7,15),hometeam=None,awayTeam=None):  
+    def getMatchesAfterDateAndMatch(self,date=datetime.date(datetime.now().year,7,15),hometeam=None,awayTeam=None):  
         anyMatchesLeft = True
         while anyMatchesLeft:
-            
             anyMatchesLeft = False
