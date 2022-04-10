@@ -1,27 +1,27 @@
-premier-league,https://www.flashscore.dk/fodbold/england/premier-league/resultater/:
+premier-league,england premier-league results:
 Chelsea,Kim
 Leicester,Emil
 Tottenham,Emil
 Arsenal,Mads
 Manchester utd,Soren
-Bundesliga,https://www.flashscore.dk/fodbold/tyskland/Bundesliga/resultater/:
+Bundesliga,tyskland Bundesliga results:
 RB leipzig,Kim
 Dortmund,Emil
 Frankfurt,Mads
 Hoffenheim,Mads
 Leverkusen,Soren
-laliga,https://www.flashscore.dk/fodbold/spanien/laliga/resultater/:
+laliga,spanien laliga results:
 Barcelona,Kim
 Real sociedad,Emil
 Valencia,Mads
 sevilla,Soren
-serie-a,https://www.flashscore.dk/fodbold/italien/serie-a/resultater/:
+serie-a,italien serie-a results:
 Bologna,Kim
 Atalanta,Emil
 Ac Milan,Mads
 juventus,Soren
 Torino,Soren
-Superliga,https://www.flashscore.dk/fodbold/danmark/Superliga/resultater/:
+Superliga,danmark Superliga results:
 OB,Kim
 AGF,Kim
 Brndby IF,Emil

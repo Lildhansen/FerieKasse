@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 #consts
 INVALID_LETTERS = "æøå"
 
@@ -40,6 +42,13 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
+def textToDate(text):
+    if text != "I Dag" and text != "I Går":
+        return None
+    if text == "I Dag":
+        return date.today()
+    else:
+        return date.today() - timedelta(days=1)
 
 def compareFlashscoreDates(date1,date2):
     #hvis det er efter måned 7 skal årstallet sættes til et år før

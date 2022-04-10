@@ -14,9 +14,7 @@ def UpdateFerieKasse():
     leagues = helperMain.getAllLeagues()
     #file = open("./logs/WeeksCovered.txt","r")
     for league in leagues:
-        driver.goToUrl(league.url)
-        #driver.showAllMatches() #er kun nødvendigt hvis den ikke har nået den nederste kamp.
-        #https://www.guru99.com/alert-popup-handling-selenium.html
+        print(league.name)
         league.driver = driver
         league.getMatchesAfterDateAndMatch()
         driver.quit()
