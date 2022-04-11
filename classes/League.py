@@ -20,4 +20,4 @@ class League:
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterDateAndMatch(self,date=datetime.date(datetime.datetime.now().year,7,15),hometeam=None,awayTeam=None):
         self.driver.findLeagueUrl(self.searchText)
-        self.driver.getMatchesAfterDateAndMatch(date,hometeam,awayTeam) 
+        self.matches = self.driver.getMatchesAfterDateAndMatch(date,self.teams) 

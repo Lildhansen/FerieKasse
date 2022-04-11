@@ -23,10 +23,10 @@ class Webdriver:
         self.driver.get('http://www.google.com')
         self.acceptCookies()
         searchField = self.driver.find_element(By.NAME, 'q')
-        searchField.send_keys(searchText)
+        searchField.send_keys(searchText + " ")
         searchField.submit()
-        self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span").click()        
-        
+        self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span").click()   
+        #soccerway
     #accepts cookies when using the selenium webdriver - not sure if it is neccessary
     def acceptCookies(self):
         try:
@@ -48,24 +48,31 @@ class Webdriver:
             actions.move_to_element(showMoreButton[0]).perform()
             self.driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
             showMoreButton[0].click()
-    def getMatchesAfterDateAndMatch(self,date,hometeam,awayTeam):
-        finishedMatches = self.driver.find_elements(By.CLASS_NAME,"KAIX8d") #KAIX8d = the box with a match, L5Kkcd = the 2 teams
-        for match in finishedMatches:
-            x = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in that the match - finds 6 matches with 7 <tr> so 48 elements in total
+    def getMatchesAfterDateAndMatch(self,date,teams):
+        time.sleep(1)
+        x = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in that the match
             
-            #this downhere doesnt work:
-            for y in range(len(x)):
-                if (y % 8 == 2):
-                    print(x[y].text)
-                    x[y].find_element(By.XPATH,"//*[@class='GOsQPe imspo_mt__wt']/tbody//td")
-
-            print(len(x))
-            matchStatus = match.find_elements(By.CLASS_NAME,"BhSGD imspo_mt__ndl-p imso-medium-font imspo_mt__match-status") 
-            if (len(matchStatus) > 0):
-                print(matchStatus[0].text)
-            ms = match.find_elements(By.CLASS_NAME,"imspo_mt__pm-inf imspo_mt__pm-infc imspo_mt__date imso-medium-font")
-            if (len(ms) > 0):
-                print(ms[0].text)
+            
+        for y in range(len(x)):
+            if (y % 8 == 2): #the date and match status
+                if (not "FT" in x[y].text):
+                    break
+                print("date: ",x[y].text,"\n")
+            elif (y % 8 == 4): #homegoals and hometeam
+                print("team1: ",x[y].text,"\n")
+            elif (y % 8 == 5): #awaygoals and awayteam
+                print("team2: ",x[y].text,"\n")
+                
+        #this does not work:
+        # finishedMatches = self.driver.find_elements(By.CLASS_NAME,"KAIX8d") #KAIX8d = the box with a match, L5Kkcd = the 2 teams
+        # for match in finishedMatches:
+            
+        #     matchStatus = match.find_elements(By.CLASS_NAME,"BhSGD imspo_mt__ndl-p imso-medium-font imspo_mt__match-status") #FT stuff here
+        #     if (len(matchStatus) > 0):
+        #         print("match been played: ",matchStatus[0].text)
+        #     ms = match.find_elements(By.CLASS_NAME,"imspo_mt__pm-inf imspo_mt__pm-infc imspo_mt__date imso-medium-font") #if match has not been
+        #     if (len(ms) > 0):
+        #         print("match not been played: ",ms[0].text)
         #allmatchesRow = self.driver.find_elements_by_css_selector("div.event__match event__match--static event__match--twoLine")
         #a = self.driver.find_elements(By.ID,"live-table") #den kan ikke finde mere end denne...
         #b = a[0].find_elements(By.CSS_SELECTOR,"div.event__match event__match--static event__match--twoLine")
