@@ -1,4 +1,5 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+
 
 #consts
 INVALID_LETTERS = "æøå"
@@ -42,9 +43,17 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
+#expects input in the form "Søn. 10.4" or either "I Går" or "I Dag"
 def textToDate(text):
     if text != "I Dag" and text != "I Går":
-        return None
+        dayAndMonth = text.split(" ")[1].split(".")
+        day = parseIntOrNone(dayAndMonth[0])
+        month = parseIntOrNone(dayAndMonth[1])
+        if (parseIntOrNone(dayAndMonth[1]) > 7): #if its the second half of the season
+            if (datetime.now().month > 7):
+                return datetime(datetime.now().year,month,day) #this year - if we are in second half, and it is the second half
+            return datetime(datetime.now().year-1,month,day) #last year - if we are in first half and it is the second half
+        return datetime(datetime.now().year,month,day) #first half of season - this is always the same year, since we cannot look in the future
     if text == "I Dag":
         return date.today()
     else:

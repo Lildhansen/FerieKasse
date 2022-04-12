@@ -8,6 +8,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+#own libraries
+from classes.Match import Match
+import utilities.util as util
 
 class Webdriver:
     def __init__(self):
@@ -48,21 +51,42 @@ class Webdriver:
             actions.move_to_element(showMoreButton[0]).perform()
             self.driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
             showMoreButton[0].click()
-    def getMatchesAfterDateAndMatch(self,date,teams):
+    def getMatchesAfterDateAndMatch(self,date,homeTeam,awayTeam,league):
+        
+        #missing implementation:
+            #mangler tjek for dato
         time.sleep(1)
-        x = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in that the match
+        rawMatchesData = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in that match
+        i = 2
+        while i <= len(rawMatchesData):
+            if (not "FT" in rawMatchesData[i].text):
+                break
+            match = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
             
-            
-        for y in range(len(x)):
-            if (y % 8 == 2): #the date and match status
-                if (not "FT" in x[y].text):
-                    break
-                print("date: ",x[y].text,"\n")
-            elif (y % 8 == 4): #homegoals and hometeam
-                print("team1: ",x[y].text,"\n")
-            elif (y % 8 == 5): #awaygoals and awayteam
-                print("team2: ",x[y].text,"\n")
-                
+            i += 8
+    def rawMatchToMatchObject(self,rawMatchData):
+        matchData = []
+        for data in rawMatchData:
+            data = data.strip()
+        #date
+        rawDate = rawMatchData[0].split("\n")[1]
+        matchData.append(util.textToDate(rawDate))
+     
+        #teams and goal
+        i = 1
+        while i < len(rawMatchData):
+            teamAndGoals = rawMatchData[i].split("\n")
+            goals = teamAndGoals[0]
+            team = teamAndGoals[1]
+            matchData.append(team)
+            matchData.append(goals)
+            i += 1
+        print(matchData)
+        return matchData
+        
+        
+        
+         
         #this does not work:
         # finishedMatches = self.driver.find_elements(By.CLASS_NAME,"KAIX8d") #KAIX8d = the box with a match, L5Kkcd = the 2 teams
         # for match in finishedMatches:
