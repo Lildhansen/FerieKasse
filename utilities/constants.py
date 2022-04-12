@@ -5,3 +5,5 @@ LeagueNationsDict = {"italien":"serie-a",
                     "tyskland":"bundesliga",
                     "england":"premier-league",
                     "danmark":"superliga"}
+
+SCROLL_THRESHOLD = 12

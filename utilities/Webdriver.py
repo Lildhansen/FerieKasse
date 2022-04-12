@@ -7,10 +7,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 
 #own libraries
 from classes.Match import Match
 import utilities.util as util
+import utilities.constants as const
 
 class Webdriver:
     def __init__(self):
@@ -53,17 +55,44 @@ class Webdriver:
             showMoreButton[0].click()
     def getMatchesAfterDateAndMatch(self,date,homeTeam,awayTeam,league):
         
-        #missing implementation:
-            #mangler tjek for dato
         time.sleep(1)
-        rawMatchesData = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in that match
+        
+        #check date for first match - if date is earlier than date of the match, more matches needs to be loaded in.
+        doWhileFlag = True
+        scrollCounter = 0
+        currentMatch = []
+        while (doWhileFlag or not util.compareDates(currentMatch[0],date)):
+            doWhileFlag = False
+            rawMatchesData = self.loadDataForAllMatches()
+            print("(",rawMatchesData[2].text,") (",rawMatchesData[4].text,") (",rawMatchesData[5].text,")")
+            currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
+            if currentMatch[0] == date:
+                pass
+                #check team
+            else:
+                scrollCounter += 1
+                if scrollCounter > const.SCROLL_THRESHOLD:
+                    break
+                self.scrollToTop(rawMatchesData[0])
+                time.sleep(3)
+            
+        print("done")
         i = 2
         while i <= len(rawMatchesData):
             if (not "FT" in rawMatchesData[i].text):
                 break
             match = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
-            
+            if (match[0] == date):
+                pass
+                #check the teams
+            #else if
             i += 8
+    def loadDataForAllMatches(self):
+        return self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in all matches
+    def scrollToTop(self,topElement):
+        self.driver.execute_script("window.scrollTo(0,0)")
+        action = ActionChains(self.driver)
+        action.move_to_element(topElement).perform()
     def rawMatchToMatchObject(self,rawMatchData):
         matchData = []
         for data in rawMatchData:
