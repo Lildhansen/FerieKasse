@@ -53,63 +53,67 @@ class Webdriver:
             actions.move_to_element(showMoreButton[0]).perform()
             self.driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
             showMoreButton[0].click()
-    def getMatchesAfterDateAndMatch(self,date,homeTeam,awayTeam,league):
-        
+    def getMatchesAfterLatestMatch(self,latestMatch):
         time.sleep(1)
-        # for testin ----------
-        date = datetime.date(2022, 1, 23)
-        homeTeam = "Crystal Palace"
-        awayTeam = "Liverpool"
+        # for testing ----------
+        latestMatch.date = datetime.date(2022, month=4, day=10)
+        latestMatch.homeTeam = "Brentford"
+        latestMatch.awayTeam = "West Ham"
+        latestMatch.homeGoals = 2
+        latestMatch.awayGoals = 0
         #_---------------------------
         #check date for first match - if date is earlier than date of the match, more matches needs to be loaded in.
-        doWhileFlag = True
         allMatches = []
         currentMatch = Match()
         rawMatchesData = None
-        
-        #gets the first match
-        while (doWhileFlag or util.compareDates(currentMatch.date,date)):
-            doWhileFlag = False
-            #used to check if top has been reached
+        while (True):
+            #used to check if top of page has been reached
             if rawMatchesData == None: 
                 previousTopMatchData = None
             else:
                 previousTopMatchData = rawMatchesData[0]
+
             rawMatchesData = self.loadDataForAllMatches()
-            print("(",rawMatchesData[2].text,") (",rawMatchesData[4].text,") (",rawMatchesData[5].text,")")
+            allMatches = self.rawMatchesToMatchObjects(rawMatchesData)
             currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
-            print("currentmatch date: ",currentMatch.date)
-            print("date: ",date)
-            if currentMatch.date == date: 
-                i = 2
-                while (currentMatch.homeTeam != homeTeam and currentMatch.awayTeam != awayTeam):
-                    currentMatch = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
-                    print(i,currentMatch.homeTeam,currentMatch.awayTeam)
-                    i += 8
-            else:
+            if util.compareDates(currentMatch.date,latestMatch.date): #currentMatch.date > latestMatch.date
                 TopMatchData = rawMatchesData[0]
                 if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked
                     break
                 self.scrollToTop(TopMatchData)
                 time.sleep(1)
-        #rawMatchesData.index()
-        #allMatches = rawMatchesData[]
-        print("done")
-        i = 2
-        while i <= len(rawMatchesData):
-            if (not "FT" in rawMatchesData[i].text):
+            else: #currentMatch.date =< latestMatch.date ##det virker vist ikke helt
+                i = 2
+                while (currentMatch != latestMatch):
+                    print(currentMatch.date,currentMatch.homeTeam,currentMatch.homeGoals,currentMatch.awayTeam,currentMatch.awayGoals,"=",latestMatch.date,latestMatch.homeTeam,latestMatch.homeGoals,latestMatch.awayTeam,latestMatch.awayGoals)
+                    currentMatch = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
+                    i += 8
+                allMatches = allMatches[allMatches.index(currentMatch)+1::]
                 break
-            match = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
-            if (match.date == date):
-                pass
-                #check the teams
-            #else if
-            i += 8
+        return allMatches
+    
     def loadDataForAllMatches(self):
-        return self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in all matches
+        matchElements = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in all matches
+        i = 2
+        while i <= len(matchElements): #removes all non-finished matches
+            if (not "FT" in matchElements[i].text):
+                matchElements = matchElements[:i-2:]
+                break
+            i += 8
+        return matchElements      
+            
     def scrollToTop(self,topElement):
         action = ActionChains(self.driver)
         action.move_to_element(topElement).perform()
+    def rawMatchesToMatchObjects(self,rawMatches):
+        allMatches = []
+        i = 2
+        while i <= len(rawMatches):
+            match = self.rawMatchToMatchObject([rawMatches[i].text,rawMatches[i+2].text,rawMatches[i+3].text])
+            ##test to see if match is valid - ie if any "teams" in that "league" is their home/away team
+            allMatches.append(match)
+            i += 8
+        return allMatches
     def rawMatchToMatchObject(self,rawMatchData):
         matchData = []
         for data in rawMatchData:
@@ -122,31 +126,12 @@ class Webdriver:
         i = 1
         while i < len(rawMatchData):
             teamAndGoals = rawMatchData[i].split("\n")
-            goals = teamAndGoals[0]
+            goals = util.parseIntOrNone(teamAndGoals[0])
             team = teamAndGoals[1]
             matchData.append(team)
             matchData.append(goals)
             i += 1
         return Match(matchData)
-        
-        
-        
-         
-        #this does not work:
-        # finishedMatches = self.driver.find_elements(By.CLASS_NAME,"KAIX8d") #KAIX8d = the box with a match, L5Kkcd = the 2 teams
-        # for match in finishedMatches:
-            
-        #     matchStatus = match.find_elements(By.CLASS_NAME,"BhSGD imspo_mt__ndl-p imso-medium-font imspo_mt__match-status") #FT stuff here
-        #     if (len(matchStatus) > 0):
-        #         print("match been played: ",matchStatus[0].text)
-        #     ms = match.find_elements(By.CLASS_NAME,"imspo_mt__pm-inf imspo_mt__pm-infc imspo_mt__date imso-medium-font") #if match has not been
-        #     if (len(ms) > 0):
-        #         print("match not been played: ",ms[0].text)
-        #allmatchesRow = self.driver.find_elements_by_css_selector("div.event__match event__match--static event__match--twoLine")
-        #a = self.driver.find_elements(By.ID,"live-table") #den kan ikke finde mere end denne...
-        #b = a[0].find_elements(By.CSS_SELECTOR,"div.event__match event__match--static event__match--twoLine")
-        #print(len(b))
-        #print(len(allmatchesRow))
     #closes the webdriver
     def quit(self):
         self.driver.quit()

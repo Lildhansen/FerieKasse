@@ -53,6 +53,7 @@ def textToDate(text):
         dayAndMonth = onlyDate.split(".")
         day = parseIntOrNone(dayAndMonth[0])
         month = parseIntOrNone(dayAndMonth[1])
+        #print(day,"-----",month)
         if (parseIntOrNone(dayAndMonth[1]) > 7): #if its the second half of the season
             if (datetime.now().month > 7):
                 return date(datetime.now().year,month,day) #if last game counted was in second half, and it is the second half

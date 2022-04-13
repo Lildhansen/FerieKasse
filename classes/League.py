@@ -1,6 +1,9 @@
+
 import os
 import datetime
 
+from classes.Match import Match
+from utilities.Webdriver import Webdriver as wd
 
 class League:
     def __init__(self,name,country):
@@ -18,11 +21,22 @@ class League:
         file.close()
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
-    def getMatchesAfterDateAndMatch(self,date=None,hometeam=None,awayTeam=None):
-        if date == None:
+    def getMatchesAfterLatestMatch(self,match=Match()):
+        if match.date == None:
             if datetime.datetime.now().month > 7: #if we are in the first half of the season we must get all matches from this year till now
-                date = datetime.date(datetime.datetime.now().year,7,15)
+                match.date = datetime.date(datetime.datetime.now().year,7,15)
             else: #if we are in the final half of the season, we must get all matches from last year's season start till now
-                date = datetime.date(datetime.datetime.now().year-1,7,15)
+                match.date = datetime.date(datetime.datetime.now().year-1,7,15)
+        self.driver = wd()
         self.driver.findLeagueUrl(self.searchText)
-        self.matches = self.driver.getMatchesAfterDateAndMatch(date,hometeam,awayTeam,self) 
+        self.matches = self.driver.getMatchesAfterLatestMatch(match)    
+        self.driver.quit()
+        self.filterMatches()
+    #removes the matches that does not involve any of the teams (that is players' teams) in that league
+    def filterMatches(self):
+        for match in self.matches:
+            if not (match.homeTeam in self.teams or match.awayTeam in self.teams):
+                self.matches.remove(match)
+    def calculatePointsForMatches(self):
+        for match in self.matches:
+            match.calculatePoints(self)
