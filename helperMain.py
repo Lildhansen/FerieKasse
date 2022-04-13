@@ -1,5 +1,4 @@
 from classes.League import League
-from classes.Team import Team
 import utilities.util as util
 
 def getAllLeagues():

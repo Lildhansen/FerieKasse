@@ -8,6 +8,11 @@ class Match:
         self.homeGoals = matchData[2]
         self.awayTeam = matchData[3]
         self.awayGoals = matchData[4]
+        self.homeTeamIsPlayerTeam = False
+        self.awayTeamIsPlayerTeam = False
+        self.homeTeamIsWinner = None
+        self.points = 0
+    #calculate points for match and saves it in the points property
     def calculatePoints(self):
         pass
     def __eq__(self, other):

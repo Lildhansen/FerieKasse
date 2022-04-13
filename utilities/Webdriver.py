@@ -8,7 +8,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
 
 #own libraries
 from classes.Match import Match
@@ -22,8 +21,9 @@ class Webdriver:
     def setupDriver(self):
         self.__service = Service("./chromedriver.exe")
         self.__options = Options()
-        #self.__options.headless = True
+        self.__options.headless = True
         self.__options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    #navigates the webdriver to the url for that specific league
     def findLeagueUrl(self,searchText):
         self.driver.get('http://www.google.com')
         self.acceptCookies()
@@ -32,29 +32,15 @@ class Webdriver:
         searchField.submit()
         self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span").click()   
         #soccerway
-    #accepts cookies when using the selenium webdriver - not sure if it is neccessary
+    #accepts cookies when using the selenium webdriver
     def acceptCookies(self):
         try:
             WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR,"#L2AGLb > div"))).click()
         except:
             pass
-    #clicks the "vis flere kampe"-button on flash score until all matches are shown
-    def showAllMatches(self):
-        while True:
-            showMoreButton = []
-            i = 0
-            while i < 10 and showMoreButton == []:
-                time.sleep(0.3)
-                i += 1
-                showMoreButton = self.driver.find_elements_by_css_selector("#live-table > div.event.event--results > div > div > a")
-            if showMoreButton == []:
-                return
-            actions = ActionChains(self.driver)
-            actions.move_to_element(showMoreButton[0]).perform()
-            self.driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
-            showMoreButton[0].click()
+    #takes the latest match that has been processed as input, and get all matches in that specific league between that match+1 and the last played match
     def getMatchesAfterLatestMatch(self,latestMatch):
-        time.sleep(1)
+        time.sleep(1) #wait for page to load
         # for testing ----------
         latestMatch.date = datetime.date(2022, month=4, day=10)
         latestMatch.homeTeam = "Brentford"
@@ -62,9 +48,7 @@ class Webdriver:
         latestMatch.homeGoals = 2
         latestMatch.awayGoals = 0
         #_---------------------------
-        #check date for first match - if date is earlier than date of the match, more matches needs to be loaded in.
         allMatches = []
-        currentMatch = Match()
         rawMatchesData = None
         while (True):
             #used to check if top of page has been reached
@@ -81,17 +65,19 @@ class Webdriver:
                 if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked
                     break
                 self.scrollToTop(TopMatchData)
-                time.sleep(1)
-            else: #currentMatch.date =< latestMatch.date ##det virker vist ikke helt
+                time.sleep(1) #wait for matches to load
+            else: #currentMatch.date <= latestMatch.date
                 i = 2
                 while (currentMatch != latestMatch):
-                    print(currentMatch.date,currentMatch.homeTeam,currentMatch.homeGoals,currentMatch.awayTeam,currentMatch.awayGoals,"=",latestMatch.date,latestMatch.homeTeam,latestMatch.homeGoals,latestMatch.awayTeam,latestMatch.awayGoals)
                     currentMatch = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
                     i += 8
-                allMatches = allMatches[allMatches.index(currentMatch)+1::]
+                allMatches = allMatches[allMatches.index(currentMatch)+1::] #removes all older matches than currentMatch 
+                                                                            #(as they have already been calculated in an earlier iteration of the program)
                 break
         return allMatches
     
+    #loads the data for all matches visible on the page at that time. Only saves the matches that have finished.
+    #returns the raw data for these matches
     def loadDataForAllMatches(self):
         matchElements = self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in all matches
         i = 2
@@ -101,24 +87,29 @@ class Webdriver:
                 break
             i += 8
         return matchElements      
-            
+    
+    #scroll to the top of the result page, by finding the first match element (which is the one highest up) and moving to that element.
+    #moving to that element will either spawn a new top element, which can be jumped to again, or put the page to the top
     def scrollToTop(self,topElement):
         action = ActionChains(self.driver)
         action.move_to_element(topElement).perform()
+        
+    #turns a list of raw matches into a list of match objects, and returns the list
     def rawMatchesToMatchObjects(self,rawMatches):
         allMatches = []
         i = 2
         while i <= len(rawMatches):
             match = self.rawMatchToMatchObject([rawMatches[i].text,rawMatches[i+2].text,rawMatches[i+3].text])
-            ##test to see if match is valid - ie if any "teams" in that "league" is their home/away team
             allMatches.append(match)
             i += 8
         return allMatches
+    #Turns the data of a raw match into a match object, and returns it
     def rawMatchToMatchObject(self,rawMatchData):
         matchData = []
+        
+        #data (date and state of match)
         for data in rawMatchData:
             data = data.strip()
-        #date
         rawDate = rawMatchData[0].split("\n")[1]
         matchData.append(util.textToDate(rawDate))
      

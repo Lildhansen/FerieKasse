@@ -1,7 +1,7 @@
-
-import os
+#libraries - standard or pip
 import datetime
 
+#own libraries
 from classes.Match import Match
 from utilities.Webdriver import Webdriver as wd
 
@@ -37,6 +37,12 @@ class League:
         for match in self.matches:
             if not (match.homeTeam in self.teams or match.awayTeam in self.teams):
                 self.matches.remove(match)
+                continue
+            elif (match.homeTeam in self.teams):
+                match.homeTeamIsPlayerTeam = True
+            if (match.awayTeam in self.teams):
+                match.awayTeamIsPlayerTeam = True
+    #calculates the points for all matches and saves the points in the match objects
     def calculatePointsForMatches(self):
         for match in self.matches:
             match.calculatePoints(self)

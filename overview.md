@@ -8,6 +8,7 @@ leaguesandteams.txt skal ende på en newline
 
 
 # initiate
+- mangler clean-up af denne fil
 skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
 skal have alle holdene fra de 5 ligaer et eller andet sted - til indsætning i menuen
 Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med holdene og spillerne i formatet:
@@ -29,21 +30,20 @@ denne .txt fil skal så genereres med spillerne, holdene, og URL i formatet:
 ~~lav .txt med datoer/uger der er covered~~
 evt. mail med holdene til alle spillerne
 # update
-for hver spiller
-    for hvert hold
-        for hver kamp der ikke er talt point for
-            gem info om kamp i match objekt
-                hjemmehold,udehold,mål scoret, mål imod, vinder/taber, (evt. målscorer for udehold/hjemmhold)
-            beregn point
-                vinder,taber,mål scoret,indbyrdes,egne hold
-                evt. hvis hold har vundet - skip den
-                    medmindre målscorene skal gemmes.
-                    på den måde sikrer vi at indbyrdes kampe ikke tælles for begge hold
-    opdater datoer
-    skriv til excel
-        sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
-    send mail
-        hver uge/anden uge / måned
+~~for hver liga~~
+    ~~for hver kamp der ikke er talt point for~~
+       ~~ gem info om kamp i match objekt~~
+            ~~hjemmehold,udehold,mål scoret, mål imod, vinder/taber, (evt. målscorer for udehold/hjemmhold)~~
+        beregn point
+            vinder,taber,mål scoret,indbyrdes,egne hold
+            evt. hvis hold har vundet - skip den
+                medmindre målscorene skal gemmes.
+                på den måde sikrer vi at indbyrdes kampe ikke tælles for begge hold
+opdater datoer
+skriv til excel
+    sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
+send mail
+    hver uge/anden uge / måned
 # remove
 skal have en "are you sure you want to remove"
 clear:

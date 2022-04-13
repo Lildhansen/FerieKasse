@@ -5,7 +5,6 @@ import os
 from menuStuff.Menu import Menu
 import utilities.util as util
 from classes.League import League
-from classes.Team import Team
 from Excel import Excel
 from utilities.Webdriver import Webdriver
 import helperMain
