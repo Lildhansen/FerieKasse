@@ -43,7 +43,7 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
-#expects input in the form "Søn. 10.4" or either "I Går" or "I Dag"
+#expects input in the form "Søn. 10.4" or "10.4" or either "I Går" or "I Dag"
 def textToDate(text):
     if text != "I Dag" and text != "I Går":
         if (re.search('[a-zA-Z]',text) != None):

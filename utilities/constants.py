@@ -6,4 +6,3 @@ LeagueNationsDict = {"italien":"serie-a",
                     "england":"premier-league",
                     "danmark":"superliga"}
 
-SCROLL_THRESHOLD = 12

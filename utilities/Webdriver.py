@@ -1,4 +1,5 @@
 #libraries - standard or pip
+import datetime
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,7 +13,6 @@ from selenium.webdriver.common.keys import Keys
 #own libraries
 from classes.Match import Match
 import utilities.util as util
-import utilities.constants as const
 
 class Webdriver:
     def __init__(self):
@@ -56,33 +56,51 @@ class Webdriver:
     def getMatchesAfterDateAndMatch(self,date,homeTeam,awayTeam,league):
         
         time.sleep(1)
-        
+        # for testin ----------
+        date = datetime.date(2022, 1, 23)
+        homeTeam = "Crystal Palace"
+        awayTeam = "Liverpool"
+        #_---------------------------
         #check date for first match - if date is earlier than date of the match, more matches needs to be loaded in.
         doWhileFlag = True
-        scrollCounter = 0
-        currentMatch = []
-        while (doWhileFlag or not util.compareDates(currentMatch[0],date)):
+        allMatches = []
+        currentMatch = Match()
+        rawMatchesData = None
+        
+        #gets the first match
+        while (doWhileFlag or util.compareDates(currentMatch.date,date)):
             doWhileFlag = False
+            #used to check if top has been reached
+            if rawMatchesData == None: 
+                previousTopMatchData = None
+            else:
+                previousTopMatchData = rawMatchesData[0]
             rawMatchesData = self.loadDataForAllMatches()
             print("(",rawMatchesData[2].text,") (",rawMatchesData[4].text,") (",rawMatchesData[5].text,")")
             currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
-            if currentMatch[0] == date:
-                pass
-                #check team
+            print("currentmatch date: ",currentMatch.date)
+            print("date: ",date)
+            if currentMatch.date == date: 
+                i = 2
+                while (currentMatch.homeTeam != homeTeam and currentMatch.awayTeam != awayTeam):
+                    currentMatch = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
+                    print(i,currentMatch.homeTeam,currentMatch.awayTeam)
+                    i += 8
             else:
-                scrollCounter += 1
-                if scrollCounter > const.SCROLL_THRESHOLD:
+                TopMatchData = rawMatchesData[0]
+                if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked
                     break
-                self.scrollToTop(rawMatchesData[0])
-                time.sleep(3)
-            
+                self.scrollToTop(TopMatchData)
+                time.sleep(1)
+        #rawMatchesData.index()
+        #allMatches = rawMatchesData[]
         print("done")
         i = 2
         while i <= len(rawMatchesData):
             if (not "FT" in rawMatchesData[i].text):
                 break
             match = self.rawMatchToMatchObject([rawMatchesData[i].text,rawMatchesData[i+2].text,rawMatchesData[i+3].text])
-            if (match[0] == date):
+            if (match.date == date):
                 pass
                 #check the teams
             #else if
@@ -90,7 +108,6 @@ class Webdriver:
     def loadDataForAllMatches(self):
         return self.driver.find_elements(By.XPATH,"//*[@class='KAIX8d']/tbody//tr") ##finds all <tr>'s in all matches
     def scrollToTop(self,topElement):
-        self.driver.execute_script("window.scrollTo(0,0)")
         action = ActionChains(self.driver)
         action.move_to_element(topElement).perform()
     def rawMatchToMatchObject(self,rawMatchData):
@@ -110,8 +127,7 @@ class Webdriver:
             matchData.append(team)
             matchData.append(goals)
             i += 1
-        print(matchData)
-        return matchData
+        return Match(matchData)
         
         
         

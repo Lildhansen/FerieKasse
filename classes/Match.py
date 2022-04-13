@@ -1,5 +1,5 @@
 class Match:
-    def __init__(self,matchData):
+    def __init__(self,matchData=[None,None,None,None,None]):
         self.date = matchData[0]
         self.homeTeam = matchData[1]
         self.homeGoals = matchData[2]

@@ -18,6 +18,11 @@ class League:
         file.close()
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
-    def getMatchesAfterDateAndMatch(self,date=datetime.date(datetime.datetime.now().year,7,15),hometeam=None,awayTeam=None):
+    def getMatchesAfterDateAndMatch(self,date=None,hometeam=None,awayTeam=None):
+        if date == None:
+            if datetime.datetime.now().month > 7: #if we are in the first half of the season we must get all matches from this year till now
+                date = datetime.date(datetime.datetime.now().year,7,15)
+            else: #if we are in the final half of the season, we must get all matches from last year's season start till now
+                date = datetime.date(datetime.datetime.now().year-1,7,15)
         self.driver.findLeagueUrl(self.searchText)
         self.matches = self.driver.getMatchesAfterDateAndMatch(date,hometeam,awayTeam,self) 
