@@ -4,63 +4,55 @@ import os
 #own modules
 from menuStuff.Menu import Menu
 import utilities.util as util
-from classes.Player import Player
+from classes.League import League
 from classes.Team import Team
 from Excel import Excel
 from utilities.Webdriver import Webdriver
+import helperMain
 
-driver = Webdriver()
 
-players = []
+leagues = []
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
-def setupMenuInitiation():
-    numOfPlayers = ""
-    while (util.parseIntOrNone(numOfPlayers,1,8) == None):
-        numOfPlayers = input("number of players: ")
-    numOfPlayers = int(numOfPlayers)
-    print(f"write the {numOfPlayers} players (seperated by enter)")
-    while len(players) < numOfPlayers:
-        players.append(input())
-    random.shuffle(players)
-    myMenu = Menu(players,"Select a league/country",driver)
-    myMenu.run()
+# def setupMenuInitiation():
+#     numOfPlayers = ""
+#     while (util.parseIntOrNone(numOfPlayers,1,8) == None):
+#         numOfPlayers = input("number of players: ")
+#     numOfPlayers = int(numOfPlayers)
+#     print(f"write the {numOfPlayers} players (seperated by enter)")
+#     while len(players) < numOfPlayers:
+#         players.append(input())
+#     random.shuffle(players)
+#     myMenu = Menu(players,"Select a league/country",driver)
+#     myMenu.run()
 
 #setting up the feriekasse with the existence of a PlayerAndTeams.txt-file 
 def setupFileInitiation():
-    file = open(r"./logs/PlayerAndTeams.txt","r",encoding="utf-8")
-    for line in file.readlines(): 
-        if ":" in line.lower():
-            players.append(Player((line.rstrip()).strip(":"),[]))
-        else:
-            strippedSplitLine = util.removeInvalidLetters(line.rstrip()).split(",")
-            players[-1].addTeam(Team(strippedSplitLine[0],strippedSplitLine[1],strippedSplitLine[2],driver))  
-    driver.quit()
-    file = open(r"./logs/playersTeamsAndLinks.txt","a+") #this is not unreachable lol- dunno why it says so
+    leagues = helperMain.getAllLeagues()
+    file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
     file.truncate(0)
     file.close
-    for player in players:
-        player.addToPlayersTeamsAndLinksFile()
+    for league in leagues:
+        league.addToLeaguesTeamsAndLinksFile()
 
-def setupWeeksCoveredFile():
+def setupWeeksCoveredForEachLeagueFile():
     file = open("./logs/WeeksCovered.txt","w+")
     file.close() 
 
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
-    if (os.path.isfile(r"./logs/PlayerAndTeams.txt") and os.path.getsize(r"./logs/PlayerAndTeams.txt") > 0):
+    if (os.path.isfile(r"./logs/leaguesAndTeams.txt") and os.path.getsize(r"./logs/leaguesAndTeams.txt") > 0):
         setupFileInitiation()
     else:
-        setupMenuInitiation()
-    myExcel = Excel(players)
+        pass
+        #setupMenuInitiation()
+    myExcel = Excel(leagues)
     myExcel.deleteExcelFile() #should not to this in the end - or maybe
     myExcel.setupExcelFile()
-    setupWeeksCoveredFile()
+    setupWeeksCoveredForEachLeagueFile()
     
 
-
-driver.quit()
 
 
 if __name__ == "__main__":

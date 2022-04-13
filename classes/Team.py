@@ -6,17 +6,12 @@ import os
 import utilities.util as util
 import utilities.constants as const
 from classes.Match import Match
-from classes.Match import IndbyrdesMatch
 class Team:
-    def __init__(self,name,league=None,country="",webdriver=None,url=None):
+    def __init__(self,name,player):
         self.name = util.removeInvalidLetters(name)
-        self.league = league
-        self.country = country.lower()
-        self.webdriver = webdriver
-        if url == None:
-            self.url = self.getTeamURL()
-        else:
-            self.url = url
+        self.player = player
+        
+        #not sure about these - wait
         self.points = 0 #this will be changed with the main_update
         self.currentMatches = []
     #get URL for a team - either from the team.txt or with the webdriver
@@ -52,7 +47,8 @@ class Team:
                 file.close()
                 return teamRow.get_attribute('href')
     def updatePointsForMatches():
-        
+        pass
+        ##
         ##her skal der findes alle matches i denne uge - og på den måde sørge for at få alle med - og ingen duplicates
         
         

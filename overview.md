@@ -1,7 +1,7 @@
 ####
 den skal tage holdene i samme liga på samme tid. 
 og så skal den gemme den sidste dato den tog - og som backup den sidste kamp (hvis flere kampe spilles den dag)
-
+leaguesandteams.txt skal ende på en newline
 
 
 ####

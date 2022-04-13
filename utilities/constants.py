@@ -5,3 +5,4 @@ LeagueNationsDict = {"italien":"serie-a",
                     "tyskland":"bundesliga",
                     "england":"premier-league",
                     "danmark":"superliga"}
+
