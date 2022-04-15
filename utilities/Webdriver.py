@@ -51,7 +51,7 @@ class Webdriver:
         allMatches = []
         rawMatchesData = None
         while (True):
-            #used to check if top of page has been reached
+            #is used to check if top of page has been reached
             if rawMatchesData == None: 
                 previousTopMatchData = None
             else:
@@ -60,7 +60,7 @@ class Webdriver:
             rawMatchesData = self.loadDataForAllMatches()
             allMatches = self.rawMatchesToMatchObjects(rawMatchesData)
             currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
-            if util.compareDates(currentMatch.date,latestMatch.date): #currentMatch.date > latestMatch.date
+            if currentMatch.date > latestMatch.date:
                 TopMatchData = rawMatchesData[0]
                 if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked
                     break
