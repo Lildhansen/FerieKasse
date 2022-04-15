@@ -34,11 +34,14 @@ evt. mail med holdene til alle spillerne
     ~~for hver kamp der ikke er talt point for~~
        ~~ gem info om kamp i match objekt~~
             ~~hjemmehold,udehold,mål scoret, mål imod, vinder/taber, (evt. målscorer for udehold/hjemmhold)~~
-        beregn point
-            vinder,taber,mål scoret,indbyrdes,egne hold
-            evt. hvis hold har vundet - skip den
-                medmindre målscorene skal gemmes.
-                på den måde sikrer vi at indbyrdes kampe ikke tælles for begge hold
+        ~~beregn point~~
+            ~~vinder,taber,mål scoret,indbyrdes,egne hold~~
+            ~~evt. hvis hold har vundet - skip den~~
+                ~~medmindre målscorene skal gemmes.~~
+            hvis 2 spillerhold mod hinanden:
+                hvis begge hold i samme spille, point = 0
+                ellers, point *= 2
+        indsæt point i spiller objekter (evt i lister så alle udregninger kan ses)
 opdater datoer
 skriv til excel
     sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
