@@ -4,6 +4,7 @@ import datetime
 #own libraries
 from classes.Match import Match
 from utilities.Webdriver import Webdriver as wd
+import utilities.constants as const
 
 class League:
     def __init__(self,name,country):
@@ -40,4 +41,17 @@ class League:
     def calculatePointsForMatches(self):
         for match in self.matches:
             match.calculatePoints(self)
-            #calculate indbyrdes based on the teams it has and the match (since the team now consist of teamname and playername)
+            self.applyMatchMultipliers(match)
+    #apply possible multipliers for the match - if it was an "indbyrdes" match
+    def applyMatchMultipliers(self,match):
+        if (match.awayTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
+            homeTeam = self.findTeamByTeamName(match.homeTeam)
+            awayTeam = self.findTeamByTeamName(match.awayTeam)
+            ##-----MANGLER IMPLEMENTATION FOR KUN DOBBELT VED HJEMMEKAMPE I SLUTSPILLET AF SUPERLIGA----
+            match.points *= 0 if homeTeam.playerName == awayTeam.playerName else const.INDBYRDES_MULTIPLIER
+    def findTeamByTeamName(self,teamName):
+        for team in self.teams:
+            if team.name.lower() == teamName.lower():
+                return team
+        raise Exception("team not found")
+           
