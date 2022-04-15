@@ -69,19 +69,3 @@ def test_textToDate_converts_month_day_and_weekdays_correctly_if_input_date_is_i
     actual = test_input.strftime("%Y") + test_input.strftime("%m") + test_input.strftime("%d")
     expected = expected_date.strftime("%Y") + expected_date.strftime("%m") + expected_date.strftime("%d")
     assert actual== expected
-
-
-
-
-
-# def test_textToDate_converts_month_and_day_correctly():
-#     pass
-
-# def test_textToDate_raises_exception_with_invalid_dates():
-#     pass
-
-# @pytest.mark.parametrize("test_input,expected",[("Søn. 10.4",date(datetime.now().year+1,4,10)),
-#                                                 ("Man. 31.12",date(datetime.now().year,12,31)),
-#                                                 ("Lør. 1.1",date(datetime.now().year+1,1,1)),
-#                                                 ("Ons. 20.3",date(datetime.now().year+1,3,20))
-#                                                 ])
