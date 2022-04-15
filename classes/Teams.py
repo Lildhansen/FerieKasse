@@ -1,4 +1,4 @@
 class Team():
-    def __init__(self):
-        self.name = None
-        self.playerName = None
+    def __init__(self,name,playerName):
+        self.name = name
+        self.playerName = playerName

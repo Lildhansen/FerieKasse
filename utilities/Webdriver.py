@@ -31,7 +31,6 @@ class Webdriver:
         searchField.send_keys(searchText + " ")
         searchField.submit()
         self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span").click()   
-        #soccerway
     #accepts cookies when using the selenium webdriver
     def acceptCookies(self):
         try:
@@ -75,7 +74,7 @@ class Webdriver:
                                                                             #(as they have already been calculated in an earlier iteration of the program)
                 break
         return allMatches
-    
+
     #loads the data for all matches visible on the page at that time. Only saves the matches that have finished.
     #returns the raw data for these matches
     def loadDataForAllMatches(self):
