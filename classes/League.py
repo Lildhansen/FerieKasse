@@ -13,12 +13,6 @@ class League:
         self.teams = []
         self.matches = []
         self.searchText = f"{self.country} {self.name} results"
-    def addToLeaguesTeamsAndLinksFile(self):
-        file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
-        file.write(f"{self.name},{self.searchText}:\n")
-        for team in self.teams:
-            file.write(f"{team.name},{team.player}\n")
-        file.close()
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterLatestMatch(self,match=Match()):
@@ -35,14 +29,15 @@ class League:
     #removes the matches that does not involve any of the teams (that is players' teams) in that league
     def filterMatches(self):
         for match in self.matches:
-            if not (match.homeTeam in self.teams or match.awayTeam in self.teams):
+            if not (match.homeTeam in self.teams.name or match.awayTeam in self.teams.name):
                 self.matches.remove(match)
                 continue
-            elif (match.homeTeam in self.teams):
+            elif (match.homeTeam in self.teams.name):
                 match.homeTeamIsPlayerTeam = True
-            if (match.awayTeam in self.teams):
+            if (match.awayTeam in self.teams.name):
                 match.awayTeamIsPlayerTeam = True
     #calculates the points for all matches and saves the points in the match objects
     def calculatePointsForMatches(self):
         for match in self.matches:
             match.calculatePoints(self)
+            #calculate indbyrdes based on the teams it has and the match (since the team now consist of teamname and playername)
