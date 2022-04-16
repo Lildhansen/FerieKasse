@@ -25,31 +25,22 @@ leagues = []
 #     myMenu = Menu(players,"Select a league/country",driver)
 #     myMenu.run()
 
-#setting up the feriekasse with the existence of a PlayerAndTeams.txt-file 
-def setupFileInitiation():
-    leagues = helperMain.getAllLeagues()
-    file = open(r"./logs/leaguesTeamsAndLinks.txt","a+")
-    file.truncate(0)
-    file.close
-    for league in leagues:
-        league.addToLeaguesTeamsAndLinksFile()
 
-def setupWeeksCoveredForEachLeagueFile():
-    file = open("./logs/WeeksCovered.txt","w+")
+def setupLatestMatchCoveredForEachLeagueFile():
+    file = open("./logs/latestMatchCovered.json","w+")
     file.close() 
-
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
     if (os.path.isfile(r"./logs/leaguesAndTeams.txt") and os.path.getsize(r"./logs/leaguesAndTeams.txt") > 0):
-        setupFileInitiation()
+        helperMain.getAllLeagues()
     else:
         pass
         #setupMenuInitiation()
     myExcel = Excel(leagues)
-    myExcel.deleteExcelFile() #should not to this in the end - or maybe
+    myExcel.deleteExcelFile() #should not do this in the end
     myExcel.setupExcelFile()
-    setupWeeksCoveredForEachLeagueFile()
+    setupLatestMatchCoveredForEachLeagueFile()
     
 
 

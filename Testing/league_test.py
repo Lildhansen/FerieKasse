@@ -1,6 +1,6 @@
 import pytest
 from classes.League import League
-from classes.Teams import Team
+from classes.Team import Team
 from classes.Match import Match
 
 def getMockLeagueForFindTeamTests():
@@ -22,8 +22,8 @@ def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_playe
     newMatch = Match()
     team1 = Team("team1","player1")
     team2 = Team("team2",None)
-    newMatch.homeTeam = team1
-    newMatch.awayTeam = team2
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
     newMatch.homeTeamIsPlayerTeam = False
     newMatch.awayTeamIsPlayerTeam = True
     newMatch.points = 20
@@ -40,8 +40,8 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_same
     newMatch = Match()
     team1 = Team("team1","player1")
     team2 = Team("team2","player1")
-    newMatch.homeTeam = team1
-    newMatch.awayTeam = team2
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
     newMatch.homeTeamIsPlayerTeam = True
     newMatch.awayTeamIsPlayerTeam = True
     newMatch.points = 20
@@ -58,8 +58,8 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_diff
     newMatch = Match()
     team1 = Team("team1","player1")
     team2 = Team("team2","player2")
-    newMatch.homeTeam = team1
-    newMatch.awayTeam = team2
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
     newMatch.homeTeamIsPlayerTeam = True
     newMatch.awayTeamIsPlayerTeam = True
     newMatch.points = 20

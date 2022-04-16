@@ -41,10 +41,10 @@ class Webdriver:
     def getMatchesAfterLatestMatch(self,latestMatch):
         time.sleep(1) #wait for page to load
         # for testing ----------
-        latestMatch.date = datetime.date(2022, month=4, day=10)
-        latestMatch.homeTeam = "Brentford"
-        latestMatch.awayTeam = "West Ham"
-        latestMatch.homeGoals = 2
+        latestMatch.date = datetime.date(2022, month=4, day=8)
+        latestMatch.homeTeam = "Newcastle"
+        latestMatch.awayTeam = "Wolves"
+        latestMatch.homeGoals = 1
         latestMatch.awayGoals = 0
         #_---------------------------
         allMatches = []
