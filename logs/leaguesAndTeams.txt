@@ -3,7 +3,7 @@ Chelsea,Kim
 Leicester,Emil
 Tottenham,Emil
 Arsenal,Mads
-Manchester utd,Soren
+Man Utd,Soren
 Bundesliga,tyskland:
 RB leipzig,Kim
 Dortmund,Emil

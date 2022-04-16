@@ -29,24 +29,32 @@ class League:
         self.filterMatches()
     #removes the matches that does not involve any of the teams (that is players' teams) in that league
     def filterMatches(self):
-        for match in self.matches:
-            if not (match.homeTeam in self.teams.name or match.awayTeam in self.teams.name):
+        originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop
+        for match in originalMatchList:
+            TeamInMatch = False
+            for team in self.teams:
+                if (match.homeTeam == team.name):
+                    match.homeTeamIsPlayerTeam = True
+                    TeamInMatch = True
+                if (match.awayTeam == team.name):
+                    match.awayTeamIsPlayerTeam = True
+                    TeamInMatch = True
+                if not TeamInMatch:
+                    continue
+                break
+            if not TeamInMatch:
                 self.matches.remove(match)
-                continue
-            elif (match.homeTeam in self.teams.name):
-                match.homeTeamIsPlayerTeam = True
-            if (match.awayTeam in self.teams.name):
-                match.awayTeamIsPlayerTeam = True
+                
     #calculates the points for all matches and saves the points in the match objects
     def calculatePointsForMatches(self):
         for match in self.matches:
-            match.calculatePoints(self)
+            match.calculatePoints()
             self.applyMatchMultipliers(match)
     #apply possible multipliers for the match - if it was an "indbyrdes" match
     def applyMatchMultipliers(self,match):
         if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
-            homeTeam = self.findTeamByTeamName(match.homeTeam.name)
-            awayTeam = self.findTeamByTeamName(match.awayTeam.name)
+            homeTeam = self.findTeamByTeamName(match.homeTeam)
+            awayTeam = self.findTeamByTeamName(match.awayTeam)
             ##-----MANGLER IMPLEMENTATION FOR KUN DOBBELT VED HJEMMEKAMPE I SLUTSPILLET AF SUPERLIGA----
             match.points *= 0 if homeTeam.playerName == awayTeam.playerName else const.INDBYRDES_MULTIPLIER
     def findTeamByTeamName(self,teamName):
