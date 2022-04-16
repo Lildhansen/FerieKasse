@@ -28,7 +28,7 @@ class Match:
     def calculate(self):
         if not self.draw:
             #if the player team won
-            if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
+            if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam and not self.homeTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam and not self.awayTeamIsPlayerTeam):
                 return 0
             return self.calculateLoss()
         #draw
@@ -38,7 +38,6 @@ class Match:
     def calculateLoss(self):
         return const.LOSE_POINTS + abs(self.awayGoals - self.homeGoals) * const.POINTS_PER_GOAL            
        
-        
     def __eq__(self, other):
         return self.date == other.date and self.homeTeam == other.homeTeam
 

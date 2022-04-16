@@ -39,7 +39,7 @@ class League:
                 if (match.awayTeam == team.name):
                     match.awayTeamIsPlayerTeam = True
                     TeamInMatch = True
-                if not TeamInMatch:
+                if not TeamInMatch: #if the team did not match, we try again with the next team - until we are through the list of teams
                     continue
                 break
             if not TeamInMatch:
