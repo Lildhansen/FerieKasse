@@ -13,8 +13,10 @@ def getMockLeagueForFindTeamTests():
     return mockLeague
 
 #filter matches
-    #måske calculatePointsForMatches - nok ikke, da den indeholder apply match multiplier og match.calculatePoints (men så er det jo en integrationTest)
-#apply match multiplier - check 0 and 2
+
+#calculatePointsForMatches - en integrationTest:
+    #tester at den kan regne point og så lave multiplier
+    
 
 def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_player_team():
     myLeague = League("league1","country1")
