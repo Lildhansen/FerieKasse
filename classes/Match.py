@@ -28,14 +28,12 @@ class Match:
     def calculate(self):
         if not self.draw:
             #if the player team won
-            if (self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (not self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
+            if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
                 return 0
             return self.calculateLoss()
         #draw
-        elif self.draw:
-            return const.DRAW_POINTS
         else:
-            raise Exception("invalid match conditions")
+            return const.DRAW_POINTS
     #calculates the points for a loss
     def calculateLoss(self):
         return const.LOSE_POINTS + abs(self.awayGoals - self.homeGoals) * const.POINTS_PER_GOAL            
@@ -44,5 +42,3 @@ class Match:
     def __eq__(self, other):
         return self.date == other.date and self.homeTeam == other.homeTeam
 
-#match skal beregnes og i player skal vi derefter - måske - gange med 0 eller 2. not sure hvor vi ganger med 2 henne - burde nok gøres i
-#main_update

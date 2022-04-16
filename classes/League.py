@@ -44,9 +44,9 @@ class League:
             self.applyMatchMultipliers(match)
     #apply possible multipliers for the match - if it was an "indbyrdes" match
     def applyMatchMultipliers(self,match):
-        if (match.awayTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
-            homeTeam = self.findTeamByTeamName(match.homeTeam)
-            awayTeam = self.findTeamByTeamName(match.awayTeam)
+        if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
+            homeTeam = self.findTeamByTeamName(match.homeTeam.name)
+            awayTeam = self.findTeamByTeamName(match.awayTeam.name)
             ##-----MANGLER IMPLEMENTATION FOR KUN DOBBELT VED HJEMMEKAMPE I SLUTSPILLET AF SUPERLIGA----
             match.points *= 0 if homeTeam.playerName == awayTeam.playerName else const.INDBYRDES_MULTIPLIER
     def findTeamByTeamName(self,teamName):

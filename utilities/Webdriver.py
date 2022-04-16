@@ -31,7 +31,6 @@ class Webdriver:
         searchField.send_keys(searchText + " ")
         searchField.submit()
         self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span").click()   
-        #soccerway
     #accepts cookies when using the selenium webdriver
     def acceptCookies(self):
         try:
@@ -51,7 +50,7 @@ class Webdriver:
         allMatches = []
         rawMatchesData = None
         while (True):
-            #used to check if top of page has been reached
+            #is used to check if top of page has been reached
             if rawMatchesData == None: 
                 previousTopMatchData = None
             else:
@@ -60,7 +59,7 @@ class Webdriver:
             rawMatchesData = self.loadDataForAllMatches()
             allMatches = self.rawMatchesToMatchObjects(rawMatchesData)
             currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
-            if util.compareDates(currentMatch.date,latestMatch.date): #currentMatch.date > latestMatch.date
+            if currentMatch.date > latestMatch.date:
                 TopMatchData = rawMatchesData[0]
                 if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked
                     break
@@ -75,7 +74,7 @@ class Webdriver:
                                                                             #(as they have already been calculated in an earlier iteration of the program)
                 break
         return allMatches
-    
+
     #loads the data for all matches visible on the page at that time. Only saves the matches that have finished.
     #returns the raw data for these matches
     def loadDataForAllMatches(self):
