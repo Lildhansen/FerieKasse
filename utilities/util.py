@@ -2,6 +2,8 @@ from datetime import date, timedelta, datetime
 from dateutil.relativedelta import relativedelta
 import re
 
+from classes.Match import Match
+
 #consts
 INVALID_LETTERS = "æøå"
 
@@ -44,7 +46,7 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
-#expects input in the form "Søn. 10.4" or "10.4" or either "I Går" or "I Dag"
+#expects input in the form "Søn. 20.4" or "20.4" or either "I Går" or "I Dag"
 def textToDate(text):
     if text != "I Dag" and text != "I Går":
         if (re.search('[a-zA-Z]',text) != None):
@@ -64,3 +66,6 @@ def textToDate(text):
     else:
         return date.today() - timedelta(days=1)
     
+#converts named tuple, match, into a match object and returns it - will only be called if not None
+def matchTupleToMatchObject(matchTuple):
+    return Match([matchTuple.date,matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals])

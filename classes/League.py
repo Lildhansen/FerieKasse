@@ -1,5 +1,7 @@
 #libraries - standard or pip
 import datetime
+import json
+from classes.myJsonEncoder import MyJsonEncoder as Encoder
 
 #own libraries
 from classes.Match import Match
@@ -26,7 +28,27 @@ class League:
         self.driver.findLeagueUrl(self.searchText)
         self.matches = self.driver.getMatchesAfterLatestMatch(match)    
         self.driver.quit()
+        self.saveLatestMatchCovered()
         self.filterMatches()
+        
+    def saveLatestMatchCovered(self):
+        latestMatchJSON = json.dumps(self.matches[-1],cls=Encoder)
+        print(latestMatchJSON)
+        
+        #reading
+        file = open(r"./logs/latestMatchCovered.json","r")
+        leaguesAncCountries = json.load(file)
+        file.close()
+        
+        leaguesAncCountries[f"{self.country},{self.name}"] = latestMatchJSON  
+        
+        #writing  
+        file = open(r"./logs/latestMatchCovered.json","w")
+        json.dump(leaguesAncCountries,file)
+        file.close()
+        
+        
+    
     #removes the matches that does not involve any of the teams (that is players' teams) in that league
     def filterMatches(self):
         originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop

@@ -8,6 +8,7 @@ from classes.League import League
 from Excel import Excel
 from utilities.Webdriver import Webdriver
 import helperMain
+import utilities.constants as const
 
 
 leagues = []
@@ -28,6 +29,14 @@ leagues = []
 
 def setupLatestMatchCoveredForEachLeagueFile():
     file = open("./logs/latestMatchCovered.json","w+")
+    file.write("{")
+    i = 0
+    for country,league in const.LeagueNationsDict.items():
+        if i != 0:
+            file.write(",\n")
+        file.write('"'+country+','+league+'":{}')
+        i += 1
+    file.write("}")
     file.close() 
 
 #the main function of the file - sets up the feriekasse

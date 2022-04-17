@@ -38,9 +38,10 @@ evt. mail med holdene til alle spillerne
             ~~vinder,taber,mål scoret,indbyrdes,egne hold~~
             ~~evt. hvis hold har vundet - skip den~~
                 ~~medmindre målscorene skal gemmes.~~
-            hvis 2 spillerhold mod hinanden:
-                hvis begge hold i samme spille, point = 0
-                ellers, point *= 2
+            ~~hvis 2 spillerhold mod hinanden:~~
+                ~~hvis begge hold i samme spille, point = 0~~
+                ~~ellers, point *= 2~~
+        ~~opdater .json - for hver liga~~
         indsæt point i spiller objekter (evt i lister så alle udregninger kan ses)
 opdater datoer
 skriv til excel

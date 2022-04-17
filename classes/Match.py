@@ -37,8 +37,10 @@ class Match:
     #calculates the points for a loss
     def calculateLoss(self):
         return const.LOSE_POINTS + abs(self.awayGoals - self.homeGoals) * const.POINTS_PER_GOAL            
-       
-        
+          
     def __eq__(self, other):
+        if other == None:
+            return False
         return self.date == other.date and self.homeTeam == other.homeTeam
+
 
