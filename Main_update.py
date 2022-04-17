@@ -13,6 +13,7 @@ import helperMain
  
 def UpdateFerieKasse():
     leagues = helperMain.getAllLeagues()
+    players = util.getPlayerObjectsFromFile()
     for league in leagues:
         ##kunne godt bruge threads her
         match = getLatestMatchCovered(league)
@@ -21,7 +22,10 @@ def UpdateFerieKasse():
         else:
             league.getMatchesAfterLatestMatch(match)
         league.calculatePointsForMatches()
+        for match in league.matches:
+            awardPointsToPlayers(match,players)
         return
+    
 
 def getLatestMatchCovered(league):
     file = open(r"./logs/latestMatchCovered.json","r")
@@ -35,7 +39,11 @@ def getLatestMatchCovered(league):
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
     
-
+def awardPointsToPlayers(match,players):
+    if match.draw:
+        pass
+    
+    
 
 if __name__ == "__main__":
     UpdateFerieKasse()

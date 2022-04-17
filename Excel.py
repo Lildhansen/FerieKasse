@@ -10,6 +10,7 @@ import os
 class Excel:
     def __init__(self,leagues):
         self.leagues = leagues
+        self.player = util.getPlayerObjectsFromFile() ##denne skal bruges i stedet for den under - og metoden til den under skal også fjernes
         self.playersTeamsDict = {}
         self.__getPlayersTeams()
     def __getPlayersTeams(self):

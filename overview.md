@@ -1,12 +1,3 @@
-####
-den skal tage holdene i samme liga på samme tid. 
-og så skal den gemme den sidste dato den tog - og som backup den sidste kamp (hvis flere kampe spilles den dag)
-leaguesandteams.txt skal ende på en newline
-
-
-####
-
-
 # initiate
 - mangler clean-up af denne fil
 skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
@@ -113,11 +104,6 @@ sørg for at lukke **ALLE** connections samt filer
     main files = Main_snake_case
     ClassFiles = PascalCase
     other files = camelCase
-
-
-
-# notes:
-when reading from "playersTeamsAndLinks.txt" skip the last newline
 
 
 # nice to haves:

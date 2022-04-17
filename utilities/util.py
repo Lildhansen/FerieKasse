@@ -1,8 +1,8 @@
 from datetime import date, timedelta, datetime
-from dateutil.relativedelta import relativedelta
 import re
 
 from classes.Match import Match
+from classes.Player import Player
 
 #consts
 INVALID_LETTERS = "æøå"
@@ -69,3 +69,29 @@ def textToDate(text):
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
     return Match([matchTuple.date,matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals])
+    
+def getPlayerObjectsFromFile(self):
+    players = []
+    file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
+    for line in file.readlines():
+        if ":" in line:
+            continue
+        else: #team,player
+            teamAndPlayer = (removeInvalidLetters(line)).split(",")
+            player = findPlayerObjectInPlayerListFromPlayerName(teamAndPlayer[1],players)
+            if player == None:
+                playerObject = Player(teamAndPlayer[1])
+                playerObject.teams.append(teamAndPlayer[0])
+                players.append(playerObject)
+            else:
+                player.teams.append(teamAndPlayer[0])
+
+def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
+    for player in players:
+        if playerName == player.name:
+            return player
+        else:
+            continue
+    return None
+    
+    
