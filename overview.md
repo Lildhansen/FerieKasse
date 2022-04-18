@@ -33,8 +33,8 @@ evt. mail med holdene til alle spillerne
                 ~~hvis begge hold i samme spille, point = 0~~
                 ~~ellers, point *= 2~~
         ~~opdater .json - for hver liga~~
-        indsæt point i spiller objekter (evt i lister så alle udregninger kan ses)
-opdater datoer
+        ~~indsæt point i spiller objekter (evt i lister så alle udregninger kan ses)~~
+~~opdater datoer~~
 skriv til excel
     sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
 send mail
@@ -66,27 +66,18 @@ ikke clear:
     LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
     makefil?
+    skal translate brndby til brøndby (og generelt tilføje æøå)
 # optimeringsmuligheder:
-når den skal finde holdene, skal den samle dem alle i lande, så den laver minimal søgninger til chrome
 sørg for at lukke **ALLE** connections samt filer
 
 # small todo
     fix casing
     add comments - til hver funktion
-    måske en selvstændig class med forbindelse til webdriver
-    lav folder til tests
     fix menu - både comments og mere 
         og hvordan kan de importere ud af filen
 
 # comments needed
-~~Util~~
-~~WebdriverHelper~~ 
-~~Team~~
-~~player~~
-~~Match~~
-~~Main_update~~
-~~Main_remove_feriekasse~~
-~~Main_initiate~~
+
     
 
 

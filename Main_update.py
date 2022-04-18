@@ -23,8 +23,9 @@ def UpdateFerieKasse():
             league.getMatchesAfterLatestMatch(match)
         league.calculatePointsForMatches()
         for match in league.matches:
-            awardPointsToPlayers(match,players)
+            awardPointsToPlayers(match,players,league)
         return
+    #skriv til excel
     
 
 def getLatestMatchCovered(league):
@@ -39,12 +40,31 @@ def getLatestMatchCovered(league):
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
     
-def awardPointsToPlayers(match,players):
-    if match.draw:
-        pass
-    
-    
+def awardPointsToPlayers(match,players,league):
+    if match.homeTeamIsPlayerTeam:
+        homePlayer = getPlayerThatHasTeam(match.homeTeam,players)
+    if match.awayTeamIsPlayerTeam:
+        awayPlayer = getPlayerThatHasTeam(match.awayTeam,players)
+    if match.homeTeamIsWinner:
+        tryAddPoints(awayPlayer,match.points)
+    elif not match.homeTeamIsWinner:
+        tryAddPoints(homePlayer,match.points)
+    elif match.draw:
+        tryAddPoints(awayPlayer,match.points)
+        tryAddPoints(homePlayer,match.points)
+           
+def getPlayerThatHasTeam(teamName,players):
+    for player in players:
+        for team in player.teams:
+            if team.name == teamName:
+                return player
+    return None
 
+def tryAddPoints(player,points):
+    if player == None:
+        return
+    player.points.append(points)
+    
 if __name__ == "__main__":
     UpdateFerieKasse()
 
