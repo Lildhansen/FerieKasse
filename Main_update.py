@@ -4,6 +4,7 @@ from collections import namedtuple
 
 #own modules
 from classes.Player import Player
+from Excel import Excel
 from classes.Match import Match
 import utilities.util as util
 from utilities.Webdriver import Webdriver as wd
@@ -23,8 +24,12 @@ def UpdateFerieKasse():
             league.getMatchesAfterLatestMatch(match)
         league.calculatePointsForMatches()
         for match in league.matches:
-            awardPointsToPlayers(match,players,league)
-        return
+            #awardPointsToPlayers(match,players,league) #this is probably not neccessary, as points must be added to each team and not one for each player
+            assignMatchToPlayers(match,players)
+        break
+    myExcel = Excel(leagues)
+    myExcel.updateExcelFile(players)
+    
     #skriv til excel
     
 
@@ -39,7 +44,18 @@ def getLatestMatchCovered(league):
     matchTuple = json.loads(matchJson, object_hook = lambda d : namedtuple('Match', d.keys())(*d.values()))
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
-    
+
+def assignMatchToPlayers(match,players):
+    if match.homeTeamIsPlayerTeam:
+        homePlayer = getPlayerThatHasTeam(match.homeTeam,players)
+    if match.awayTeamIsPlayerTeam:
+        awayPlayer = getPlayerThatHasTeam(match.awayTeam,players)
+    if match.homeTeamIsWinner or match.draw:
+        homePlayer.matches.append(match)
+    if not match.homeTeamIsWinner or match.draw:
+        awayPlayer.matches.append(match)
+
+
 def awardPointsToPlayers(match,players,league):
     if match.homeTeamIsPlayerTeam:
         homePlayer = getPlayerThatHasTeam(match.homeTeam,players)

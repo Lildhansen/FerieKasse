@@ -70,7 +70,7 @@ def textToDate(text):
 def matchTupleToMatchObject(matchTuple):
     return Match([matchTuple.date,matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals])
     
-def getPlayerObjectsFromFile(self):
+def getPlayerObjectsFromFile():
     players = []
     file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
     for line in file.readlines():
@@ -85,6 +85,7 @@ def getPlayerObjectsFromFile(self):
                 players.append(playerObject)
             else:
                 player.teams.append(teamAndPlayer[0])
+    return players
 
 def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
     for player in players:
