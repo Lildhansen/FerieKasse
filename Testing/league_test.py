@@ -66,7 +66,7 @@ def test_calculatePointsForMatches_calculates_points_correctly():
     myLeague.calculatePointsForMatches()
     assert match1.points == 10 #draw (5) with multiplier (5*2)
     assert match2.points == 0
-    assert match3.points == 25
+    assert match3.points == 20
 
 def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_player_team():
     myLeague = League("league1","country1")

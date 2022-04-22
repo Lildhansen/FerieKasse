@@ -27,11 +27,11 @@ def test_setupPointCalculation_sets_bools_correct_for_draw(test_input):
     assert test_input.homeTeamIsWinner == None
     assert test_input.draw == True
 
-@pytest.mark.parametrize("test_input,expected", [(Match([None,"a",15,"b",1]),80),(Match([None,"a",0,"b",1]),15),(Match([None,"a",2,"b",5]),25),(Match([None,"a",5,"b",2]),25)]) 
+@pytest.mark.parametrize("test_input,expected", [(Match([None,"a",15,"b",1]),75),(Match([None,"a",0,"b",1]),10),(Match([None,"a",2,"b",5]),20),(Match([None,"a",5,"b",2]),20)]) 
 def test_calculateLoss_calculates_points_correctly_based_on_score_if_game_is_a_loss(test_input,expected):
     assert test_input.calculateLoss() == expected
     
-@pytest.mark.parametrize("test_input,expected", [(Match([None,"a",0,"b",0]),5),(Match([None,"a",7,"b",7]),5),(Match([None,"a",2,"b",5]),25),(Match([None,"a",10,"b",0]),60)])    
+@pytest.mark.parametrize("test_input,expected", [(Match([None,"a",0,"b",0]),5),(Match([None,"a",7,"b",7]),5),(Match([None,"a",2,"b",5]),20),(Match([None,"a",10,"b",0]),55)])    
 def test_calculatePoints_calculates_points_for_matches_correctly_by_score(test_input,expected):
     test_input.setupPointCalculation() #needs to be done - so the flags are correctly set for calculate
     assert test_input.calculate() == expected

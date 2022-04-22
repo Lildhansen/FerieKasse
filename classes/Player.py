@@ -1,8 +1,9 @@
 
 class Player:
-    def __init__(self,name,teams):
+    def __init__(self,name):
         self.name = name
-        self.teams = teams
+        self.teams = []
+        self.matches = []
         self.points = []
 
 

@@ -38,17 +38,24 @@ class Webdriver:
         except:
             pass
     #takes the latest match that has been processed as input, and get all matches in that specific league between that match+1 and the last played match
-    def getMatchesAfterLatestMatch(self,latestMatch):
+    def getMatchesAfterLatestMatch(self,latestMatch,league):
         time.sleep(1) #wait for page to load
         # for testing ----------
-        latestMatch.date = datetime.date(2022, month=4, day=8)
-        latestMatch.homeTeam = "Newcastle"
-        latestMatch.awayTeam = "Wolves"
-        latestMatch.homeGoals = 1
-        latestMatch.awayGoals = 0
+        # latestMatch.date = datetime.date(2022, month=4, day=8)
+        # latestMatch.homeTeam = "Newcastle"
+        # latestMatch.awayTeam = "Wolves"
+        # latestMatch.homeGoals = 1
+        # latestMatch.awayGoals = 0
+        latestMatch.date = datetime.date(2021, month=12, day=30)
+        latestMatch.homeTeam = "Man Utd"
+        latestMatch.awayTeam = "Burnley"
+        latestMatch.homeGoals = 3
+        latestMatch.awayGoals = 1
+        
         #_---------------------------
         allMatches = []
         rawMatchesData = None
+        firstRun = True
         while (True):
             #is used to check if top of page has been reached
             if rawMatchesData == None: 
@@ -59,6 +66,8 @@ class Webdriver:
             rawMatchesData = self.loadDataForAllMatches()
             allMatches = self.rawMatchesToMatchObjects(rawMatchesData)
             currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
+            if firstRun:
+                league.newLatestMatch = allMatches[-1]
             if currentMatch.date > latestMatch.date:
                 TopMatchData = rawMatchesData[0]
                 if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked

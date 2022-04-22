@@ -24,6 +24,6 @@ Torino,Soren
 Superliga,danmark:
 OB,Kim
 AGF,Kim
-Brøndby IF,Emil
-FC København,Mads
-FC midtjylland,Soren
+Brøndby,Emil
+FCK,Mads
+FC Midtjylland,Soren

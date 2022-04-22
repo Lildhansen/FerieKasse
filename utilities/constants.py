@@ -8,5 +8,5 @@ LeagueNationsDict = {"italien":"serie-a",
 
 POINTS_PER_GOAL = 5
 DRAW_POINTS = 5
-LOSE_POINTS = 10
+LOSE_POINTS = 5
 INDBYRDES_MULTIPLIER = 2

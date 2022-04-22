@@ -1,6 +1,8 @@
 from datetime import date, timedelta, datetime
-from dateutil.relativedelta import relativedelta
 import re
+
+from classes.Match import Match
+from classes.Player import Player
 
 #consts
 INVALID_LETTERS = "æøå"
@@ -44,7 +46,7 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
-#expects input in the form "Søn. 10.4" or "10.4" or either "I Går" or "I Dag"
+#expects input in the form "Søn. 20.4" or "20.4" or either "I Går" or "I Dag"
 def textToDate(text):
     if text != "I Dag" and text != "I Går":
         if (re.search('[a-zA-Z]',text) != None):
@@ -54,7 +56,6 @@ def textToDate(text):
         dayAndMonth = onlyDate.split(".")
         day = parseIntOrNone(dayAndMonth[0])
         month = parseIntOrNone(dayAndMonth[1])
-        #print(day,"-----",month)
         if (parseIntOrNone(dayAndMonth[1]) > 7) and (datetime.now().month < 7):
             return date(datetime.now().year-1,month,day) #if last game counted was in second half and it is the first half
         return date(datetime.now().year,month,day)
@@ -63,4 +64,34 @@ def textToDate(text):
         return date.today()
     else:
         return date.today() - timedelta(days=1)
+    
+#converts named tuple, match, into a match object and returns it - will only be called if not None
+def matchTupleToMatchObject(matchTuple):
+    return Match([matchTuple.date,matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals])
+    
+def getPlayerObjectsFromFile():
+    players = []
+    file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
+    for line in file.readlines():
+        if ":" in line:
+            continue
+        else: #team,player
+            teamAndPlayer = (removeInvalidLetters(line)).split(",")
+            player = findPlayerObjectInPlayerListFromPlayerName(teamAndPlayer[1],players)
+            if player == None:
+                playerObject = Player(teamAndPlayer[1])
+                playerObject.teams.append(teamAndPlayer[0])
+                players.append(playerObject)
+            else:
+                player.teams.append(teamAndPlayer[0])
+    return players
+
+def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
+    for player in players:
+        if playerName == player.name:
+            return player
+        else:
+            continue
+    return None
+    
     
