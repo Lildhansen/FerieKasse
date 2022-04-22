@@ -27,9 +27,11 @@ class Match:
     #calculate the points and return them    
     def calculate(self):
         if not self.draw:
+            #if it is not an indbyrdes match
+            if not (self.awayTeamIsPlayerTeam and self.homeTeamIsPlayerTeam):
             #if the player team won
-            if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
-                return 0
+                if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
+                    return 0
             return self.calculateLoss()
         #draw
         else:

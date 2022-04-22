@@ -23,8 +23,8 @@ def UpdateFerieKasse():
         else:
             league.getMatchesAfterLatestMatch(match)
         league.calculatePointsForMatches()
+        league.removeMatchesYielding0Points()
         for match in league.matches:
-            #awardPointsToPlayers(match,players,league) #this is probably not neccessary, as points must be added to each team and not one for each player
             assignMatchToPlayers(match,players)
         break
     myExcel = Excel(leagues)
@@ -46,33 +46,25 @@ def getLatestMatchCovered(league):
     return util.matchTupleToMatchObject(matchTuple)
 
 def assignMatchToPlayers(match,players):
+    homePlayer, awayPlayer = None,None
     if match.homeTeamIsPlayerTeam:
         homePlayer = getPlayerThatHasTeam(match.homeTeam,players)
     if match.awayTeamIsPlayerTeam:
         awayPlayer = getPlayerThatHasTeam(match.awayTeam,players)
     if match.homeTeamIsWinner or match.draw:
-        homePlayer.matches.append(match)
+        tryAppendMatch(awayPlayer,match)
     if not match.homeTeamIsWinner or match.draw:
-        awayPlayer.matches.append(match)
+        tryAppendMatch(homePlayer,match)
 
-
-def awardPointsToPlayers(match,players,league):
-    if match.homeTeamIsPlayerTeam:
-        homePlayer = getPlayerThatHasTeam(match.homeTeam,players)
-    if match.awayTeamIsPlayerTeam:
-        awayPlayer = getPlayerThatHasTeam(match.awayTeam,players)
-    if match.homeTeamIsWinner:
-        tryAddPoints(awayPlayer,match.points)
-    elif not match.homeTeamIsWinner:
-        tryAddPoints(homePlayer,match.points)
-    elif match.draw:
-        tryAddPoints(awayPlayer,match.points)
-        tryAddPoints(homePlayer,match.points)
+def tryAppendMatch(player,match):
+    if player == None:
+        return
+    player.matches.append(match)
            
 def getPlayerThatHasTeam(teamName,players):
     for player in players:
         for team in player.teams:
-            if team.name == teamName:
+            if team == teamName:
                 return player
     return None
 

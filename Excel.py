@@ -1,4 +1,5 @@
 #own modules
+from ast import Raise
 from classes.Player import Player
 import utilities.util as util
 
@@ -8,7 +9,7 @@ import os
 #import xlsxwriter
 
 class Excel:
-    def __init__(self,leagues):
+    def __init__(self,leagues=[]):
         self.leagues = leagues
         self.players = util.getPlayerObjectsFromFile() ##denne skal bruges i stedet for den under - og metoden til den under skal også fjernes
         self.playersTeamsDict = {}
@@ -35,7 +36,8 @@ class Excel:
             ws.cell(row,column,"Point:")
             for team in player.teams:
                 row += 1
-                ws.cell(row,column,0)
+                pointLocation = util.numberToExcelColumn(column) + str(row)
+                ws[pointLocation] = "=0"
             row += 1
             ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
@@ -45,12 +47,36 @@ class Excel:
         wb.save("Feriekasse.xlsx")
         wb.close()
     def updateExcelFile(self,players):
-        pass
+        wb = openpyxl.load_workbook('Feriekasse.xlsx')
+        ws = wb.active #new worksheet
+        column = 1
+        for player in players:
+            for match in player.matches:
+                self.updateTeamPointsInColumn(match,ws,column,player)
+            column += 2
+        wb.save("Feriekasse.xlsx")
+        wb.close()
         #open file
         #for hver spiller (her skal kolonnerne skippe med 2)
             #for hver kamp
                 #find det hold (hometeam == hold eller awayteam == hold) som matcher
                 #indsæt point
+    def updateTeamPointsInColumn(self,match,ws,column,player):
+        row = 2
+        while True:
+            cell = ws.cell(row,column)
+            if cell.value == "Total:":
+                Raise(Exception("team not found in excel file"))
+            if cell.value == match.homeTeam or cell.value == match.awayTeam:
+                #print(match.homeTeam," ",match.homeGoals," - ",match.awayGoals," ",match.awayTeam,"=",match.points)
+                pointCell = ws.cell(row,column+1)
+                pointCell.value += "+" + str(match.points)
+                break
+            row += 1
+            
+              
 #myExcel = Excel()
-#myExcel.deleteExcelFile()
-#myExcel.setupExcelFile()
+#myExcel.updateExcelFile([])
+
+
+#det bliver ikke rigtig regnet ud - fx chelsea man u 1-1 regnes vist til 5 i stedet for 10

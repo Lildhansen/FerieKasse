@@ -16,6 +16,7 @@ class League:
         self.teams = []
         self.matches = []
         self.searchText = f"{self.country} {self.name} results"
+        self.newLatestMatch = None
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterLatestMatch(self,match=Match()):
@@ -26,34 +27,31 @@ class League:
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
         self.driver = wd()
         self.driver.findLeagueUrl(self.searchText)
-        self.matches = self.driver.getMatchesAfterLatestMatch(match)    
+        self.matches = self.driver.getMatchesAfterLatestMatch(match,self) 
         self.driver.quit()
         self.saveLatestMatchCovered()
         self.filterMatches()
         
     def saveLatestMatchCovered(self):
-        latestMatchJSON = json.dumps(self.matches[-1],cls=Encoder)
-        print(latestMatchJSON)
+        latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
         
         #reading
         file = open(r"./logs/latestMatchCovered.json","r")
-        leaguesAncCountries = json.load(file)
+        leaguesAndCountries = json.load(file)
         file.close()
         
-        leaguesAncCountries[f"{self.country},{self.name}"] = latestMatchJSON  
+        leaguesAndCountries[f"{self.country},{self.name}"] = latestMatchJSON  
         
         #writing  
         file = open(r"./logs/latestMatchCovered.json","w")
-        json.dump(leaguesAncCountries,file)
+        json.dump(leaguesAndCountries,file)
         file.close()
         
-        
-    
-    #removes the matches that does not involve any of the teams (that is players' teams) in that league
+    #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
         originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop
-        for match in originalMatchList:
-            TeamInMatch = False
+        for match in originalMatchList:                  
+            TeamInMatch = False            
             for team in self.teams:
                 if (match.homeTeam == team.name):
                     match.homeTeamIsPlayerTeam = True
@@ -61,12 +59,16 @@ class League:
                 if (match.awayTeam == team.name):
                     match.awayTeamIsPlayerTeam = True
                     TeamInMatch = True
-                if not TeamInMatch:
-                    continue
-                break
+                continue #needs to go all the way through the list - if both teams are player teams
             if not TeamInMatch:
                 self.matches.remove(match)
-                
+    #remove matches, where the losing team is not one of the players' teams
+    def removeMatchesYielding0Points(self):
+        originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop
+        for match in originalMatchList:
+            if (not match.draw):
+                if (match.homeTeamIsWinner and not match.awayTeamIsPlayerTeam) or (not match.homeTeamIsWinner and not match.homeTeamIsPlayerTeam):
+                    self.matches.remove(match)           
     #calculates the points for all matches and saves the points in the match objects
     def calculatePointsForMatches(self):
         for match in self.matches:
