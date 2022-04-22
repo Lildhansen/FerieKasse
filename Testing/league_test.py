@@ -12,9 +12,61 @@ def getMockLeagueForFindTeamTests():
     mockLeague.teams.append(Team("name5","player5"))
     return mockLeague
 
-#filter matches
-    #måske calculatePointsForMatches - nok ikke, da den indeholder apply match multiplier og match.calculatePoints (men så er det jo en integrationTest)
-#apply match multiplier - check 0 and 2
+def test_filterMatches_filters_matches_not_involving_player_teams():
+    myLeague = League("league1","country1")
+    
+    match1 = Match()
+    match1.awayTeam = "team1"
+    match1.homeTeam = "team2"
+    
+    match2 = Match()
+    match2.awayTeam = "team3"
+    match2.homeTeam = "not a real team"
+    
+    match3 = Match()
+    match3.awayTeam = "teamNo"
+    match3.homeTeam = "team2"
+    
+    match4 = Match()
+    match4.awayTeam = "noTeam"
+    match4.homeTeam = "nah"
+    
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    team3 = Team("team3","player3")
+    
+    myLeague.matches.extend([match1,match2,match3,match4])
+    myLeague.teams.extend([team1,team2,team3])    
+    
+    myLeague.filterMatches()
+    assert len(myLeague.matches) == 3
+    assert myLeague.matches == [match1,match2,match3]
+
+def test_calculatePointsForMatches_calculates_points_correctly():
+    myLeague = League("league1","country1")
+    match1 = Match([None,"team1",1,"team2",1])
+    match1.homeTeamIsPlayerTeam = True
+    match1.awayTeamIsPlayerTeam = True
+
+    match2 = Match([None,"team3",4,"team4",2])
+    match2.homeTeamIsPlayerTeam = True
+    match2.awayTeamIsPlayerTeam = False
+    
+    match3 = Match([None,"team5",3,"team6",0])
+    match3.homeTeamIsPlayerTeam = False
+    match3.awayTeamIsPlayerTeam = True
+
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    team3 = Team("team3","player3")
+    
+    myLeague.matches.extend([match1,match2,match3])
+    myLeague.teams.extend([team1,team2,team3])
+    
+    myLeague.calculatePointsForMatches()
+    assert match1.points == 10 #draw (5) with multiplier (5*2)
+    assert match2.points == 0
+    assert match3.points == 25
 
 def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_player_team():
     myLeague = League("league1","country1")
