@@ -35,7 +35,7 @@ evt. mail med holdene til alle spillerne
         ~~opdater .json - for hver liga~~
         ~~indsæt point i spiller objekter (evt i lister så alle udregninger kan ses)~~
 ~~opdater datoer~~
-skriv til excel
+~~skriv til excel~~
     sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
 send mail
     hver uge/anden uge / måned
