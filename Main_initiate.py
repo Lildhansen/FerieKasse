@@ -41,7 +41,7 @@ def setupLatestMatchCoveredForEachLeagueFile():
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
-    if (os.path.isfile(r"./logs/leaguesAndTeams.txt") and os.path.getsize(r"./logs/leaguesAndTeams.txt") > 0):
+    if (os.path.isfile(r"./logs/leaguesAndTeams.json") and os.path.getsize(r"./logs/leaguesAndTeams.json") > 0):
         helperMain.getAllLeagues()
     else:
         pass

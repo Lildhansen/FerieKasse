@@ -1,5 +1,7 @@
 from datetime import date, timedelta, datetime
 import re
+import orjson
+import codecs
 
 from classes.Match import Match
 from classes.Player import Player
@@ -71,19 +73,18 @@ def matchTupleToMatchObject(matchTuple):
     
 def getPlayerObjectsFromFile():
     players = []
-    file = open(r"./logs/leaguesAndTeams.txt","r",encoding="utf-8")
-    for line in file.readlines():
-        if ":" in line:
-            continue
-        else: #team,player
-            teamAndPlayer = (removeInvalidLetters(line)).split(",")
-            player = findPlayerObjectInPlayerListFromPlayerName(teamAndPlayer[1],players)
+    file = codecs.open(r"./logs/leaguesAndTeams.json","r",encoding='UTF-8')
+    jsonData = orjson.loads(file.read())
+    for leagueAndCountry in jsonData:
+        for teamName in jsonData[leagueAndCountry]:
+            playerName = jsonData[leagueAndCountry][teamName]
+            player = findPlayerObjectInPlayerListFromPlayerName(playerName,players)
             if player == None:
-                playerObject = Player(teamAndPlayer[1])
-                playerObject.teams.append(teamAndPlayer[0])
-                players.append(playerObject)
+                player = Player(playerName)
+                player.teams.append(teamName)
+                players.append(player)
             else:
-                player.teams.append(teamAndPlayer[0])
+                player.teams.append(teamName)
     return players
 
 def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
