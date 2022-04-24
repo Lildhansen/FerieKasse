@@ -1,5 +1,6 @@
 #libraries - standard or pip
 import json
+import orjson
 from collections import namedtuple
 
 #own modules
@@ -34,9 +35,12 @@ def UpdateFerieKasse():
     
 
 def getLatestMatchCovered(league):
+    #work i progress - should get datetime sorted first - ie writing to the file
+    # with open(r"./logs/latestMatchCovered.json","r") as file:
+    #     fileJson = orjson.loads(file.read())
     file = open(r"./logs/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
-    fileDict = fileJson[f"{league.country},{league.name}"]
+    fileDict = fileJson[f"{league.name},{league.country}"]
     if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update
         return None
     match = json.loads(fileDict)
