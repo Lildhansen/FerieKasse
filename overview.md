@@ -49,7 +49,6 @@ ikke clear:
 
 # tests:
 - rigtig URL for holdene / kampene findes
-- .txt format generes i rigtig format (find linjer og tjek, samt sørg for der ikke er extra \n)
 - korrekt pointtælling
 - korrekt excelskrivning
     - ~~indsættes i rigtig kolonne~~
@@ -61,12 +60,9 @@ ikke clear:
     skal køre menuen hvis den .txt-fil med holdene og spillerne enten er tom eller ikke eksisterer 
         kan evt. også spørge om menuen skal opsættes, hvis ingen .txt-fil eksisterer/er tom
 # extra shit:
-    check danskerscoringer
-    check specielt spillernavn scoring
     LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
     makefil?
-    skal translate brndby til brøndby (og generelt tilføje æøå)
 # optimeringsmuligheder:
 sørg for at lukke **ALLE** connections samt filer
 
