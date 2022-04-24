@@ -1,6 +1,7 @@
 #libraries - standard or pip
-import random
 import os
+import orjson
+
 #own modules
 from menuStuff.Menu import Menu
 import utilities.util as util
@@ -26,22 +27,14 @@ leagues = []
 #     myMenu = Menu(players,"Select a league/country",driver)
 #     myMenu.run()
 
-
+#orjson
 def setupLatestMatchCoveredForEachLeagueFile():
-    file = open("./logs/latestMatchCovered.json","w+")
-    file.write("{")
-    i = 0
-    for country,league in const.LeagueNationsDict.items():
-        if i != 0:
-            file.write(",\n")
-        file.write('"'+country+','+league+'":{}')
-        i += 1
-    file.write("}")
-    file.close() 
+    with open("./logs/latestMatchCovered.json","wb") as file:
+        file.write(orjson.dumps(const.LeagueNationsDict))
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
-    if (os.path.isfile(r"./logs/leaguesAndTeams.txt") and os.path.getsize(r"./logs/leaguesAndTeams.txt") > 0):
+    if (os.path.isfile(r"./logs/leaguesAndTeams.json") and os.path.getsize(r"./logs/leaguesAndTeams.json") > 0):
         helperMain.getAllLeagues()
     else:
         pass

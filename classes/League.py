@@ -1,6 +1,7 @@
 #libraries - standard or pip
 import datetime
 import json
+import orjson
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 
 #own libraries
@@ -33,19 +34,18 @@ class League:
         self.filterMatches()
         
     def saveLatestMatchCovered(self):
+        
         latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
         
         #reading
-        file = open(r"./logs/latestMatchCovered.json","r")
-        leaguesAndCountries = json.load(file)
-        file.close()
+        with open(r"./logs/latestMatchCovered.json","r") as file:
+            leaguesAndCountries = json.load(file)
         
         leaguesAndCountries[f"{self.country},{self.name}"] = latestMatchJSON  
         
         #writing  
-        file = open(r"./logs/latestMatchCovered.json","w")
-        json.dump(leaguesAndCountries,file)
-        file.close()
+        with open(r"./logs/latestMatchCovered.json","w") as file:
+            json.dump(leaguesAndCountries,file)
         
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
