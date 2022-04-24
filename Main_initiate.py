@@ -29,9 +29,8 @@ leagues = []
 
 #orjson
 def setupLatestMatchCoveredForEachLeagueFile():
-    data = const.LeagueNationsDict
     with open("./logs/latestMatchCovered.json","wb") as file:
-        file.write(orjson.dumps(data))
+        file.write(orjson.dumps(const.LeagueNationsDict))
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():

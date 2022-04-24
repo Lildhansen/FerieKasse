@@ -35,40 +35,17 @@ class League:
         
     def saveLatestMatchCovered(self):
         
-        self.newLatestMatch.date = None
-        self.newLatestMatch.homeTeam = None
-        self.newLatestMatch.homeGoals = None
-        self.newLatestMatch.awayTeam = None
-        self.newLatestMatch.awayGoals = None
-        self.newLatestMatch.homeTeamIsPlayerTeam = None
-        self.newLatestMatch.awayTeamIsPlayerTeam = None
-        self.newLatestMatch.homeTeamIsWinner = None 
-        self.newLatestMatch.draw = None
-        self.newLatestMatch.points = None
+        latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
         
+        #reading
         with open(r"./logs/latestMatchCovered.json","r") as file:
-            leaguesAndCountries = orjson.loads(file.read())
-        leaguesAndCountries[f"{self.name},{self.country}"] = orjson.dumps(self.newLatestMatch)
+            leaguesAndCountries = json.load(file)
         
+        leaguesAndCountries[f"{self.country},{self.name}"] = latestMatchJSON  
+        
+        #writing  
         with open(r"./logs/latestMatchCovered.json","w") as file:
-            orjson.dumps(leaguesAndCountries,file)
-        
-        #not tested yet
-        
-        
-        # latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
-        
-        # #reading
-        # file = open(r"./logs/latestMatchCovered.json","r")
-        # leaguesAndCountries = json.load(file)
-        # file.close()
-        
-        # leaguesAndCountries[f"{self.country},{self.name}"] = latestMatchJSON  
-        
-        # #writing  
-        # file = open(r"./logs/latestMatchCovered.json","w")
-        # json.dump(leaguesAndCountries,file)
-        # file.close()
+            json.dump(leaguesAndCountries,file)
         
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
