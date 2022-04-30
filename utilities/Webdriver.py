@@ -21,7 +21,7 @@ class Webdriver:
     def setupDriver(self):
         self.__service = Service("./chromedriver.exe")
         self.__options = Options()
-        self.__options.headless = True
+        #self.__options.headless = True
         self.__options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #navigates the webdriver to the url for that specific league
     def findLeagueUrl(self,searchText):
@@ -46,11 +46,12 @@ class Webdriver:
         # latestMatch.awayTeam = "Wolves"
         # latestMatch.homeGoals = 1
         # latestMatch.awayGoals = 0
-        latestMatch.date = datetime.date(2021, month=12, day=30)
-        latestMatch.homeTeam = "Man Utd"
-        latestMatch.awayTeam = "Burnley"
-        latestMatch.homeGoals = 3
-        latestMatch.awayGoals = 1
+        
+        # latestMatch.date = datetime.date(2021, month=12, day=30)
+        # latestMatch.homeTeam = "Man Utd"
+        # latestMatch.awayTeam = "Burnley"
+        # latestMatch.homeGoals = 3
+        # latestMatch.awayGoals = 1
         
         #_---------------------------
         allMatches = []
@@ -66,9 +67,11 @@ class Webdriver:
             rawMatchesData = self.loadDataForAllMatches()
             allMatches = self.rawMatchesToMatchObjects(rawMatchesData)
             currentMatch = self.rawMatchToMatchObject([rawMatchesData[2].text,rawMatchesData[4].text,rawMatchesData[5].text])
+            print(f"current match: {currentMatch.date} latestMatch: {latestMatch.date}")
             if firstRun:
                 league.newLatestMatch = allMatches[-1]
             if currentMatch.date > latestMatch.date:
+                print("here")
                 TopMatchData = rawMatchesData[0]
                 if (previousTopMatchData == TopMatchData): #has reached the top - meaning all matches must be checked
                     break
@@ -107,6 +110,7 @@ class Webdriver:
         allMatches = []
         i = 2
         while i <= len(rawMatches):
+            print(i)
             match = self.rawMatchToMatchObject([rawMatches[i].text,rawMatches[i+2].text,rawMatches[i+3].text])
             allMatches.append(match)
             i += 8

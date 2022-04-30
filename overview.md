@@ -62,7 +62,7 @@ ikke clear:
 # extra shit:
     LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
-    makefil?
+    ~~makefil?~~
 # optimeringsmuligheder:
 sørg for at lukke **ALLE** connections samt filer
 

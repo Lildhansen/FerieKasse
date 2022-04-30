@@ -17,6 +17,9 @@ def UpdateFerieKasse():
     leagues = helperMain.getAllLeagues()
     players = util.getPlayerObjectsFromFile()
     for league in leagues:
+        print(league.country)
+        if league.country.lower() == "england" or league.country.lower() == "tyskland":
+            continue
         ##kunne godt bruge threads her
         match = getLatestMatchCovered(league)
         if match == None:
@@ -27,7 +30,6 @@ def UpdateFerieKasse():
         league.removeMatchesYielding0Points()
         for match in league.matches:
             assignMatchToPlayers(match,players)
-        break
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
     
@@ -38,6 +40,7 @@ def getLatestMatchCovered(league):
     file = open(r"./logs/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
     fileDict = fileJson[f"{league.name},{league.country}"]
+    print(f"{league.name},{league.country}")
     if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update
         return None
     match = json.loads(fileDict)
