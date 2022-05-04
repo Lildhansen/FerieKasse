@@ -41,7 +41,7 @@ class League:
         with open(r"./logs/latestMatchCovered.json","r") as file:
             leaguesAndCountries = json.load(file)
         
-        leaguesAndCountries[f"{self.country},{self.name}"] = latestMatchJSON  
+        leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON  
         
         #writing  
         with open(r"./logs/latestMatchCovered.json","w") as file:

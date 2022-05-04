@@ -68,7 +68,6 @@ class Excel:
             if cell.value == "Total:":
                 Raise(Exception("team not found in excel file"))
             if cell.value == match.homeTeam or cell.value == match.awayTeam:
-                #print(match.homeTeam," ",match.homeGoals," - ",match.awayGoals," ",match.awayTeam,"=",match.points)
                 pointCell = ws.cell(row,column+1)
                 pointCell.value += "+" + str(match.points)
                 break
