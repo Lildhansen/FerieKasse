@@ -27,7 +27,7 @@ class League:
             else: #if we are in the final half of the season, we must get all matches from last year's season start till now
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
         self.driver = wd()
-        self.driver.findLeagueUrl(self.searchText)
+        self.driver.findLeagueUrl(self.searchText,False)
         self.matches = self.driver.getMatchesAfterLatestMatch(match,self) 
         self.driver.quit()
         self.saveLatestMatchCovered()

@@ -1,5 +1,6 @@
 import bs4
-from selenium import webdriver
+
+from utilities.Webdriver import Webdriver as wd
 import requests as re
 import time
 
@@ -11,17 +12,20 @@ leagueDict = {"premier-league": "https://www.google.com/search?q=premier+league+
     "serie-a": "https://www.google.com/search?q=serie+a+results&oq=serie+a+results&aqs=chrome..69i57j0i512l2j0i22i30l7.3171j1j9&sourceid=chrome&ie=UTF-8#sie=lg;/g/11n0vx7n5d;2;/m/03zv9;st;fp;1;;",
     "Superliga": "https://www.google.com/search?q=superliga+results&oq=superliga+re&aqs=chrome.1.69i57j35i39l2j0i512l3j69i60l2.3474j1j9&sourceid=chrome&ie=UTF-8#sie=lg;/g/11nmr_75gx;2;/m/06bxjb;st;fp;1;;"}
 
+wd = wd()
+
 for league,link in leagueDict.items():
     if league == "Superliga":
         pass
         #do something else
     else:
-        browser = webdriver.
-        browser.get(link)
+        browser = wd.findLeagueUrl(f"{league} results",True)
         time.sleep(2)
-        html = browser.page_source
+        html = wd.driver.page_source
         soup = bs4.BeautifulSoup(html, 'lxml')
+        print(soup)
         a = soup.findall("tr", {"class": "imso-loa imso-hov"})
+        wd.quit()
         # scoreLink = re.get(link)
         # scoreLink.raise_for_status()
         # Pi_file = open("WeLovePie.txt","wb")
