@@ -21,7 +21,7 @@ class Webdriver:
     def setupDriver(self):
         self.__service = Service("./chromedriver.exe")
         self.__options = Options()
-        #self.__options.headless = True
+        self.__options.headless = True
         self.__options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #navigates the webdriver to the url for that specific league
     def findLeagueUrl(self,searchText,isScoreTable):
