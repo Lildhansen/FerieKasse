@@ -7,6 +7,8 @@ run:
 reset:
 	python Main_remove_feriekasse.py
 
+script:
+	python getTeams.py
 
 clean:
 	
