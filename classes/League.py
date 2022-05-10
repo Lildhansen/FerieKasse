@@ -1,6 +1,7 @@
 #libraries - standard or pip
 import datetime
 import json
+from tkinter import TRUE
 import orjson
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 
@@ -79,8 +80,18 @@ class League:
         if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
             homeTeam = self.findTeamByTeamName(match.homeTeam)
             awayTeam = self.findTeamByTeamName(match.awayTeam)
-            ##-----MANGLER IMPLEMENTATION FOR KUN DOBBELT VED HJEMMEKAMPE I SLUTSPILLET AF SUPERLIGA----
-            match.points *= 0 if homeTeam.playerName == awayTeam.playerName else const.INDBYRDES_MULTIPLIER
+            if homeTeam.playerName == awayTeam.playerName:
+                match.points *= 0
+            elif self.isSlutspilMatch(match) and match.homeTeamIsWinner:
+                return
+            else:
+                match.points *= const.INDBYRDES_MULTIPLIER
+    def isSlutspilMatch(self,match):
+        if self.name.lower() != "superliga":
+            return False
+        if match.date >= datetime.date(datetime.datetime.now().year,4,1):
+            return True
+            
     def findTeamByTeamName(self,teamName):
         for team in self.teams:
             if team.name.lower() == teamName.lower():
