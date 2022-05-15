@@ -6,26 +6,32 @@ import orjson
 from menuStuff.Menu import Menu
 import utilities.util as util
 from classes.League import League
+from classes.Player import Player
 from Excel import Excel
-from utilities.Webdriver import Webdriver
 import helperMain
 import utilities.constants as const
+import random
 
 
 leagues = []
+players = []
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
-# def setupMenuInitiation():
-#     numOfPlayers = ""
-#     while (util.parseIntOrNone(numOfPlayers,1,8) == None):
-#         numOfPlayers = input("number of players: ")
-#     numOfPlayers = int(numOfPlayers)
-#     print(f"write the {numOfPlayers} players (seperated by enter)")
-#     while len(players) < numOfPlayers:
-#         players.append(input())
-#     random.shuffle(players)
-#     myMenu = Menu(players,"Select a league/country",driver)
-#     myMenu.run()
+def setupMenuInitiation():
+    # numOfPlayers = ""
+    # while (util.parseIntOrNone(numOfPlayers,1,8) == None):
+    #     numOfPlayers = input("number of players: ")
+    # numOfPlayers = int(numOfPlayers)
+    # print(f"write the {numOfPlayers} players (seperated by enter):")
+    # while len(players) < numOfPlayers:
+    #     players.append(Player(input()))
+    numOfPlayer = 2
+    players.append(Player("a"))
+    players.append(Player("b"))
+    random.shuffle(players)
+    myMenu = Menu(players,"Select a league/country")
+    myMenu.setupMenu()
+    myMenu.run()
 
 #orjson
 def setupLatestMatchCoveredForEachLeagueFile():
@@ -48,7 +54,8 @@ def initiateFerieKasse():
 
 
 if __name__ == "__main__":
+    setupMenuInitiation()
     #if (not) excel sheet er tom - eller slettet:
         #print "a round has already been started" - or something
         #return
-    initiateFerieKasse()
+    #initiateFerieKasse()

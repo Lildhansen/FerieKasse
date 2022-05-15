@@ -1,7 +1,6 @@
 # initiate
 - mangler clean-up af denne fil
 skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
-skal have alle holdene fra de 5 ligaer et eller andet sted - til indsætning i menuen
 Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med holdene og spillerne i formatet:
 **note: spillere må ikke indeholde ,** 
     spiller1:
@@ -46,6 +45,24 @@ clear:
     players and teams / players and teams and links
 ikke clear:
     teams.txt
+
+# Menu
+## regler:
+- kun 1 holder per liga for hver spiller
+  - undtagen sidste runde, hvor alle ligaer kan vælges
+- når et hold vælges, kan det ikke vælges igen af andre
+
+## logik
+- 1 hovedmenu med ligaer
+- 1 undermenu for hver liga
+- 1 tæller (den starter på 0 for hver menu) - og så er den skiftevis attachet til en af menuerne
+- der skal være en dictionary med "spillerx:availableLeague"
+### option a
+- en controller kunne holde styr på kontrollen mellem hovedmenu og submenu
+- den kunne have en counter for index i menuen som kunne parses ind i deres run funktioner
+### option b:
+submenu kunne være indlejret i hovedmenuen
+
 
 # tests:
 - rigtig URL for holdene / kampene findes

@@ -4,7 +4,7 @@ import orjson
 from utilities.Webdriver import Webdriver as wd
 import time
 
-leaguesAndTeams = {"premier-league":[],"Bundesliga":[],"laliga":[],"serie-a":[],"Superliga":[]}
+leaguesAndTeams = {"premier-league,England":[],"Bundesliga,Tyskland":[],"laliga,Spanien":[],"serie-a,Italien":[],"Superliga,Danmark":[]}
 
 wd = wd()
 
