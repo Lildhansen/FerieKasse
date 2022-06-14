@@ -41,7 +41,8 @@ sørg for at lukke **ALLE** connections samt filer
 # comments needed
 
     
-
+# point
+- der gives dobbelt ved uafgjort lige meget med slutspil eller ej
 
 # naming conventions:
 ## general naming conventions:

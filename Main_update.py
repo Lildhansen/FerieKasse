@@ -30,6 +30,7 @@ def UpdateFerieKasse():
     setupLinks(leagues) ##remove this when in midst of season
     players = util.getPlayerObjectsFromFile()
     for league in leagues:
+        print("working on",league.name) #for some reason league.name starts with a space??
         ##kunne godt bruge threads her
         match = getLatestMatchCovered(league)
         if match == None:
@@ -55,6 +56,7 @@ def getLatestMatchCovered(league):
     match = json.loads(fileDict)
     matchJson = json.dumps(match)
     matchTuple = json.loads(matchJson, object_hook = lambda d : namedtuple('Match', d.keys())(*d.values()))
+    
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
 

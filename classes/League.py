@@ -35,7 +35,6 @@ class League:
         self.filterMatches()
         
     def saveLatestMatchCovered(self):
-        
         latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
         
         #reading

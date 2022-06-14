@@ -2,6 +2,7 @@ import pytest
 from classes.League import League
 from classes.Team import Team
 from classes.Match import Match
+import datetime
 
 def getMockLeagueForFindTeamTests():
     mockLeague = League("testName","testCountry")
@@ -121,6 +122,90 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_diff
         
     myLeague.applyMatchMultipliers(newMatch) 
     assert newMatch.points == 40
+
+def test_applyMatchMultipliers_applies_correct_multiplier_for_draw_for_superliga_slutspil():
+    myLeague = League("league1","country1")
+    myLeague.name = "superliga"
+    
+    newMatch = Match()
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
+    newMatch.draw = True
+    newMatch.homeTeamIsPlayerTeam = True
+    newMatch.awayTeamIsPlayerTeam = True
+    newMatch.date = datetime.date(datetime.datetime.now().year,4,15)
+    newMatch.points = 5
+    
+    myLeague.teams.append(team1)
+    myLeague.teams.append(team2)
+        
+    myLeague.applyMatchMultipliers(newMatch) 
+    assert newMatch.points == 10
+    
+def test_applyMatchMultipliers_applies_correct_multiplier_for_away_win_for_superliga_slutspil():
+    myLeague = League("league1","country1")
+    myLeague.name = "superliga"
+    
+    newMatch = Match()
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
+    newMatch.homeTeamIsWinner = False
+    newMatch.homeTeamIsPlayerTeam = True
+    newMatch.awayTeamIsPlayerTeam = True
+    newMatch.date = datetime.date(datetime.datetime.now().year,4,15)
+    newMatch.points = 20
+    
+    myLeague.teams.append(team1)
+    myLeague.teams.append(team2)
+        
+    myLeague.applyMatchMultipliers(newMatch) 
+    assert newMatch.points == 40
+
+def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_superliga_slutspil():
+    myLeague = League("league1","country1")
+    myLeague.name = "superliga"
+    
+    newMatch = Match()
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
+    newMatch.homeTeamIsWinner = True
+    newMatch.homeTeamIsPlayerTeam = True
+    newMatch.awayTeamIsPlayerTeam = True
+    newMatch.date = datetime.date(datetime.datetime.now().year,4,15)
+    newMatch.points = 20
+    
+    myLeague.teams.append(team1)
+    myLeague.teams.append(team2)
+        
+    myLeague.applyMatchMultipliers(newMatch) 
+    assert newMatch.points == 20    
+    
+def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_superliga_grundspil():
+    myLeague = League("league1","country1")
+    myLeague.name = "superliga"
+    
+    newMatch = Match()
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
+    newMatch.homeTeamIsWinner = True
+    newMatch.homeTeamIsPlayerTeam = True
+    newMatch.awayTeamIsPlayerTeam = True
+    newMatch.date = datetime.date(datetime.datetime.now().year,3,15)
+    newMatch.points = 20
+    
+    myLeague.teams.append(team1)
+    myLeague.teams.append(team2)
+        
+    myLeague.applyMatchMultipliers(newMatch) 
+    assert newMatch.points == 40    
     
 def test_findTeamByTeamName_finds_team_if_it_is_there():
     mockLeague = getMockLeagueForFindTeamTests()
