@@ -24,7 +24,7 @@ class Webdriver:
         self.__options.headless = True
         self.__options.add_experimental_option("excludeSwitches", ["enable-logging"])
     #navigates the webdriver to the url for that specific league
-    def findLeagueUrl(self,searchText,isScoreTable):
+    def findLeagueUrl(self,searchText,isScoreTable,link):
         self.driver.get('http://www.google.com')
         self.acceptCookies()
         searchField = self.driver.find_element(By.NAME, 'q')
@@ -33,7 +33,11 @@ class Webdriver:
         if (isScoreTable):
             self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div:nth-child(2) > div > div > div > ol > li:nth-child(3)").click() 
         else:
-            self.driver.find_element(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span").click() 
+            elems = self.driver.find_elements(By.CSS_SELECTOR,"#sports-app > div > div.imso-ft.duf-h > div.imso-loa.imso-ani > div > g-immersive-footer > g-fab > span")
+            if len(elems) == 0:
+                self.driver.get(link)
+            else:
+                elems[0].click() 
     #accepts cookies when using the selenium webdriver
     def acceptCookies(self):
         try:

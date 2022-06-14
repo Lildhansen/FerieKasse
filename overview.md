@@ -3,40 +3,8 @@
 skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
 skal have alle holdene fra de 5 ligaer et eller andet sted - til indsætning i menuen
 Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med holdene og spillerne i formatet:
-**note: spillere må ikke indeholde ,** 
-    spiller1:
-    hold1,liga1,land1
-    hold2,liga2,land2
-    ...
-    spiller2
-    ... etc
-denne .txt fil skal så genereres med spillerne, holdene, og URL i formatet:
-    spiller1:
-    hold1,URL1
-    hold2,URL2
-    ...
-    spiller2:
-    ... etc
-~~et xlsx dokument skal genereres - med spillerne og holdene - i samme stil som "feriekasse 2"~~ (evt kunne den farve med landene/ligaerne som den gør nu)
-~~lav .txt med datoer/uger der er covered~~
 evt. mail med holdene til alle spillerne
 # update
-~~for hver liga~~
-    ~~for hver kamp der ikke er talt point for~~
-       ~~ gem info om kamp i match objekt~~
-            ~~hjemmehold,udehold,mål scoret, mål imod, vinder/taber, (evt. målscorer for udehold/hjemmhold)~~
-        ~~beregn point~~
-            ~~vinder,taber,mål scoret,indbyrdes,egne hold~~
-            ~~evt. hvis hold har vundet - skip den~~
-                ~~medmindre målscorene skal gemmes.~~
-            ~~hvis 2 spillerhold mod hinanden:~~
-                ~~hvis begge hold i samme spille, point = 0~~
-                ~~ellers, point *= 2~~
-        ~~opdater .json - for hver liga~~
-        ~~indsæt point i spiller objekter (evt i lister så alle udregninger kan ses)~~
-~~opdater datoer~~
-~~skriv til excel~~
-    sørg for at den først skal skrive til excel når den har alt info - så den ikke skal åbne og lukke dem hele tiden.
 send mail
     hver uge/anden uge / måned
 # remove
@@ -51,7 +19,6 @@ ikke clear:
 - rigtig URL for holdene / kampene findes
 - korrekt pointtælling
 - korrekt excelskrivning
-    - ~~indsættes i rigtig kolonne~~
 - mail sendes ordentligt - rigtig vedhæftning, connection til SMTP, rigtig modtagere
 - **Kan ikke teste for webdriver**
 
@@ -62,7 +29,6 @@ ikke clear:
 # extra shit:
     LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
-    ~~makefil?~~
 # optimeringsmuligheder:
 sørg for at lukke **ALLE** connections samt filer
 
@@ -109,3 +75,12 @@ def isCodeblock():
     return True
 ```
 [link](www.thisisalink.com)
+
+
+
+Thor                             Nielsen              Pølle                   Thuge                Kim
+Chelsea                          Tottenham          United               Leicester           Newcastle
+Leverkusen                  Frankfurt               Wolfsburg           Freiburg                Leipzig
+Sociedad                        Villareal            Atletico             Betis                  Sevilla
+Napoli                              Fiorentina        Roma                 Juventus             Lazio
+Viborg                             Randers            AaB                     Brøndby            Silkeborg

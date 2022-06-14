@@ -1,7 +1,6 @@
 #libraries - standard or pip
 import datetime
 import json
-from tkinter import TRUE
 import orjson
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 
@@ -19,6 +18,7 @@ class League:
         self.matches = []
         self.searchText = f"{self.country} {self.name} results"
         self.newLatestMatch = None
+        self.link = None ##bad fix finding matches when no leagues in progress
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterLatestMatch(self,match=Match()):
@@ -28,7 +28,7 @@ class League:
             else: #if we are in the final half of the season, we must get all matches from last year's season start till now
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
         self.driver = wd()
-        self.driver.findLeagueUrl(self.searchText,False)
+        self.driver.findLeagueUrl(self.searchText,False,self.link)
         self.matches = self.driver.getMatchesAfterLatestMatch(match,self) 
         self.driver.quit()
         self.saveLatestMatchCovered()
