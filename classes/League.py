@@ -18,6 +18,7 @@ class League:
         self.matches = []
         self.searchText = f"{self.country} {self.name} results"
         self.newLatestMatch = None
+        self.link = None ##bad fix finding matches when no leagues in progress
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterLatestMatch(self,match=Match()):
@@ -27,14 +28,13 @@ class League:
             else: #if we are in the final half of the season, we must get all matches from last year's season start till now
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
         self.driver = wd()
-        self.driver.findLeagueUrl(self.searchText,False)
+        self.driver.findLeagueUrl(self.searchText,False,self.link)
         self.matches = self.driver.getMatchesAfterLatestMatch(match,self) 
         self.driver.quit()
         self.saveLatestMatchCovered()
         self.filterMatches()
         
     def saveLatestMatchCovered(self):
-        
         latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
         
         #reading
@@ -79,8 +79,18 @@ class League:
         if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
             homeTeam = self.findTeamByTeamName(match.homeTeam)
             awayTeam = self.findTeamByTeamName(match.awayTeam)
-            ##-----MANGLER IMPLEMENTATION FOR KUN DOBBELT VED HJEMMEKAMPE I SLUTSPILLET AF SUPERLIGA----
-            match.points *= 0 if homeTeam.playerName == awayTeam.playerName else const.INDBYRDES_MULTIPLIER
+            if homeTeam.playerName == awayTeam.playerName:
+                match.points *= 0
+            elif self.isSlutspilMatch(match) and match.homeTeamIsWinner:
+                return
+            else:
+                match.points *= const.INDBYRDES_MULTIPLIER
+    def isSlutspilMatch(self,match):
+        if self.name.lower() != "superliga":
+            return False
+        if match.date >= datetime.date(datetime.datetime.now().year,4,1):
+            return True
+            
     def findTeamByTeamName(self,teamName):
         for team in self.teams:
             if team.name.lower() == teamName.lower():
