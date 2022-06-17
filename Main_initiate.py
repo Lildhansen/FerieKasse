@@ -1,5 +1,6 @@
 #libraries - standard or pip
 import os
+import time
 import orjson
 
 #own modules
@@ -18,20 +19,18 @@ players = []
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
-    # numOfPlayers = ""
-    # while (util.parseIntOrNone(numOfPlayers,1,8) == None):
-    #     numOfPlayers = input("number of players: ")
-    # numOfPlayers = int(numOfPlayers)
-    # print(f"write the {numOfPlayers} players (seperated by enter):")
-    # while len(players) < numOfPlayers:
-    #     players.append(Player(input()))
-    numOfPlayer = 2
-    players.append(Player("a"))
-    players.append(Player("b"))
+    numOfPlayers = ""
+    while (util.parseIntOrNone(numOfPlayers,1,8) == None):
+        numOfPlayers = input("number of players: ")
+    numOfPlayers = int(numOfPlayers)
+    print(f"write the {numOfPlayers} players (seperated by enter):")
+    while len(players) < numOfPlayers:
+        players.append(Player(input()))
     random.shuffle(players)
     myMenu = Menu(players,"Select a league/country")
     myMenu.setupMenu()
     myMenu.run()
+    myMenu.saveInJson()
 
 #orjson
 def setupLatestMatchCoveredForEachLeagueFile():
@@ -40,11 +39,9 @@ def setupLatestMatchCoveredForEachLeagueFile():
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
-    if (os.path.isfile(r"./logs/leaguesAndTeams.json") and os.path.getsize(r"./logs/leaguesAndTeams.json") > 0):
-        helperMain.getAllLeagues()
-    else:
-        pass
-        #setupMenuInitiation()
+    if not (os.path.isfile(r"./logs/leaguesAndTeams.json") and os.path.getsize(r"./logs/leaguesAndTeams.json") > 0):
+        setupMenuInitiation()
+    helperMain.getAllLeagues()
     myExcel = Excel(leagues)
     myExcel.deleteExcelFile() #should not do this in the end
     myExcel.setupExcelFile()
@@ -54,8 +51,7 @@ def initiateFerieKasse():
 
 
 if __name__ == "__main__":
-    setupMenuInitiation()
     #if (not) excel sheet er tom - eller slettet:
         #print "a round has already been started" - or something
         #return
-    #initiateFerieKasse()
+    initiateFerieKasse()
