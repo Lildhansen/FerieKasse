@@ -51,7 +51,9 @@ def initiateFerieKasse():
 
 
 if __name__ == "__main__":
-    #if (not) excel sheet er tom - eller slettet:
-        #print "a round has already been started" - or something
-        #return
-    initiateFerieKasse()
+    if os.path.isfile("Feriekasse.xlsx"):
+        print("A round has already been started.")
+        print("if you want to start a new round, do 'make remove' first")
+        input("press enter to continue ...")
+    else:
+        initiateFerieKasse()
