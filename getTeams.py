@@ -1,19 +1,19 @@
 import bs4
 import orjson
 
-from utilities.Webdriver import Webdriver as wd
+from utilities.Soup import Soup
 import time
 
 leaguesAndTeams = {"premier-league,england":[],"bundesliga,tyskland":[],"laliga,spanien":[],"serie-a,italien":[],"superliga,danmark":[]}
 
-wd = wd()
+Soup = Soup()
 
 #get teams and save them in leagueAndTeams dict
 def getTeams():
     for league in leaguesAndTeams.keys():
-        wd.findLeagueUrl(f"{league} results",True)
+        Soup.findLeagueUrl(f"{league} results",True)
         time.sleep(1.3) #waiting for page to load
-        html = wd.driver.page_source
+        html = Soup.driver.page_source
         soup = bs4.BeautifulSoup(html, 'lxml')
         teamRows = soup.find_all("tr", {"class": "imso-loa imso-hov"})
         for teamRow in teamRows:
@@ -21,7 +21,7 @@ def getTeams():
             if (teamName in leaguesAndTeams[league]):
                 break
             leaguesAndTeams[league].append(teamName)
-    wd.quit()
+    Soup.quit()
     print(len(leaguesAndTeams["superliga"]))
 
 

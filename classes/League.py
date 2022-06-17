@@ -6,19 +6,18 @@ from classes.myJsonEncoder import MyJsonEncoder as Encoder
 
 #own libraries
 from classes.Match import Match
-from utilities.Webdriver import Webdriver as wd
+from utilities.Soup import Soup
 import utilities.constants as const
 
 class League:
     def __init__(self,name,country):
         self.name = name
         self.country = country.lower()
-        self.driver = None
+        self.soup = None
         self.teams = []
         self.matches = []
-        self.searchText = f"{self.country} {self.name} results"
         self.newLatestMatch = None
-        self.link = None ##bad fix finding matches when no leagues in progress
+        self.link = None
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterLatestMatch(self,match=Match()):
@@ -27,10 +26,9 @@ class League:
                 match.date = datetime.date(datetime.datetime.now().year,7,15)
             else: #if we are in the final half of the season, we must get all matches from last year's season start till now
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
-        self.driver = wd()
-        self.driver.findLeagueUrl(self.searchText,False,self.link)
-        self.matches = self.driver.getMatchesAfterLatestMatch(match,self) 
-        self.driver.quit()
+        self.soup = Soup()
+        self.soup.getLinkContent(self.link)
+        self.matches = self.soup.getMatchesAfterLatestMatch(match,self.link) 
         self.saveLatestMatchCovered()
         self.filterMatches()
         
