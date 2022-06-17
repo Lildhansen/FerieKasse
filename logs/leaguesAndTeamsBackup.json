@@ -1,0 +1,41 @@
+{
+    "premier-league,england": 
+    {
+        "Chelsea":"Kim",
+        "Leicester":"Emil",
+        "Tottenham":"Emil",
+        "Arsenal":"Mads",
+        "Man Utd":"Soren"
+    },
+    "bundesliga,tyskland": 
+    {
+        "RB Leipzig":"Kim",
+        "Dortmund":"Emil",
+        "Eintracht Frankfurt":"Mads",
+        "Hoffenheim":"Mads",
+        "Leverkusen":"Soren"
+    },
+    "laliga,spanien": 
+    {
+        "Barcelona":"Kim",
+        "Real Sociedad":"Emil",
+        "Valencia":"Mads",
+        "Sevilla":"Soren"
+    },
+    "serie-a,italien": 
+    {
+        "Bologna":"Kim",
+        "Atalanta":"Emil",
+        "Milan":"Mads",
+        "Juventus":"Soren",
+        "Torino":"Soren"
+    },
+    "superliga,danmark": 
+    {
+        "OB":"Kim",
+        "AGF":"Kim",
+        "Brøndby":"Emil",
+        "FCK":"Mads",
+        "FC Midtjylland":"Soren"
+    }
+}

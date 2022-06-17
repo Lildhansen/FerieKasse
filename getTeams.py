@@ -4,7 +4,7 @@ import orjson
 from utilities.Webdriver import Webdriver as wd
 import time
 
-leaguesAndTeams = {"premier-league":[],"Bundesliga":[],"laliga":[],"serie-a":[],"Superliga":[]}
+leaguesAndTeams = {"premier-league,england":[],"bundesliga,tyskland":[],"laliga,spanien":[],"serie-a,italien":[],"superliga,danmark":[]}
 
 wd = wd()
 
@@ -22,7 +22,7 @@ def getTeams():
                 break
             leaguesAndTeams[league].append(teamName)
     wd.quit()
-    print(len(leaguesAndTeams["Superliga"]))
+    print(len(leaguesAndTeams["superliga"]))
 
 
 def addTeamsToJsonFile():

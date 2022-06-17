@@ -13,11 +13,11 @@ import helperMain
 
 def setupLinks(leagues):
     for league in leagues:
-        if league.name == "Superliga":
+        if league.name == "superliga":
             league.link = "https://www.google.com/search?q=superliagetable&sxsrf=ALiCzsbrRcpPR73yMygkacEmQt88qS6qSQ%3A1655221225444&ei=6auoYoHeGobRqwG91JaoBg&ved=0ahUKEwjB9qrJo634AhWG6CoKHT2qBWUQ4dUDCA4&uact=5&oq=superliagetable&gs_lcp=Cgdnd3Mtd2l6EAMyBAgAEA0yBAgAEA0yBAgAEA0yCAgAEB4QBxAKMgQIABANMgQILhANMgQIABANMgYIABAeEA0yBggAEB4QDTIGCAAQHhANOgcIIxCwAxAnOgcIABBHELADOgcIABCwAxBDOgwILhDIAxCwAxBDGAE6BggAEB4QBzoECAAQEzoICAAQHhAHEBM6CggAEB4QBxAKEBM6CAguEB4QBxATOggIABAeEA0QCjoICAAQHhANEBM6CggAEB4QDRAFEBNKBAhBGABKBAhGGAFQ8QxYyytgvi9oBXABeACAAWyIAakIkgEEMTEuMZgBAKABAcgBFMABAdoBBggBEAEYCA&sclient=gws-wiz#sie=lg;/g/11nmr_75gx;2;/m/06bxjb;mt;fp;1;;"
         elif league.name == "premier-league":
             league.link = "https://www.google.com/search?q=premier+league+table#sie=lg;/g/11p44qhs93;2;/m/02_tc;mt;fp;1;;"
-        elif league.name == "Bundesliga":
+        elif league.name == "bundesliga":
             league.link = "https://www.google.com/search?q=bundesliga+1+table&sxsrf=ALiCzsZkk_XyHAIj70_EmJr_WlhI6SKIQw%3A1655222309694&ei=JbCoYq2FKovMrgTmuonYAQ&ved=0ahUKEwjtq6zOp634AhULposKHWZdAhsQ4dUDCA4&uact=5&oq=bundesliga+1+table&gs_lcp=Cgdnd3Mtd2l6EAMyBggAEB4QBzIGCAAQHhAHMgYIABAeEAcyBggAEB4QBzIGCAAQHhAHMgYIABAeEAcyBQgAEMsBMgUIABDLATIFCAAQywEyBQgAEMsBOgcIABBHELADOgcIABCwAxBDOgwILhDIAxCwAxBDGAE6DwguENQCEMgDELADEEMYAToECCMQJzoICAAQHhAHEAo6CAgAEB4QBxATOgoIABAeEAcQChATSgQIQRgASgQIRhgBUOITWLwaYMcbaANwAXgAgAFQiAGcApIBATSYAQCgAQHIARTAAQHaAQYIARABGAg&sclient=gws-wiz#sie=lg;/g/11m__0kr76;2;/m/037169;mt;fp;1;;"
         elif league.name == "serie-a":
             league.link = "https://www.google.com/search?q=serie+a+table&oq=serie+a+table&aqs=chrome.0.69i59j0i512l9.6906j0j9&sourceid=chrome&ie=UTF-8#sie=lg;/g/11n0vx7n5d;2;/m/03zv9;mt;fp;1;;"
