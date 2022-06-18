@@ -57,14 +57,14 @@ def splitAndConvertToInt(inputString,seperator):
         result.append(int(element))
     return result
 
-#expects input in the form 20210814
+#expects input in the form 2021-08-14
 def textToDate(text):
     year,month,day = splitAndConvertToInt(text,"-")
     return date(year,month,day)
     
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
-    return Match([textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals])
+    return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
     
 def getPlayerObjectsFromFile():
     players = []
@@ -72,6 +72,7 @@ def getPlayerObjectsFromFile():
     jsonData = orjson.loads(file.read())
     for leagueAndCountry in jsonData:
         for teamName in jsonData[leagueAndCountry]:
+            teamName = teamName
             playerName = jsonData[leagueAndCountry][teamName]
             player = findPlayerObjectInPlayerListFromPlayerName(playerName,players)
             if player == None:

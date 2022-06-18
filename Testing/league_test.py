@@ -45,15 +45,15 @@ def test_filterMatches_filters_matches_not_involving_player_teams():
 
 def test_calculatePointsForMatches_calculates_points_correctly():
     myLeague = League("league1","country1")
-    match1 = Match([None,"team1",1,"team2",1])
+    match1 = Match(None,"team1",1,"team2",1)
     match1.homeTeamIsPlayerTeam = True
     match1.awayTeamIsPlayerTeam = True
 
-    match2 = Match([None,"team3",4,"team4",2])
+    match2 = Match(None,"team3",4,"team4",2)
     match2.homeTeamIsPlayerTeam = True
     match2.awayTeamIsPlayerTeam = False
     
-    match3 = Match([None,"team5",3,"team6",0])
+    match3 = Match(None,"team5",3,"team6",0)
     match3.homeTeamIsPlayerTeam = False
     match3.awayTeamIsPlayerTeam = True
 

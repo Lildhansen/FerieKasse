@@ -1,5 +1,7 @@
 #libraries - standard or pip
+import codecs
 import json
+import os
 import orjson
 from collections import namedtuple
 
@@ -47,7 +49,7 @@ def UpdateFerieKasse():
     
 
 def getLatestMatchCovered(league):
-    file = open(r"./logs/latestMatchCovered.json","r")
+    file = codecs.open(r"./logs/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
     fileDict = fileJson[f"{league.name},{league.country}"]
     if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update
