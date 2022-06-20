@@ -54,6 +54,8 @@ def getLatestMatchCovered(league):
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
 
+#assigns a specific match to a player depending on if one of the player's team is in the match (will only assign match to player if the player loses point for that match)
+#can be assigned to 2 players, if it is a draw with 2 different players' teams
 def assignMatchToPlayers(match,players):
     homePlayer, awayPlayer = None,None
     if match.homeTeamIsPlayerTeam:
@@ -80,4 +82,3 @@ def getPlayerThatHasTeam(teamName,players):
     
 if __name__ == "__main__":
     UpdateFerieKasse()
-

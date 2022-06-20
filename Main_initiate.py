@@ -46,9 +46,6 @@ def initiateFerieKasse():
     myExcel.setupExcelFile()
     setupLatestMatchCoveredForEachLeagueFile()
     
-
-
-
 if __name__ == "__main__":
     if os.path.isfile("Feriekasse.xlsx"):
         print("A round has already been started.")

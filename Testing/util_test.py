@@ -25,5 +25,4 @@ def test_numberToExcelColumn_returns_correct_columnstring(test_input,expected):
     assert util.numberToExcelColumn(test_input) == expected
 
 def test_textToDate_converts_correctly():
-    today = date.today()
     assert util.textToDate("2022-01-01") == date(2022,1,1)
