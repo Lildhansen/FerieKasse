@@ -1,7 +1,5 @@
-from datetime import date
 from classes.League import League
 from classes.Team import Team
-import utilities.util as util
 
 import orjson
 import codecs #for reading non-ascii chars

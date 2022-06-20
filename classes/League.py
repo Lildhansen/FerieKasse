@@ -1,24 +1,25 @@
 #libraries - standard or pip
+import codecs
 import datetime
+from datetime import date
 import json
 import orjson
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
+import copy
 
 #own libraries
 from classes.Match import Match
-from utilities.Webdriver import Webdriver as wd
+from utilities.Soup import Soup
 import utilities.constants as const
 
 class League:
     def __init__(self,name,country):
         self.name = name
         self.country = country.lower()
-        self.driver = None
+        self.soup = None
         self.teams = []
         self.matches = []
-        self.searchText = f"{self.country} {self.name} results"
-        self.newLatestMatch = None
-        self.link = None ##bad fix finding matches when no leagues in progress
+        self.link = None
     #will update "matches" with all matches after the date 
     #(and perhaps after a certain match - the last one taken)
     def getMatchesAfterLatestMatch(self,match=Match()):
@@ -27,28 +28,32 @@ class League:
                 match.date = datetime.date(datetime.datetime.now().year,7,15)
             else: #if we are in the final half of the season, we must get all matches from last year's season start till now
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
-        self.driver = wd()
-        self.driver.findLeagueUrl(self.searchText,False,self.link)
-        self.matches = self.driver.getMatchesAfterLatestMatch(match,self) 
-        self.driver.quit()
+        self.soup = Soup()
+        self.soup.getLinkContent(self.link)
+        self.matches = self.soup.getMatchesAfterLatestMatch(match) 
         self.saveLatestMatchCovered()
         self.filterMatches()
+
         
     def saveLatestMatchCovered(self):
-        latestMatchJSON = json.dumps(self.newLatestMatch,cls=Encoder)
-        
+        if len(self.matches) == 0:
+            return
+        latestMatch = copy.deepcopy(self.matches[-1])
+        latestMatch.date = latestMatch.date.isoformat()
+        latestMatchJSON = json.dumps(latestMatch,cls=Encoder)
         #reading
-        with open(r"./logs/latestMatchCovered.json","r") as file:
+        with codecs.open(r"./logs/latestMatchCovered.json","r") as file:
             leaguesAndCountries = json.load(file)
         
         leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON  
         
         #writing  
-        with open(r"./logs/latestMatchCovered.json","w") as file:
+        with codecs.open(r"./logs/latestMatchCovered.json","w") as file:
             json.dump(leaguesAndCountries,file)
         
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
+        ####this function does not work at the moment
         originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop
         for match in originalMatchList:                  
             TeamInMatch = False            
@@ -59,7 +64,7 @@ class League:
                 if (match.awayTeam == team.name):
                     match.awayTeamIsPlayerTeam = True
                     TeamInMatch = True
-                continue #needs to go all the way through the list - if both teams are player teams
+                continue #needs to go all the way through the list (even if one team is player team) - to make sure we check for if both teams are player teams
             if not TeamInMatch:
                 self.matches.remove(match)
     #remove matches, where the losing team is not one of the players' teams

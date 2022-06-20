@@ -1,21 +1,15 @@
-from re import T
 import keyboard
 import time
 import json
 import orjson
 import os
 import colorama
-import codecs
 
 
 import utilities.constants as const
-from .MenuItem import MenuItem
 
 #todo
 """
-kun 1 hold per liga (undtagen sidste runde)
-    Mangler at gemme det i JSON
-    sidste runde skal det kun køre en gang for hver (i stedet for det 1 - 2 - 2 - 1)-stuff (eller hold up)
 den er kinda ustabil
     den kører igen (kun 1 gang til) hvis den crasher
     hvis man trykker enter i lidt for lang tid registrerer den  det for begge
@@ -137,8 +131,6 @@ class Menu:
                     print("  >",end="")
                 print(self.currentPlayer.availableLeagues[i].title)
             return
-        
-        
         for i in range(len(self.currentPlayer.availableLeagues)):
             if (i == self.__selectedIndex):
                 print("  >",end="")
@@ -194,6 +186,7 @@ class SubMenu(Menu):
     def run(self):
         self.__selectedIndex = 0 #sets picker pointer to top of menu (avoids index out of bounds error)
         self.running = True
+        self.hasExitted = False
         while self.running:
             self.displayMenu()
             self.readInput()

@@ -1,6 +1,5 @@
 #own modules
 from ast import Raise
-from classes.Player import Player
 import utilities.util as util
 
 #imports
@@ -11,23 +10,22 @@ import os
 class Excel:
     def __init__(self,leagues=[]):
         self.leagues = leagues
-        self.players = util.getPlayerObjectsFromFile() ##denne skal bruges i stedet for den under - og metoden til den under skal også fjernes
+        self.players = util.getPlayerObjectsFromFile()
         self.playersTeamsDict = {}
-    def deleteExcelFile(self):
-        if (os.path.isfile("Feriekasse.xlsx")):
-            os.remove("Feriekasse.xlsx")
+    
+    #sets up the excel file. This is done when starting a game
     def setupExcelFile(self):
         wb = openpyxl.Workbook() # new workbook
         ws = wb.active #new worksheet
         ws.title = "Feriekasse"
         row = 1
         column = 1
-        for player in self.players: #todo - fix skrivning til excel (håber __getPlayersTeams works as intended)
+        for player in self.players:
             #first column set
             ws.cell(row,column,player.name)
             for team in player.teams:
                 row += 1
-                ws.cell(row,column,team) #when testing internally this should be just team (not team.name) instead
+                ws.cell(row,column,team)
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
@@ -42,26 +40,25 @@ class Excel:
             ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
-
-        #...
         wb.save("Feriekasse.xlsx")
         wb.close()
+    #updates the excel file. this is done when a game is in progress
     def updateExcelFile(self,players):
         wb = openpyxl.load_workbook('Feriekasse.xlsx')
         ws = wb.active #new worksheet
         column = 1
         for player in players:
             for match in player.matches:
-                self.updateTeamPointsInColumn(match,ws,column,player)
+                self.updateTeamPointsInColumn(match,ws,column)
             column += 2
         wb.save("Feriekasse.xlsx")
         wb.close()
-        #open file
-        #for hver spiller (her skal kolonnerne skippe med 2)
-            #for hver kamp
-                #find det hold (hometeam == hold eller awayteam == hold) som matcher
-                #indsæt point
-    def updateTeamPointsInColumn(self,match,ws,column,player):
+    #deletes the excel file. this is done when a game is over
+    def deleteExcelFile(self):
+        if (os.path.isfile("Feriekasse.xlsx")):
+            os.remove("Feriekasse.xlsx")
+    #updates the points in the excel file for a single match
+    def updateTeamPointsInColumn(self,match,ws,column):
         row = 2
         while True:
             cell = ws.cell(row,column)

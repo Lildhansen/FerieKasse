@@ -1,12 +1,12 @@
 import utilities.constants as const
 
 class Match:
-    def __init__(self,matchData=[None,None,None,None,None]):
-        self.date = matchData[0]
-        self.homeTeam = matchData[1]
-        self.homeGoals = matchData[2]
-        self.awayTeam = matchData[3]
-        self.awayGoals = matchData[4]
+    def __init__(self,date=None,homeTeam=None,homeGoals=None,awayTeam=None,awayGoals=None):
+        self.date = date
+        self.homeTeam = homeTeam
+        self.homeGoals = homeGoals
+        self.awayTeam = awayTeam
+        self.awayGoals = awayGoals
         self.homeTeamIsPlayerTeam = False
         self.awayTeamIsPlayerTeam = False
         self.homeTeamIsWinner = None #will remain none if it is a draw

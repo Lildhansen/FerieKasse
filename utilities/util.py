@@ -1,5 +1,4 @@
-from datetime import date, timedelta, datetime
-import re
+from datetime import date
 import orjson
 import codecs
 
@@ -48,35 +47,31 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
-#expects input in the form "Søn. 20.4" or "20.4" or either "I Går" or "I Dag"
-def textToDate(text):
-    if text != "I Dag" and text != "I Går":
-        if (re.search('[a-zA-Z]',text) != None):
-            onlyDate = text.split(" ")[1]
-        else:
-            onlyDate = text
-        dayAndMonth = onlyDate.split(".")
-        day = parseIntOrNone(dayAndMonth[0])
-        month = parseIntOrNone(dayAndMonth[1])
-        if (parseIntOrNone(dayAndMonth[1]) > 7) and (datetime.now().month < 7):
-            return date(datetime.now().year-1,month,day) #if last game counted was in second half and it is the first half
-        return date(datetime.now().year,month,day)
+#does the same as split, but converts the parts to ints and finally returns a list (which can be unpacked as a tuple) of the parts
+def splitAndConvertToInt(inputString,seperator):
+    result = []
+    splittedList = inputString.split(seperator)
+    for element in splittedList:
+        result.append(int(element))
+    return result
 
-    if text == "I Dag":
-        return date.today()
-    else:
-        return date.today() - timedelta(days=1)
+#expects input in the form 2021-08-14
+def textToDate(text):
+    year,month,day = splitAndConvertToInt(text,"-")
+    return date(year,month,day)
     
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
-    return Match([textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals])
-    
+    return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
+
+#gets all players from leaguesAndTeams.json and make a Player object for each of them and finally returns a list of them
 def getPlayerObjectsFromFile():
     players = []
     file = codecs.open(r"./logs/leaguesAndTeams.json","r",encoding='UTF-8')
     jsonData = orjson.loads(file.read())
     for leagueAndCountry in jsonData:
         for teamName in jsonData[leagueAndCountry]:
+            teamName = teamName
             playerName = jsonData[leagueAndCountry][teamName]
             player = findPlayerObjectInPlayerListFromPlayerName(playerName,players)
             if player == None:

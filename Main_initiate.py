@@ -1,12 +1,11 @@
 #libraries - standard or pip
+import codecs
 import os
-import time
 import orjson
 
 #own modules
 from menuStuff.Menu import Menu
 import utilities.util as util
-from classes.League import League
 from classes.Player import Player
 from Excel import Excel
 import helperMain
@@ -34,7 +33,7 @@ def setupMenuInitiation():
 
 #orjson
 def setupLatestMatchCoveredForEachLeagueFile():
-    with open("./logs/latestMatchCovered.json","wb") as file:
+    with codecs.open("./logs/latestMatchCovered.json","wb") as file:
         file.write(orjson.dumps(const.LeagueNationsDict))
 
 #the main function of the file - sets up the feriekasse
@@ -53,7 +52,7 @@ def initiateFerieKasse():
 if __name__ == "__main__":
     if os.path.isfile("Feriekasse.xlsx"):
         print("A round has already been started.")
-        print("if you want to start a new round, do 'make remove' first")
+        print("if you want to start a new round, do 'make reset' first")
         input("press enter to continue ...")
     else:
         initiateFerieKasse()

@@ -1,37 +1,32 @@
 #libraries - standard or pip
+import codecs
 import json
-import orjson
 from collections import namedtuple
 
 #own modules
-from classes.Player import Player
 from Excel import Excel
-from classes.Match import Match
 import utilities.util as util
-from utilities.Webdriver import Webdriver as wd
 import helperMain
 
 def setupLinks(leagues):
     for league in leagues:
         if league.name == "superliga":
-            league.link = "https://www.google.com/search?q=superliagetable&sxsrf=ALiCzsbrRcpPR73yMygkacEmQt88qS6qSQ%3A1655221225444&ei=6auoYoHeGobRqwG91JaoBg&ved=0ahUKEwjB9qrJo634AhWG6CoKHT2qBWUQ4dUDCA4&uact=5&oq=superliagetable&gs_lcp=Cgdnd3Mtd2l6EAMyBAgAEA0yBAgAEA0yBAgAEA0yCAgAEB4QBxAKMgQIABANMgQILhANMgQIABANMgYIABAeEA0yBggAEB4QDTIGCAAQHhANOgcIIxCwAxAnOgcIABBHELADOgcIABCwAxBDOgwILhDIAxCwAxBDGAE6BggAEB4QBzoECAAQEzoICAAQHhAHEBM6CggAEB4QBxAKEBM6CAguEB4QBxATOggIABAeEA0QCjoICAAQHhANEBM6CggAEB4QDRAFEBNKBAhBGABKBAhGGAFQ8QxYyytgvi9oBXABeACAAWyIAakIkgEEMTEuMZgBAKABAcgBFMABAdoBBggBEAEYCA&sclient=gws-wiz#sie=lg;/g/11nmr_75gx;2;/m/06bxjb;mt;fp;1;;"
+            league.link = "https://fbref.com/en/comps/50/schedule/Superliga-Scores-and-Fixtures"
         elif league.name == "premier-league":
-            league.link = "https://www.google.com/search?q=premier+league+table#sie=lg;/g/11p44qhs93;2;/m/02_tc;mt;fp;1;;"
+            league.link = "https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures"
         elif league.name == "bundesliga":
-            league.link = "https://www.google.com/search?q=bundesliga+1+table&sxsrf=ALiCzsZkk_XyHAIj70_EmJr_WlhI6SKIQw%3A1655222309694&ei=JbCoYq2FKovMrgTmuonYAQ&ved=0ahUKEwjtq6zOp634AhULposKHWZdAhsQ4dUDCA4&uact=5&oq=bundesliga+1+table&gs_lcp=Cgdnd3Mtd2l6EAMyBggAEB4QBzIGCAAQHhAHMgYIABAeEAcyBggAEB4QBzIGCAAQHhAHMgYIABAeEAcyBQgAEMsBMgUIABDLATIFCAAQywEyBQgAEMsBOgcIABBHELADOgcIABCwAxBDOgwILhDIAxCwAxBDGAE6DwguENQCEMgDELADEEMYAToECCMQJzoICAAQHhAHEAo6CAgAEB4QBxATOgoIABAeEAcQChATSgQIQRgASgQIRhgBUOITWLwaYMcbaANwAXgAgAFQiAGcApIBATSYAQCgAQHIARTAAQHaAQYIARABGAg&sclient=gws-wiz#sie=lg;/g/11m__0kr76;2;/m/037169;mt;fp;1;;"
+            league.link = "https://fbref.com/en/comps/20/schedule/Bundesliga-Scores-and-Fixtures"
         elif league.name == "serie-a":
-            league.link = "https://www.google.com/search?q=serie+a+table&oq=serie+a+table&aqs=chrome.0.69i59j0i512l9.6906j0j9&sourceid=chrome&ie=UTF-8#sie=lg;/g/11n0vx7n5d;2;/m/03zv9;mt;fp;1;;"
+            league.link = "https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures"
         elif league.name == "laliga":
-            league.link = "https://www.google.com/search?q=laliga+table&oq=la&aqs=chrome.1.69i57j35i19i39j69i59j35i19i39j0i131i433j69i60l3.1694j0j9&sourceid=chrome&ie=UTF-8#sie=lg;/g/11mqlmppsd;2;/m/09gqx;mt;fp;1;;"
-            
+            league.link = "https://fbref.com/en/comps/12/schedule/La-Liga-Scores-and-Fixtures"
 
 def UpdateFerieKasse():
     leagues = helperMain.getAllLeagues()
-    setupLinks(leagues) ##remove this when in midst of season
+    setupLinks(leagues)
     players = util.getPlayerObjectsFromFile()
     for league in leagues:
-        print("working on",league.name) #for some reason league.name starts with a space??
-        ##kunne godt bruge threads her
+        print("working on",league.name)
         match = getLatestMatchCovered(league)
         if match == None:
             league.getMatchesAfterLatestMatch()
@@ -48,7 +43,7 @@ def UpdateFerieKasse():
     
 
 def getLatestMatchCovered(league):
-    file = open(r"./logs/latestMatchCovered.json","r")
+    file = codecs.open(r"./logs/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
     fileDict = fileJson[f"{league.name},{league.country}"]
     if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update
@@ -56,7 +51,6 @@ def getLatestMatchCovered(league):
     match = json.loads(fileDict)
     matchJson = json.dumps(match)
     matchTuple = json.loads(matchJson, object_hook = lambda d : namedtuple('Match', d.keys())(*d.values()))
-    
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
 
@@ -75,18 +69,14 @@ def tryAppendMatch(player,match):
     if player == None:
         return
     player.matches.append(match)
-           
+          
+#returns the player that has the team with the given name from a list of players 
 def getPlayerThatHasTeam(teamName,players):
     for player in players:
         for team in player.teams:
             if team == teamName:
                 return player
     return None
-
-def tryAddPoints(player,points):
-    if player == None:
-        return
-    player.points.append(points)
     
 if __name__ == "__main__":
     UpdateFerieKasse()
