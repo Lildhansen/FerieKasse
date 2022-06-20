@@ -19,8 +19,6 @@ soup = Soup()
 #get teams and save them in leagueAndTeams dict
 def getTeams():
     for league in leaguesAndTeams.keys():
-        if league != "superliga,danmark":
-            continue
         soup.getLinkContent(getLinks(league))
         table = soup.soup.find("tbody")
         for team in table.find_all("tr"):
