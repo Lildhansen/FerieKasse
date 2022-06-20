@@ -1,9 +1,6 @@
-from operator import le
-import bs4
 import orjson
 
 from utilities.Soup import Soup
-import time
 
 leaguesAndTeams = {"premier-league,england":[],"bundesliga,tyskland":[],"laliga,spanien":[],"serie-a,italien":[],"superliga,danmark":[]}
 def getLinks(league):

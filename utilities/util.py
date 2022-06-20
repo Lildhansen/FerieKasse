@@ -1,6 +1,4 @@
-from datetime import date, timedelta, datetime
-import re
-from xml.dom.minidom import Element
+from datetime import date
 import orjson
 import codecs
 
@@ -49,7 +47,7 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
-
+#does the same as split, but converts the parts to ints and finally returns a list (which can be unpacked as a tuple) of the parts
 def splitAndConvertToInt(inputString,seperator):
     result = []
     splittedList = inputString.split(seperator)
@@ -65,7 +63,8 @@ def textToDate(text):
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
     return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
-    
+
+#gets all players from leaguesAndTeams.json and make a Player object for each of them and finally returns a list of them
 def getPlayerObjectsFromFile():
     players = []
     file = codecs.open(r"./logs/leaguesAndTeams.json","r",encoding='UTF-8')

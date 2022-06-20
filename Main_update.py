@@ -1,16 +1,11 @@
 #libraries - standard or pip
 import codecs
 import json
-import os
-import orjson
 from collections import namedtuple
 
 #own modules
-from classes.Player import Player
 from Excel import Excel
-from classes.Match import Match
 import utilities.util as util
-from utilities.Soup import Soup
 import helperMain
 
 def setupLinks(leagues):
@@ -28,11 +23,10 @@ def setupLinks(leagues):
 
 def UpdateFerieKasse():
     leagues = helperMain.getAllLeagues()
-    setupLinks(leagues) ##remove this when in midst of season
+    setupLinks(leagues)
     players = util.getPlayerObjectsFromFile()
     for league in leagues:
         print("working on",league.name)
-        ##kunne godt bruge threads her
         match = getLatestMatchCovered(league)
         if match == None:
             league.getMatchesAfterLatestMatch()
@@ -57,7 +51,6 @@ def getLatestMatchCovered(league):
     match = json.loads(fileDict)
     matchJson = json.dumps(match)
     matchTuple = json.loads(matchJson, object_hook = lambda d : namedtuple('Match', d.keys())(*d.values()))
-    
     file.close()
     return util.matchTupleToMatchObject(matchTuple)
 
@@ -76,18 +69,14 @@ def tryAppendMatch(player,match):
     if player == None:
         return
     player.matches.append(match)
-           
+          
+#returns the player that has the team with the given name from a list of players 
 def getPlayerThatHasTeam(teamName,players):
     for player in players:
         for team in player.teams:
             if team == teamName:
                 return player
     return None
-
-def tryAddPoints(player,points):
-    if player == None:
-        return
-    player.points.append(points)
     
 if __name__ == "__main__":
     UpdateFerieKasse()

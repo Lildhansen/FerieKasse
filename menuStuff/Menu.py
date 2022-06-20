@@ -1,20 +1,15 @@
-from re import T
 import keyboard
 import time
 import json
 import orjson
 import os
 import colorama
-import codecs
 
 
 import utilities.constants as const
-from .MenuItem import MenuItem
 
 #todo
 """
-bugs:
-    hvis man går ind i en liga, og så ud af den igen, og så ind i den igen kan man kun gå ud af den igen
 den er kinda ustabil
     den kører igen (kun 1 gang til) hvis den crasher
     hvis man trykker enter i lidt for lang tid registrerer den  det for begge

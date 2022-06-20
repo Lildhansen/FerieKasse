@@ -1,13 +1,11 @@
 #libraries - standard or pip
 import codecs
 import os
-import time
 import orjson
 
 #own modules
 from menuStuff.Menu import Menu
 import utilities.util as util
-from classes.League import League
 from classes.Player import Player
 from Excel import Excel
 import helperMain
