@@ -62,6 +62,9 @@ class Excel:
         row = 2
         while True:
             cell = ws.cell(row,column)
+            if cell.value != None:
+                print(cell.value)
+            #row bliver uendeligt høj
             if cell.value == "Total:":
                 Raise(Exception("team not found in excel file"))
             if cell.value == match.homeTeam or cell.value == match.awayTeam:
@@ -69,10 +72,3 @@ class Excel:
                 pointCell.value += "+" + str(match.points)
                 break
             row += 1
-            
-              
-#myExcel = Excel()
-#myExcel.updateExcelFile([])
-
-
-#det bliver ikke rigtig regnet ud - fx chelsea man u 1-1 regnes vist til 5 i stedet for 10
