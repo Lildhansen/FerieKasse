@@ -1,63 +1,35 @@
+# multiple games
+## main initiate:
+flyt .json filer og excel fil til **data** mappe.
+Når man laver et nyt game skal der laves en mappe i **data**, som hedder navnet på den **save** man nu laver
+    der skal promptes om hvad den save skal hedde
+    en constant med den save skal gemmes, så det kan dataet kan accesses
+Nu skal alt data (undtagen teams.json) så gemmes i den mappe
+
+
 # initiate
-- mangler clean-up af denne fil
-skal kun kunne initiate hvis excel-sheetet med feriekassen er tom - eller slettet
-Der skal kunne vælges hold i menu for hver spiller / indsætte .txt-fil med holdene og spillerne i formatet:
 evt. mail med holdene til alle spillerne
 # update
 send mail
     hver uge/anden uge / måned
-# remove
-skal have en "are you sure you want to remove"
-clear:
-    excel sheet
-    players and teams / players and teams and links
-ikke clear:
-    teams.txt
 
 # Menu
-## regler:
-- kun 1 holder per liga for hver spiller
-  - undtagen sidste runde, hvor alle ligaer kan vælges
-- når et hold vælges, kan det ikke vælges igen af andre
-
-## logik
-- 1 hovedmenu med ligaer
-- 1 undermenu for hver liga
-- 1 tæller (den starter på 0 for hver menu) - og så er den skiftevis attachet til en af menuerne
-- der skal være en dictionary med "spillerx:availableLeague"
-### option a
-- en controller kunne holde styr på kontrollen mellem hovedmenu og submenu
-- den kunne have en counter for index i menuen som kunne parses ind i deres run funktioner
-### option b:
-submenu kunne være indlejret i hovedmenuen
-
+cleanup
+comments
 
 # tests:
 - rigtig URL for holdene / kampene findes
 - korrekt pointtælling
 - korrekt excelskrivning
 - mail sendes ordentligt - rigtig vedhæftning, connection til SMTP, rigtig modtagere
-- **Kan ikke teste for webdriver**
 
-# hvornår / hvordan filerne skal køres
-## initiate
-    skal køre menuen hvis den .txt-fil med holdene og spillerne enten er tom eller ikke eksisterer 
-        kan evt. også spørge om menuen skal opsættes, hvis ingen .txt-fil eksisterer/er tom
 # extra shit:
-    LeagueNationsDict fra constants kunne måske optimere/prettify noget stuff
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
-# optimeringsmuligheder:
-sørg for at lukke **ALLE** connections samt filer
 
 # small todo
     fix casing
     add comments - til hver funktion
-    fix menu - både comments og mere 
-        og hvordan kan de importere ud af filen
 
-# comments needed
-
-    
 # point
 - der gives dobbelt ved uafgjort lige meget med slutspil eller ej
 
@@ -72,16 +44,13 @@ sørg for at lukke **ALLE** connections samt filer
     classMethods
 
 ## file names
-    main files = Main_snake_case
+    main_files = Main_snake_case
     ClassFiles = PascalCase
-    other files = camelCase
+    otherFiles = camelCase
 
 
 # nice to haves:
 - send mail (both when initiation and each week(or month or some defined timeframe))
-- menu initiation
-
-
 
 # md guide:
 ~~overstreg~~

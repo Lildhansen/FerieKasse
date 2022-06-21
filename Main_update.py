@@ -39,8 +39,6 @@ def UpdateFerieKasse():
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
     
-    #skriv til excel
-    
 
 def getLatestMatchCovered(league):
     file = codecs.open(r"./logs/latestMatchCovered.json","r")
