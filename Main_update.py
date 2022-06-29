@@ -3,10 +3,12 @@ import codecs
 import json
 from collections import namedtuple
 
+
 #own modules
 from Excel import Excel
 import utilities.util as util
 import helperMain
+import utilities.constants as const
 
 def setupLinks(leagues):
     for league in leagues:
@@ -41,7 +43,7 @@ def UpdateFerieKasse():
     
 
 def getLatestMatchCovered(league):
-    file = codecs.open(r"./logs/latestMatchCovered.json","r")
+    file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
     fileDict = fileJson[f"{league.name},{league.country}"]
     if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update

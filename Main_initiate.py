@@ -24,7 +24,10 @@ def setupMenuInitiation():
     numOfPlayers = int(numOfPlayers)
     print(f"write the {numOfPlayers} players (seperated by enter):")
     while len(players) < numOfPlayers:
-        players.append(Player(input()))
+        playerName = input()
+        if playerName == "" or playerName.isspace():
+            continue
+        players.append(Player(playerName))
     random.shuffle(players)
     myMenu = Menu(players,"Select a league/country")
     myMenu.setupMenu()
@@ -33,23 +36,29 @@ def setupMenuInitiation():
 
 #orjson
 def setupLatestMatchCoveredForEachLeagueFile():
-    with codecs.open("./logs/latestMatchCovered.json","wb") as file:
+    with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","wb") as file:
         file.write(orjson.dumps(const.LeagueNationsDict))
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
-    if not (os.path.isfile(r"./logs/leaguesAndTeams.json") and os.path.getsize(r"./logs/leaguesAndTeams.json") > 0):
+    print("starting a new feriekasse")
+    const.FERIEKASSE_NAME = input("What name would you like to give the feriekasse? (n to cancel) ")
+    if const.FERIEKASSE_NAME == "n":
+        print("canceled")
+        exit()
+    newDir = fr"./data/{const.FERIEKASSE_NAME}"
+    if os.path.exists(newDir):
+        print("a feriekasse with this name already exists")
+        exit()
+    os.mkdir(newDir)
+    file = fr"{newDir}/leaguesAndTeams.json"
+    if not (os.path.isfile(file) and os.path.getsize(file) > 0):
         setupMenuInitiation()
     helperMain.getAllLeagues()
     myExcel = Excel(leagues)
-    myExcel.deleteExcelFile() #should not do this in the end
     myExcel.setupExcelFile()
     setupLatestMatchCoveredForEachLeagueFile()
+    print("successfully started feriekasse",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":
-    if os.path.isfile("Feriekasse.xlsx"):
-        print("A round has already been started.")
-        print("if you want to start a new round, do 'make reset' first")
-        input("press enter to continue ...")
-    else:
-        initiateFerieKasse()
+    initiateFerieKasse()

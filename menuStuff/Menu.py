@@ -39,7 +39,7 @@ class Menu:
     def getSelectedIndex(self):
         return self.__selectedIndex
     def setupMenu(self):
-        with open("./logs/teams.json","r",encoding='utf-8') as file:
+        with open("./data/teams.json","r",encoding='utf-8') as file:
             leagueDict = json.load(file)
         for leagueItem in leagueDict.keys():
             optionTitle = self.getOptionTitle(leagueItem)
@@ -168,7 +168,7 @@ class Menu:
                     for pickedTeam in league.pickedOptions:
                         if pickedTeam == team:
                             jsonData[self.unGetOptionTitle(league.title)].update({team:player.name})
-        with open(r"./logs/leaguesAndTeams.json","wb") as file:
+        with open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","wb") as file:
             file.write(orjson.dumps(jsonData))
 
 class SubMenu(Menu):

@@ -42,13 +42,13 @@ class League:
         latestMatch.date = latestMatch.date.isoformat()
         latestMatchJSON = json.dumps(latestMatch,cls=Encoder)
         #reading
-        with codecs.open(r"./logs/latestMatchCovered.json","r") as file:
+        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r") as file:
             leaguesAndCountries = json.load(file)
         
         leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON  
         
         #writing  
-        with codecs.open(r"./logs/latestMatchCovered.json","w") as file:
+        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","w") as file:
             json.dump(leaguesAndCountries,file)
         
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,

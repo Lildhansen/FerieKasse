@@ -3,7 +3,7 @@
 flyt .json filer og excel fil til **data** mappe.
 Når man laver et nyt game skal der laves en mappe i **data**, som hedder navnet på den **save** man nu laver
     der skal promptes om hvad den save skal hedde
-    en constant med den save skal gemmes, så det kan dataet kan accesses
+    en constant med den save skal gemmes, så dataet kan accesses
 Nu skal alt data (undtagen teams.json) så gemmes i den mappe
 
 
