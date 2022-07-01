@@ -41,6 +41,8 @@ def setupLatestMatchCoveredForEachLeagueFile():
 
 #function that return false if folder is invalid (that is consists of any of the invalid chars) and true otherwise
 def folderIsValid(folderName):
+    if const.FERIEKASSE_NAME == "" or const.FERIEKASSE_NAME.isspace():
+        return False
     invalidSymbols = "/\\:*?\"<>|"
     for invalidSymbol in invalidSymbols:
         if invalidSymbol in folderName:
