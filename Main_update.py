@@ -2,6 +2,7 @@
 import codecs
 import json
 from collections import namedtuple
+import os
 
 
 #own modules
@@ -22,8 +23,19 @@ def setupLinks(leagues):
             league.link = "https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures"
         elif league.name == "laliga":
             league.link = "https://fbref.com/en/comps/12/schedule/La-Liga-Scores-and-Fixtures"
+def loadFerieKasse():
+    print("updating feriekasse ...")
+    const.FERIEKASSE_NAME = input("Which feriekasse do you want to update? (n to cancel) ")
+    if const.FERIEKASSE_NAME == "n":
+        print("cancelled")
+        exit()
+    if not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
+        print("This feriekasse does not exist")
+        exit()
+        
 
 def UpdateFerieKasse():
+    loadFerieKasse()
     leagues = helperMain.getAllLeagues()
     setupLinks(leagues)
     players = util.getPlayerObjectsFromFile()
