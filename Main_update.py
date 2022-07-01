@@ -2,11 +2,14 @@
 import codecs
 import json
 from collections import namedtuple
+import os
+
 
 #own modules
 from Excel import Excel
 import utilities.util as util
 import helperMain
+import utilities.constants as const
 
 def setupLinks(leagues):
     for league in leagues:
@@ -20,8 +23,19 @@ def setupLinks(leagues):
             league.link = "https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures"
         elif league.name == "laliga":
             league.link = "https://fbref.com/en/comps/12/schedule/La-Liga-Scores-and-Fixtures"
+def loadFerieKasse():
+    print("updating feriekasse ...")
+    const.FERIEKASSE_NAME = input("Which feriekasse do you want to update? (n to cancel) ")
+    if const.FERIEKASSE_NAME == "n":
+        print("cancelled")
+        exit()
+    if not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
+        print("This feriekasse does not exist")
+        exit()
+        
 
 def UpdateFerieKasse():
+    loadFerieKasse()
     leagues = helperMain.getAllLeagues()
     setupLinks(leagues)
     players = util.getPlayerObjectsFromFile()
@@ -41,7 +55,7 @@ def UpdateFerieKasse():
     
 
 def getLatestMatchCovered(league):
-    file = codecs.open(r"./logs/latestMatchCovered.json","r")
+    file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
     fileDict = fileJson[f"{league.name},{league.country}"]
     if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update

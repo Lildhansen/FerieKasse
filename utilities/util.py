@@ -4,6 +4,7 @@ import codecs
 
 from classes.Match import Match
 from classes.Player import Player
+import utilities.constants as const
 
 #consts
 INVALID_LETTERS = "æøå"
@@ -67,7 +68,7 @@ def matchTupleToMatchObject(matchTuple):
 #gets all players from leaguesAndTeams.json and make a Player object for each of them and finally returns a list of them
 def getPlayerObjectsFromFile():
     players = []
-    file = codecs.open(r"./logs/leaguesAndTeams.json","r",encoding='UTF-8')
+    file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","r",encoding='UTF-8')
     jsonData = orjson.loads(file.read())
     for leagueAndCountry in jsonData:
         for teamName in jsonData[leagueAndCountry]:

@@ -1,8 +1,9 @@
 #own modules
-from ast import Raise
 import utilities.util as util
+import utilities.constants as const
 
 #imports
+from ast import Raise
 import openpyxl
 import os
 #import xlsxwriter
@@ -40,31 +41,28 @@ class Excel:
             ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
-        wb.save("Feriekasse.xlsx")
+        wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
     #updates the excel file. this is done when a game is in progress
     def updateExcelFile(self,players):
-        wb = openpyxl.load_workbook('Feriekasse.xlsx')
+        wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
         ws = wb.active #new worksheet
         column = 1
         for player in players:
             for match in player.matches:
                 self.updateTeamPointsInColumn(match,ws,column)
             column += 2
-        wb.save("Feriekasse.xlsx")
+        wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
     #deletes the excel file. this is done when a game is over
     def deleteExcelFile(self):
-        if (os.path.isfile("Feriekasse.xlsx")):
-            os.remove("Feriekasse.xlsx")
+        if (os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")):
+            os.remove(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
     #updates the points in the excel file for a single match
     def updateTeamPointsInColumn(self,match,ws,column):
         row = 2
         while True:
             cell = ws.cell(row,column)
-            if cell.value != None:
-                print(cell.value)
-            #row bliver uendeligt høj
             if cell.value == "Total:":
                 Raise(Exception("team not found in excel file"))
             if cell.value == match.homeTeam or cell.value == match.awayTeam:

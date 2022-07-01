@@ -29,7 +29,7 @@ def getTeams():
 #fjern tomme fra superliga (hul mellem mesterskabsspil og taberspil)
 
 def addTeamsToJsonFile():
-    with open("./logs/teams.json","wb") as file:
+    with open("./data/teams.json","wb") as file:
         file.write(orjson.dumps(leaguesAndTeams))
 
 if __name__ == "__main__":
