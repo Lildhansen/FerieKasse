@@ -63,7 +63,6 @@ class Excel:
         row = 2
         while True:
             cell = ws.cell(row,column)
-            #row bliver uendeligt høj - i think this is fixed
             if cell.value == "Total:":
                 Raise(Exception("team not found in excel file"))
             if cell.value == match.homeTeam or cell.value == match.awayTeam:
