@@ -49,7 +49,13 @@ def folderIsValid(folderName):
             return False
     return True
         
-    
+def setupExtraRulesFile():
+    userInput = ""
+    while userInput != "0" and userInput != "1":
+        userInput = input("would you like to add extra rules? (0=no) (1=gain points for 4 goal lead) ")
+    if userInput == 0:
+        return
+    const.FOUR_GOAL_WIN_RULE = True
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
@@ -87,6 +93,8 @@ def initiateFerieKasse():
         myExcel.setupExcelFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/latestMatchCovered.json"):
         setupLatestMatchCoveredForEachLeagueFile()
+    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
+        setupExtraRulesFile()
     print("succesfully updated all data of feriekasse",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":

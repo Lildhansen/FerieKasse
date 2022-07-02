@@ -29,7 +29,7 @@ class Match:
         if not self.draw:
             #if it is not an indbyrdes match
             if not (self.awayTeamIsPlayerTeam and self.homeTeamIsPlayerTeam):
-            #if the player team won
+            #if the player team won     if (awayteam won and awayteam is player team) or (hometeam won and hometeam is player team)
                 if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
                     return 0
 

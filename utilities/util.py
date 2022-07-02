@@ -83,6 +83,14 @@ def getPlayerObjectsFromFile():
                 player.teams.append(teamName)
     return players
 
+#returns the player that has the team with the given name from a list of players 
+def getPlayerThatHasTeam(teamName,players):
+    for player in players:
+        for team in player.teams:
+            if team == teamName:
+                return player
+    return None
+
 def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
     for player in players:
         if playerName == player.name:
