@@ -2,6 +2,7 @@ import pytest
 from classes.League import League
 from classes.Team import Team
 from classes.Match import Match
+import utilities.constants as const
 import datetime
 
 def getMockLeagueForFindTeamTests():
@@ -68,6 +69,38 @@ def test_calculatePointsForMatches_calculates_points_correctly():
     assert match1.points == 10 #draw (5) with multiplier (5*2)
     assert match2.points == 0
     assert match3.points == 20
+
+def test_calculatePointsForMatches_calculates_bonus_points_correctly_for_4_goal_win_rule():
+    const.FOUR_GOAL_WIN_RULE = True
+    myLeague = League("league1","country1")
+    match1 = Match(None,"team1",4,"team2",0)
+    match1.homeTeamIsPlayerTeam = True
+    match1.awayTeamIsPlayerTeam = True
+
+    match2 = Match(None,"germany",7,"brazil",1)
+    match2.homeTeamIsPlayerTeam = True
+    match2.awayTeamIsPlayerTeam = False
+    
+    match3 = Match(None,"team6",0,"team3",3)
+    match3.homeTeamIsPlayerTeam = False
+    match3.awayTeamIsPlayerTeam = True
+
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    germany = Team("germany","player3")
+    team3 = Team("team3","player4")
+    brazil = Team("brazil","player5")
+    team6 = Team("team6","player6")
+    
+    myLeague.matches.extend([match1,match2,match3])
+    myLeague.teams.extend([team1,germany,team3,team2,brazil,team6])
+    
+    myLeague.calculatePointsForMatches()
+    assert team1.bonusPoints == -10 #
+    assert germany.bonusPoints == -10
+    assert team3.bonusPoints == 0
+
+
 
 def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_player_team():
     myLeague = League("league1","country1")

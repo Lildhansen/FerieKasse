@@ -26,7 +26,7 @@ class Excel:
             ws.cell(row,column,player.name)
             for team in player.teams:
                 row += 1
-                ws.cell(row,column,team)
+                ws.cell(row,column,team.name)
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
@@ -38,7 +38,7 @@ class Excel:
                 pointLocation = util.numberToExcelColumn(column) + str(row)
                 ws[pointLocation] = "=0"
             row += 1
-            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
+            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row - len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
@@ -52,8 +52,32 @@ class Excel:
             for match in player.matches:
                 self.updateTeamPointsInColumn(match,ws,column)
             column += 2
+        if const.FOUR_GOAL_WIN_RULE:
+            self.addFourGoalWinBonusPoints(ws,players)
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
+    #adds bonus points for for four goal win rule
+    def addFourGoalWinBonusPoints(self,ws,players):
+        column = 1
+        row = 1
+        for player in players:
+            while True:
+                if player.name == ws.cell(row,column).value:
+                    break
+                column += 2
+            for team in player.teams:
+                row = 1
+                if team.bonusPoints == 0:
+                    continue
+                cell = ws.cell(row,column)
+                if team.name == cell.value:
+                    pointCell = ws.cell(row,column+1)
+                    pointCell.value += "+" + str(team.bonusPoints)
+                else:
+                    row += 1
+                
+                
+        
     #deletes the excel file. this is done when a game is over
     def deleteExcelFile(self):
         if (os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")):

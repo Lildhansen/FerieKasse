@@ -11,6 +11,7 @@ import copy
 from classes.Match import Match
 from utilities.Soup import Soup
 import utilities.constants as const
+import utilities.util as util
 
 class League:
     def __init__(self,name,country):
@@ -53,7 +54,6 @@ class League:
         
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
-        ####this function does not work at the moment
         originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop
         for match in originalMatchList:                  
             TeamInMatch = False            
@@ -75,10 +75,12 @@ class League:
                 if (match.homeTeamIsWinner and not match.awayTeamIsPlayerTeam) or (not match.homeTeamIsWinner and not match.homeTeamIsPlayerTeam):
                     self.matches.remove(match)           
     #calculates the points for all matches and saves the points in the match objects
-    def calculatePointsForMatches(self):
+    def calculatePointsForMatches(self,players=[]):
         for match in self.matches:
             match.calculatePoints()
             self.applyMatchMultipliers(match)
+            if const.FOUR_GOAL_WIN_RULE:
+                self.calculateFourGoalWinBonusPoints(match,players)
     #apply possible multipliers for the match - if it was an "indbyrdes" match
     def applyMatchMultipliers(self,match):
         if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
@@ -95,6 +97,12 @@ class League:
             return False
         if match.date >= datetime.date(datetime.datetime.now().year,4,1):
             return True
+        
+    def calculateFourGoalWinBonusPoints(self,match,players):
+        if (match.homeTeamIsWinner and match.homeTeamIsPlayerTeam) and (match.homeGoals - match.awayGoals) >= 4:
+            self.findTeamByTeamName(match.homeTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
+        elif (not match.homeTeamIsWinner and match.awayTeamIsPlayerTeam) and (match.awayGoals - match.homeGoals) >= 4:
+            self.findTeamByTeamName(match.awayTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
             
     def findTeamByTeamName(self,teamName):
         for team in self.teams:

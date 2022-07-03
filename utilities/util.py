@@ -4,6 +4,7 @@ import codecs
 
 from classes.Match import Match
 from classes.Player import Player
+from classes.Team import Team
 import utilities.constants as const
 
 #consts
@@ -77,11 +78,20 @@ def getPlayerObjectsFromFile():
             player = findPlayerObjectInPlayerListFromPlayerName(playerName,players)
             if player == None:
                 player = Player(playerName)
-                player.teams.append(teamName)
+                player.teams.append(Team(teamName,player.name))
                 players.append(player)
             else:
-                player.teams.append(teamName)
+                player.teams.append(Team(teamName,player.name))
     return players
+
+#returns the player that has the team with the given name from a list of players 
+#the teams of each player must be strings rather than team objects
+def getPlayerThatHasTeam(teamName,players):
+    for player in players:
+        for team in player.teams:
+            if team.name == teamName:
+                return player
+    return None
 
 def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
     for player in players:

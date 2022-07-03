@@ -32,6 +32,8 @@ def loadFerieKasse():
     if not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
         print("This feriekasse does not exist")
         exit()
+    if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
+        const.FOUR_GOAL_WIN_RULE = True
         
 
 def UpdateFerieKasse():
@@ -46,7 +48,7 @@ def UpdateFerieKasse():
             league.getMatchesAfterLatestMatch()
         else:
             league.getMatchesAfterLatestMatch(match)
-        league.calculatePointsForMatches()
+        league.calculatePointsForMatches(players)
         league.removeMatchesYielding0Points()
         for match in league.matches:
             assignMatchToPlayers(match,players)
@@ -71,9 +73,9 @@ def getLatestMatchCovered(league):
 def assignMatchToPlayers(match,players):
     homePlayer, awayPlayer = None,None
     if match.homeTeamIsPlayerTeam:
-        homePlayer = getPlayerThatHasTeam(match.homeTeam,players)
+        homePlayer = util.getPlayerThatHasTeam(match.homeTeam,players)
     if match.awayTeamIsPlayerTeam:
-        awayPlayer = getPlayerThatHasTeam(match.awayTeam,players)
+        awayPlayer = util.getPlayerThatHasTeam(match.awayTeam,players)
     if match.homeTeamIsWinner or match.draw:
         tryAppendMatch(awayPlayer,match)
     if not match.homeTeamIsWinner or match.draw:
@@ -84,13 +86,6 @@ def tryAppendMatch(player,match):
         return
     player.matches.append(match)
           
-#returns the player that has the team with the given name from a list of players 
-def getPlayerThatHasTeam(teamName,players):
-    for player in players:
-        for team in player.teams:
-            if team == teamName:
-                return player
-    return None
     
 if __name__ == "__main__":
     UpdateFerieKasse()
