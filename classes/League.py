@@ -97,11 +97,12 @@ class League:
             return False
         if match.date >= datetime.date(datetime.datetime.now().year,4,1):
             return True
+        
     def calculateFourGoalWinBonusPoints(self,match,players):
         if (match.homeTeamIsWinner and match.homeTeamIsPlayerTeam) and (match.homeGoals - match.awayGoals) >= 4:
-            self.findTeamByTeamName(match.homeTeam,players).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
+            self.findTeamByTeamName(match.homeTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
         elif (not match.homeTeamIsWinner and match.awayTeamIsPlayerTeam) and (match.awayGoals - match.homeGoals) >= 4:
-            self.findTeamByTeamName(match.awayTeam,players).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
+            self.findTeamByTeamName(match.awayTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
             
     def findTeamByTeamName(self,teamName):
         for team in self.teams:

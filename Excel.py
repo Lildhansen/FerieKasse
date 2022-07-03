@@ -26,7 +26,7 @@ class Excel:
             ws.cell(row,column,player.name)
             for team in player.teams:
                 row += 1
-                ws.cell(row,column,team)
+                ws.cell(row,column,team.name)
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
@@ -38,7 +38,7 @@ class Excel:
                 pointLocation = util.numberToExcelColumn(column) + str(row)
                 ws[pointLocation] = "=0"
             row += 1
-            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row-len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
+            ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row - len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
