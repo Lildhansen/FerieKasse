@@ -61,7 +61,6 @@ def setupExtraRulesFile():
         return
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","wb") as file:
         file.write(orjson.dumps({"4GoalWinRule":True}))
-        print(file)
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
