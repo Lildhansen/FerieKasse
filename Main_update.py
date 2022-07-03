@@ -32,6 +32,8 @@ def loadFerieKasse():
     if not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
         print("This feriekasse does not exist")
         exit()
+    if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
+        const.FOUR_GOAL_WIN_RULE = True
         
 
 def UpdateFerieKasse():

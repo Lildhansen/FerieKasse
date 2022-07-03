@@ -55,7 +55,8 @@ def setupExtraRulesFile():
         userInput = input("would you like to add extra rules? (0=no) (1=gain points for 4 goal lead) ")
     if userInput == 0:
         return
-    const.FOUR_GOAL_WIN_RULE = True
+    with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","w") as file:
+        file.write(orjson.dumps({"4GoalWinRule":True}))
 
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
