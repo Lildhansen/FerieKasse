@@ -5,8 +5,6 @@ import shutil
 def resetFeriekasse():
     print("removing a feriekasse")
     userInput = ""
-    print(userInput != "")
-    print(not userInput.isspace())
     while userInput == "" or userInput.isspace():
         userInput = input("What feriekasse would you like to remove? (n = cancel) (all = remove all feriekasser) ") #add remove all option
     if userInput == "all":

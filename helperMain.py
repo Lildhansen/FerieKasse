@@ -14,6 +14,6 @@ def getAllLeagues():
         league = League(league,country)
         for teamName in jsonData[leagueAndCountry]:
             player = jsonData[leagueAndCountry][teamName]
-            league.teams.append(Team(teamName,player))
+            league.teams.append(Team(teamName,player,league.name))
         leagues.append(league)
     return leagues

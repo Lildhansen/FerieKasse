@@ -72,16 +72,17 @@ def getPlayerObjectsFromFile():
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","r",encoding='UTF-8')
     jsonData = orjson.loads(file.read())
     for leagueAndCountry in jsonData:
+        leagueName = leagueAndCountry.split(",")[0]
         for teamName in jsonData[leagueAndCountry]:
             teamName = teamName
             playerName = jsonData[leagueAndCountry][teamName]
             player = findPlayerObjectInPlayerListFromPlayerName(playerName,players)
             if player == None:
                 player = Player(playerName)
-                player.teams.append(Team(teamName,player.name))
+                player.teams.append(Team(teamName,player.name,leagueName))
                 players.append(player)
             else:
-                player.teams.append(Team(teamName,player.name))
+                player.teams.append(Team(teamName,player.name,leagueName))
     return players
 
 #returns the player that has the team with the given name from a list of players 
@@ -100,5 +101,4 @@ def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
         else:
             continue
     return None
-    
     
