@@ -1,11 +1,14 @@
 #own modules
 import utilities.util as util
 import utilities.constants as const
+import random
 
 #imports
 from ast import Raise
 import openpyxl
 import os
+from openpyxl.styles import colors
+from openpyxl.styles import Font, Color
 #import xlsxwriter
 
 class Excel:
@@ -13,8 +16,17 @@ class Excel:
         self.leagues = leagues
         self.players = util.getPlayerObjectsFromFile()
         self.playersTeamsDict = {}
+        self.leaguesAndColors = {}
+        self.addColorsToLeagues(self.leagues)
     
     #sets up the excel file. This is done when starting a game
+    def addColorsToLeagues(self,leagues):
+        availableColors = const.AVAILABLE_COLORS.copy()
+        random.shuffle(const.AVAILABLE_COLORS)
+        for league in leagues:
+            self.leaguesAndColors[league.name] = availableColors[0]
+            availableColors.pop(0)
+            
     def setupExcelFile(self):
         wb = openpyxl.Workbook() # new workbook
         ws = wb.active #new worksheet
@@ -27,6 +39,7 @@ class Excel:
             for team in player.teams:
                 row += 1
                 ws.cell(row,column,team.name)
+                ws[f"{util.numberToExcelColumn(column)}{row}"].font = Font(color=Color(self.leaguesAndColors[team.leagueName]))
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
@@ -41,6 +54,10 @@ class Excel:
             ws.cell(row,column,f"=SUM({util.numberToExcelColumn(column)}{row - len(player.teams)}:{util.numberToExcelColumn(column)}{row-1})")
             row = 1
             column += 1
+        for league in self.leagues:
+            row += 1
+            ws.cell(row,column,league.name)
+            ws[f"{util.numberToExcelColumn(column)}{row}"].font = Font(color=Color(self.leaguesAndColors[league.name]))
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
     #updates the excel file. this is done when a game is in progress

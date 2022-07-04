@@ -57,7 +57,7 @@ def setupExtraRulesFile():
     userInput = ""
     while userInput != "0" and userInput != "1":
         userInput = input("would you like to add extra rules? (0=no) (1=gain points for 4 goal win) ")
-    if userInput == 0:
+    if userInput == "0":
         return
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","wb") as file:
         file.write(orjson.dumps({"4GoalWinRule":True}))
@@ -80,7 +80,7 @@ def initiateFerieKasse():
     if os.path.exists(newDir):
         print("a feriekasse with this name already exists")
         print("updates data if all is not present")
-        helperMain.getAllLeagues()
+        leagues = helperMain.getAllLeagues()
     #if folder doesnt exist we are starting a completely new game
     else:
         os.mkdir(newDir)
@@ -89,7 +89,7 @@ def initiateFerieKasse():
             setupMenuInitiation()
             print("teams have been loaded into the feriekasse")
             time.sleep(2)
-        helperMain.getAllLeagues()
+        leagues = helperMain.getAllLeagues()
         myExcel = Excel(leagues)
         myExcel.setupExcelFile()
         setupLatestMatchCoveredForEachLeagueFile()
