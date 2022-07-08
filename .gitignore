@@ -1,9 +1,13 @@
 #my logs + excel file:
 .txt
 /Feriekasse.xlsx
+/mailConfig.txt
+mailConfig.txt
+.mailConfig.txt
+./mailConfig.txt
 
 # config:
-/app.config
+/Email.ini
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
