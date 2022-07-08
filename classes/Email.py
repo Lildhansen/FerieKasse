@@ -9,8 +9,8 @@ class Email:
         self.server = None
         self.port = None
         self.receivers = []
-        self.setupEmail()
-    def setupEmail(self):
+        self.setupEmailInformationFromConfigFile()
+    def setupEmailInformationFromConfigFile(self):
         configSection = "email_config"
         config = configparser.ConfigParser()
         config.read(os.path.join(os.path.dirname(os.path.dirname(__file__)),'Email.ini'))
@@ -21,5 +21,6 @@ class Email:
         self.receivers = config.get(configSection,'receivers').split(';')
         
 a = Email()
+
 
 #lav ny gmail konto - feriekasse@gmail.com

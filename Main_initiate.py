@@ -13,7 +13,6 @@ import helperMain
 import utilities.constants as const
 import random
 
-
 leagues = []
 players = []
 
@@ -62,6 +61,10 @@ def setupExtraRulesFile():
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","wb") as file:
         file.write(orjson.dumps({"4GoalWinRule":True}))
 
+def setupLastEditedFile():
+    with open(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt","w") as _:
+        pass
+        
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
     #opening prompts
@@ -102,6 +105,8 @@ def initiateFerieKasse():
         setupLatestMatchCoveredForEachLeagueFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
         setupExtraRulesFile()
+    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt"):
+        setupLastEditedFile()
     print("succesfully updated all data of feriekasse:",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":

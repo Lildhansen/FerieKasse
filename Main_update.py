@@ -1,5 +1,6 @@
 #libraries - standard or pip
 import codecs
+from datetime import date
 import json
 from collections import namedtuple
 import os
@@ -52,9 +53,15 @@ def UpdateFerieKasse():
         league.removeMatchesYielding0Points()
         for match in league.matches:
             assignMatchToPlayers(match,players)
+    addToLastEditedFile()
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
+    if mailShouldBeSent():
+        sendMail()
     
+def addToLastEditedFile():
+    with open("./data/teams.json","w") as file:
+        file.write(date.today().isoformat())
 
 def getLatestMatchCovered(league):
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r")
@@ -85,7 +92,15 @@ def tryAppendMatch(player,match):
     if player == None:
         return
     player.matches.append(match)
-          
+    
+def mailShouldBeSent():
+    pass
+    #læs fra lastEdited.txt og check dato med dagens dato (og se om der er gået x dage siden) - hvor x er hvor ofte vi skal sende mails     
+    #returner true eller false
+    
+def sendMail():
+    pass
+    #brug Email class
     
 if __name__ == "__main__":
     UpdateFerieKasse()
