@@ -1,6 +1,8 @@
 import smtplib
 import configparser
 import os
+
+from datetime import date 
   
 class Email:
     def __init__(self):
@@ -22,5 +24,5 @@ class Email:
         
 a = Email()
 
-
+print((date.today() - date(2022,7,7)).days)    
 #lav ny gmail konto - feriekasse@gmail.com

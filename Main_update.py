@@ -94,7 +94,10 @@ def tryAppendMatch(player,match):
     player.matches.append(match)
     
 def mailShouldBeSent():
-    pass
+    with open(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt","r") as file:
+        dateLastEdited = util.textToDate(file.read())
+    return (date.today() - dateLastEdited).days >= const.SEND_MAIL_INTERVAL_DAYS
+        
     #læs fra lastEdited.txt og check dato med dagens dato (og se om der er gået x dage siden) - hvor x er hvor ofte vi skal sende mails     
     #returner true eller false
     
