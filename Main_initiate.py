@@ -16,7 +16,6 @@ import random
 
 leagues = []
 players = []
-
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
     numOfPlayers = ""
