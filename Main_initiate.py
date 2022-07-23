@@ -13,6 +13,7 @@ from Excel import Excel
 import helperMain
 import utilities.constants as const
 import random
+from classes.Email import Email
 
 leagues = []
 players = []
@@ -72,11 +73,11 @@ def setupEmailIniFile():
         config.add_section("email_config")
     except configparser.DuplicateSectionError:
         pass
-
-    config.set("email_config", "sender", "feriekasse@gmail.com")
-    config.set("email_config", "password", "Kodeord123")
-    config.set("email_config", "server", "smtp.gmail.com")
-    config.set("email_config", "port", "587")
+    email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
+    config.set("email_config", "sender", email.sender)
+    config.set("email_config", "password", email.password)
+    config.set("email_config", "server", email.server)
+    config.set("email_config", "port", str(email.port))
     config.set("email_config", "Receivers", "")
 
     with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
