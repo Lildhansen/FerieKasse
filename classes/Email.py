@@ -3,6 +3,7 @@ import configparser
 import os
 
 from datetime import date 
+import utilities.constants as const
   
 class Email:
     def __init__(self):
@@ -15,7 +16,7 @@ class Email:
     def setupEmailInformationFromConfigFile(self):
         configSection = "email_config"
         config = configparser.ConfigParser()
-        config.read(os.path.join(os.path.dirname(os.path.dirname(__file__)),'Email.ini'))
+        config.read(os.path.join(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx", (os.path.join(os.path.dirname(os.path.dirname(__file__)),'Email.ini'))))
         self.sender = config.get(configSection,'sender')
         self.password = config.get(configSection,'password')
         self.server = config.get(configSection,'server')
@@ -24,5 +25,4 @@ class Email:
         
 a = Email()
 
-print((date.today() - date(2022,7,7)).days)    
-#lav ny gmail konto - feriekasse@gmail.com
+

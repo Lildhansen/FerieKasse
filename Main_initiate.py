@@ -3,6 +3,7 @@ import codecs
 import os
 import orjson
 import time
+import configparser
 
 #own modules
 from menuStuff.Menu import Menu
@@ -64,6 +65,24 @@ def setupExtraRulesFile():
 def setupLastEditedFile():
     with open(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt","w") as _:
         pass
+
+def setupEmailIniFile():
+    config = configparser.ConfigParser()
+    try:
+        config.add_section("email_config")
+    except configparser.DuplicateSectionError:
+        pass
+
+    config.set("email_config", "sender", "feriekasse@gmail.com")
+    config.set("email_config", "password", "Kodeord123")
+    config.set("email_config", "server", "smtp.gmail.com")
+    config.set("email_config", "port", "587")
+    config.set("email_config", "Receivers", "")
+
+    with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
+        config.write(config_file)
+
+    print("ini file has been created, please add emails to receivers (seperated by semicolon) if you want to add automatic emails")
         
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
@@ -107,6 +126,8 @@ def initiateFerieKasse():
         setupExtraRulesFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt"):
         setupLastEditedFile()
+    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
+        setupEmailIniFile()
     print("succesfully updated all data of feriekasse:",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":
