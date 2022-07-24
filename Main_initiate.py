@@ -117,7 +117,7 @@ def initiateFerieKasse():
         myExcel.setupExcelFile()
         setupLatestMatchCoveredForEachLeagueFile()
         print("successfully started feriekasse:",const.FERIEKASSE_NAME)
-    #completes the setup if the user has added the folder themselves - and then added the leaguesAndTeams.json file
+    #completes the setup if the user has added the folder and then added the leaguesAndTeams.json file themself
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx"):
         myExcel = Excel(leagues)
         myExcel.setupExcelFile()
