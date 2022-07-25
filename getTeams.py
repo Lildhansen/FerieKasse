@@ -1,4 +1,4 @@
-import orjson
+import json
 
 from utilities.Soup import Soup
 
@@ -29,8 +29,8 @@ def getTeams():
 #fjern tomme fra superliga (hul mellem mesterskabsspil og taberspil)
 
 def addTeamsToJsonFile():
-    with open("./data/teams.json","wb") as file:
-        file.write(orjson.dumps(leaguesAndTeams))
+    with open("./data/teams.json","w") as file:
+        file.write(json.dumps(leaguesAndTeams))
 
 if __name__ == "__main__":
     getTeams()

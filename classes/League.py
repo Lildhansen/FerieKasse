@@ -3,7 +3,7 @@ import codecs
 import datetime
 from datetime import date
 import json
-import orjson
+import json
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 import copy
 

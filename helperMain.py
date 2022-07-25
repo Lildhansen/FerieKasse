@@ -2,13 +2,13 @@ from classes.League import League
 from classes.Team import Team
 import utilities.constants as const
 
-import orjson
+import json
 import codecs #for reading non-ascii chars
 
 def getAllLeagues():
     leagues = []
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","r",encoding='UTF-8')
-    jsonData = orjson.loads(file.read())
+    jsonData = json.loads(file.read())
     for leagueAndCountry in jsonData:
         league,country = leagueAndCountry.split(",")
         league = League(league,country)

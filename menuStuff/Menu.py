@@ -1,7 +1,7 @@
 import keyboard
 import time
 import json
-import orjson
+import json
 import os
 import colorama
 import copy
@@ -169,8 +169,8 @@ class Menu:
                     for pickedTeam in league.pickedOptions:
                         if pickedTeam == team:
                             jsonData[self.unGetOptionTitle(league.title)].update({team:player.name})
-        with open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","wb") as file:
-            file.write(orjson.dumps(jsonData))
+        with open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","w") as file:
+            file.write(json.dumps(jsonData))
 
 class SubMenu(Menu):
     def __init__(self, players, title, menu):

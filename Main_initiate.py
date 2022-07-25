@@ -1,7 +1,7 @@
 #libraries - standard or pip
 import codecs
 import os
-import orjson
+import json
 import time
 from collections import OrderedDict
 
@@ -35,10 +35,10 @@ def setupMenuInitiation():
     myMenu.run()
     myMenu.saveInJson()
 
-#orjson
+#json
 def setupLatestMatchCoveredForEachLeagueFile():
-    with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","wb") as file:
-        file.write(orjson.dumps(const.LeagueNationsDict))
+    with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","w") as file:
+        file.write(json.dumps(const.LeagueNationsDict))
 
 #function that return false if folder is invalid (that is consists of any of the invalid chars or does not comply with predefined rules) and true otherwise
 def folderIsValid(folderName):
@@ -77,8 +77,8 @@ def setupExtraRulesFile():
         const.FOUR_GOAL_WIN_BONUS_POINTS = - abs(getConstValue("number of points for 4 goal win ")) #will always be negative
         extraRulesDictionary["FOUR_GOAL_WIN_RULE"] = True
         extraRulesDictionary["FOUR_GOAL_WIN_BONUS_POINTS"] = const.FOUR_GOAL_WIN_BONUS_POINTS
-    with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","wb") as file:
-        file.write(orjson.dumps(extraRulesDictionary))
+    with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","w") as file:
+        file.write(json.dumps(extraRulesDictionary))
 
 def getConstValue(prompt,type=int,minValue=0):
     value = None

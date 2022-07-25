@@ -1,5 +1,5 @@
 from datetime import date
-import orjson
+import json
 import codecs
 
 from classes.Match import Match
@@ -82,7 +82,7 @@ def matchTupleToMatchObject(matchTuple):
 def getPlayerObjectsFromFile():
     players = []
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","r",encoding='UTF-8')
-    jsonData = orjson.loads(file.read())
+    jsonData = json.loads(file.read())
     for leagueAndCountry in jsonData:
         leagueName = leagueAndCountry.split(",")[0]
         for teamName in jsonData[leagueAndCountry]:
