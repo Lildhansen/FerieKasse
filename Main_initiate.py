@@ -89,7 +89,6 @@ def getConstValue(prompt,type=int,minValue=0):
             value = util.parseIntOrNone(input(prompt),minValue)
         else:
             raise Exception(f"type must be int or float, not {type}")
-        print(value)
     return value
 
 #the main function of the file - sets up the feriekasse
