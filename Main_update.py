@@ -56,6 +56,8 @@ def setConstant(constantString,value):
         const.TEAMS_PER_PLAYER = value
     elif constantString == "FOUR_GOAL_WIN_BONUS_POINTS":
         const.FOUR_GOAL_WIN_BONUS_POINTS = value
+    elif constantString == "FOUR_GOAL_WIN_RULE":
+        const.FOUR_GOAL_WIN_RULE = value
     else:
         raise Exception(f"the constant {constantString} not found")
     
