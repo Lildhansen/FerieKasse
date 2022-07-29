@@ -78,13 +78,27 @@ def setupEmailIniFile():
     config.set("email_config", "password", email.password)
     config.set("email_config", "server", email.server)
     config.set("email_config", "port", str(email.port))
-    config.set("email_config", "Receivers", "")
+    config.set("email_config", "initialEmailSent", False)
 
+    userInput = ""
+    while userInput.lower() != "y" and userInput.lower() != "n":
+        userInput = input("Do you want to input the receiving Emails and send the initial mail now (y/n)")
+    if userInput == "y":
+        receivers = ""
+        receiverInput = None
+        print("write the emails to add seperated by enters (terminates on empty input)")
+        while receiverInput != "":
+            receiverInput = input()
+            receivers += receiverInput + ";"
+        receivers = receivers.rstrip(";")
+        config.set("email_config","receivers",receivers)
+    else:  
+        config.set("email_config", "receivers", "")
+        print("ini file has been created, please add emails to receivers (seperated by semicolon) if you want to add automatic email service")
+        print("You can then run make start start again to send initial email or just ignore the intial email.")
+        
     with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
         config.write(config_file)
-
-    print("ini file has been created, please add emails to receivers (seperated by semicolon) if you want to add automatic emails")
-        
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
     #opening prompts
@@ -129,6 +143,9 @@ def initiateFerieKasse():
         setupLastEditedFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
         setupEmailIniFile()
+    #if ini file initialEmailSent er False
+        #emil.sendInitialEmail
+        #initialEmailSent = True
     print("succesfully updated all data of feriekasse:",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":
