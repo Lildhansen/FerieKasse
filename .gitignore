@@ -1,10 +1,11 @@
-#my logs + excel file:
-.txt
+# saves:
+data/*/
 /Feriekasse.xlsx
 
 # config:
 /app.config
 *.ini
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
