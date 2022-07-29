@@ -1,10 +1,6 @@
-#my logs + excel file:
-.txt
-/Feriekasse.xlsx
-/mailConfig.txt
-mailConfig.txt
-.mailConfig.txt
-./mailConfig.txt
+
+# saves:
+data/*/
 
 # config:
 /Email.ini
