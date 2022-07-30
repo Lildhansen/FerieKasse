@@ -1,5 +1,6 @@
 #libraries - standard or pip
 import codecs
+from importlib.resources import path
 import os
 import orjson
 import time
@@ -17,7 +18,8 @@ from classes.Email import Email
 
 leagues = []
 players = []
-email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
+#email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
+email = None
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
@@ -69,6 +71,8 @@ def setupLastEditedFile():
         pass
 
 def setupEmailIniFile():
+    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"email.ini"))
+    print(email)
     config = configparser.ConfigParser()
     try:
         config.add_section("email_config")
@@ -145,9 +149,10 @@ def initiateFerieKasse():
         setupEmailIniFile()
     config = configparser.ConfigParser()
     config.read(fr"data/{const.FERIEKASSE_NAME}/Email.ini")
+    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"email.ini"))
     if not util.parseBool(config.get("email_config","initialEmailSent")):
         email.sendInitialEmail()
-        config.set("email_config","initialEmailSent",True)
+        config.set("email_config","initialEmailSent","True")
         with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
             config.write(config_file)
     print("succesfully updated all data of feriekasse:",const.FERIEKASSE_NAME)

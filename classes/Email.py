@@ -21,6 +21,7 @@ class Email:
         self.receivers = []
         self.setupEmailInformationFromConfigFile(emailIniFile)
     def setupEmailInformationFromConfigFile(self,emailIniFile):
+        print(emailIniFile)
         configSection = "email_config"
         config = configparser.ConfigParser()
         config.read(emailIniFile)
@@ -33,7 +34,7 @@ class Email:
         mail_body = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse."
         message = MIMEMultipart()
         message['From'] = self.sender
-        message['To'] = self.receivers
+        message['To'] = self.receivers[0] #sender kun til 1 pt.
         message['Subject'] = f"feriekassen, {const.FERIEKASSE_NAME}, has been created"
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx"
         #add body
@@ -56,12 +57,13 @@ class Email:
         context = ssl.create_default_context()
         
         print("0")
-        smtp = smtplib.SMTP_SSL(self.server, self.port,context=context)
+        smtp = smtplib.SMTP_SSL(self.server)
+        smtp.connect(self.server,self.port)
         print("2")
-        smtp.ehlo()
         smtp.login(self.sender,self.password)
         print("3")
-        smtp.sendmail(message)
+        print(self.sender)
+        smtp.sendmail(to_addrs=self.receivers,msg=message.as_string(),from_addr=self.sender)
         print("4")
         smtp.quit()
         # context = ssl.create_default_context()
