@@ -17,6 +17,7 @@ from classes.Email import Email
 
 leagues = []
 players = []
+email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
@@ -73,16 +74,15 @@ def setupEmailIniFile():
         config.add_section("email_config")
     except configparser.DuplicateSectionError:
         pass
-    email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
     config.set("email_config", "sender", email.sender)
     config.set("email_config", "password", email.password)
     config.set("email_config", "server", email.server)
     config.set("email_config", "port", str(email.port))
-    config.set("email_config", "initialEmailSent", False)
+    config.set("email_config", "initialEmailSent", "False")
 
     userInput = ""
     while userInput.lower() != "y" and userInput.lower() != "n":
-        userInput = input("Do you want to input the receiving Emails and send the initial mail now (y/n)")
+        userInput = input("Do you want to input the receiving Emails and send the initial mail now (y/n) ")
     if userInput == "y":
         receivers = ""
         receiverInput = None
@@ -143,9 +143,13 @@ def initiateFerieKasse():
         setupLastEditedFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
         setupEmailIniFile()
-    #if ini file initialEmailSent er False
-        #emil.sendInitialEmail
-        #initialEmailSent = True
+    config = configparser.ConfigParser()
+    config.read(fr"data/{const.FERIEKASSE_NAME}/Email.ini")
+    if not util.parseBool(config.get("email_config","initialEmailSent")):
+        email.sendInitialEmail()
+        config.set("email_config","initialEmailSent",True)
+        with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
+            config.write(config_file)
     print("succesfully updated all data of feriekasse:",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":

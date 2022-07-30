@@ -22,6 +22,13 @@ def parseIntOrNone(input,minValue=0,maxValue=0):
             return None
     return output
 
+#returns True if "1", 1, or "True"
+def parseBool(input):
+    if input == "True" or parseIntOrNone(input) == 1:
+        return True
+    else:
+        return False
+
 #.txt files have issues reading æøå so these are simply removed when used for comparison and URL generation fx
 def removeInvalidLetters(myStr):
     for letter in INVALID_LETTERS:
