@@ -36,20 +36,30 @@ class Email:
         
         self.setupMailInfo(message,self.sender,self.receivers,subject,mailBody)
         
-        #attach the excel file
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
         self.attachExcelFile(message,excelFile,filename)
         
         self.connectToSmtpAndSendMail(message)
+        
+    def sendPeriodicMail(self):
+        message = EmailMessage()
+        mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse."
+        #tilføj evt. extra til mailBody
+        subject = f"feriekassen, {const.FERIEKASSE_NAME}, has been updated"
+        self.setupMailInfo(message,self.sender,self.receivers,subject,mailBody)
+        
+        excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
+        filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
+        self.attachExcelFile(message,excelFile,filename)
+        
+        self.connectToSmtpAndSendMail(message)
+        
     def setupMailInfo(self,message,sender,receivers,subject,body):
         message['From'] = sender
         message['To'] = receivers
         message['Subject'] = subject
         message.set_content(body)
-    
-    def sendMail(self):
-        mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse."
     
     def attachExcelFile(self,message,excelFile,newFileName):
         with open(excelFile, 'rb') as f:

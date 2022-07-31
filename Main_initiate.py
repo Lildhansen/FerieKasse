@@ -71,8 +71,7 @@ def setupLastEditedFile():
         pass
 
 def setupEmailIniFile():
-    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"email.ini"))
-    print(email)
+    email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
     config = configparser.ConfigParser()
     try:
         config.add_section("email_config")

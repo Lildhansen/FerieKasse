@@ -71,6 +71,7 @@ def textToDate(text):
     
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
+    print(matchTuple)
     return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
 
 #gets all players from leaguesAndTeams.json and make a Player object for each of them and finally returns a list of them

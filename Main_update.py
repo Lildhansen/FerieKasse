@@ -7,6 +7,7 @@ import os
 
 
 #own modules
+from classes.Email import Email
 from Excel import Excel
 import utilities.util as util
 import helperMain
@@ -57,7 +58,7 @@ def UpdateFerieKasse():
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
     if mailShouldBeSent():
-        sendMail()
+        sendPeriodicMail()
     
 def addToLastEditedFile():
     with open("./data/teams.json","w") as file:
@@ -101,8 +102,9 @@ def mailShouldBeSent():
     #læs fra lastEdited.txt og check dato med dagens dato (og se om der er gået x dage siden) - hvor x er hvor ofte vi skal sende mails     
     #returner true eller false
     
-def sendMail():
-    pass
+def sendPeriodicMail():
+    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"email.ini"))
+    email.sendPeriodicMail()
     #brug Email class
     
 if __name__ == "__main__":
