@@ -123,7 +123,10 @@ def tryAppendMatch(player,match):
     player.matches.append(match)
     
 def mailShouldBeSent():
-    with open(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt","r") as file:
+    lastEditedFilePath = fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt"
+    if os.path.getsize(lastEditedFilePath) == 0:
+        return True
+    with open(lastEditedFilePath,"r") as file:
         dateLastEdited = util.textToDate(file.read())
     return (date.today() - dateLastEdited).days >= const.SEND_MAIL_INTERVAL_DAYS
         

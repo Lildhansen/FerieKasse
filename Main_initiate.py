@@ -19,7 +19,6 @@ from classes.Email import Email
 
 leagues = []
 players = []
-#email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
 email = None
 
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
