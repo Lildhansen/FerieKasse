@@ -21,7 +21,6 @@ class Email:
         self.receivers = []
         self.setupEmailInformationFromConfigFile(emailIniFile)
     def setupEmailInformationFromConfigFile(self,emailIniFile):
-        print(emailIniFile)
         configSection = "email_config"
         config = configparser.ConfigParser()
         config.read(emailIniFile)
@@ -31,50 +30,28 @@ class Email:
         self.port = int(config.getint(configSection,'port'))
         self.receivers = config.get(configSection,'receivers').split(';')
     def sendInitialEmail(self):
-        mail_body = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse."
-        message = MIMEMultipart()
+        mailBody = "The feriekasse has been created and the teams picked by each player is visible in the attached excel file (.xlsx)."
+        message = EmailMessage()
         message['From'] = self.sender
-        message['To'] = self.receivers[0] #sender kun til 1 pt.
+        message['To'] = self.receivers
         message['Subject'] = f"feriekassen, {const.FERIEKASSE_NAME}, has been created"
-        excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx"
         #add body
-        message.attach(MIMEText(mail_body))
+        message.set_content(mailBody)
         
-        part = MIMEBase('application', "octet-stream")
-        part.set_payload(open(excelFile, "rb").read())
-        encoders.encode_base64(part)
-        part.add_header('Content-Disposition', 'attachment; filename=excelFile')
-        message.attach(part)
+        #attach the excel file
+        excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
+        filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
+        with open(excelFile, 'rb') as f:
+            file_data = f.read()
+        message.add_attachment(file_data, maintype="application", subtype="xlsx", filename=filename)
         
-        
-        # #attach the excel file
-        # excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
-        # with open(excelFile, 'rb') as f:
-        #     file_data = f.read()
-        # message.add_attachment(file_data, maintype="application", subtype="xlsx", filename=excelFile) #this doesnt work
-        #establish connection
-        
-        context = ssl.create_default_context()
-        
-        print("0")
+        #connect and send mail
         smtp = smtplib.SMTP_SSL(self.server)
         smtp.connect(self.server,self.port)
-        print("2")
         smtp.login(self.sender,self.password)
-        print("3")
-        print(self.sender)
         smtp.sendmail(to_addrs=self.receivers,msg=message.as_string(),from_addr=self.sender)
-        print("4")
         smtp.quit()
-        # context = ssl.create_default_context()
-        # with smtplib.SMTP_SSL(self.server, self.port) as session:
-        #     session.ehlo()
-        #     #session.starttls() #enable security
-        #     session.login(self.sender, self.password)
-        #     #send mail
-        #     session.send(message)
-        #     print("initial mail has been sent")
-
-#turn off LESS SECURE APPS to make this work on your gmail
+    def sendMail(self):
+        mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse."
 
 
