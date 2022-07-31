@@ -4,6 +4,7 @@ import json
 import orjson
 import os
 import colorama
+import copy
 
 
 import utilities.constants as const
@@ -160,7 +161,7 @@ class Menu:
         self.run()
     
     def saveInJson(self):
-        jsonData = const.LeagueNationsDict
+        jsonData = copy.deepcopy(const.LeagueNationsDict)
         #save jsonData and then overwrite it with the new data
         for player in self.players:
             for league in player.pickedLeagues:

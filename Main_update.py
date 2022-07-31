@@ -35,7 +35,35 @@ def loadFerieKasse():
         print("This feriekasse does not exist")
         exit()
     if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
-        const.FOUR_GOAL_WIN_RULE = True
+        configureExtraRules()
+
+def configureExtraRules():
+    with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","r") as file:
+        extraRules = json.loads(file.read())
+        for constant,value in extraRules.items():
+            setConstant(constant,value)
+
+def setConstant(constantString,value):
+    if constantString == "DRAW_POINTS":
+        const.DRAW_POINTS = value
+    elif constantString == "LOSE_POINTS":
+        const.LOSE_POINTS = value
+    elif constantString == "POINTS_PER_GOAL":
+        const.POINTS_PER_GOAL = value
+    elif constantString == "INDBYRDES_MULTIPLIER":
+        const.INDBYRDES_MULTIPLIER = value
+    elif constantString == "EXTRA_TEAMS_PER_PLAYER":
+        const.EXTRA_TEAMS_PER_PLAYER = value
+    elif constantString == "TEAMS_PER_PLAYER":
+        const.TEAMS_PER_PLAYER = value
+    elif constantString == "FOUR_GOAL_WIN_BONUS_POINTS":
+        const.FOUR_GOAL_WIN_BONUS_POINTS = value
+    elif constantString == "FOUR_GOAL_WIN_RULE":
+        const.FOUR_GOAL_WIN_RULE = value
+    else:
+        raise Exception(f"the constant {constantString} not found")
+    
+        
         
 
 def UpdateFerieKasse():

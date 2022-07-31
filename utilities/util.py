@@ -28,6 +28,17 @@ def parseBool(input):
         return True
     else:
         return False
+#parses input into a float if possible - otherwise returns None (rather than throwing an exception)
+def parseFloatOrNone(input,minValue=0,maxValue=0):
+    output = None
+    try:
+        output = float(input)
+    except ValueError:
+        return None
+    if minValue != 0 or maxValue != 0:
+        if output > maxValue or output < minValue:
+            return None
+    return output
 
 #.txt files have issues reading æøå so these are simply removed when used for comparison and URL generation fx
 def removeInvalidLetters(myStr):

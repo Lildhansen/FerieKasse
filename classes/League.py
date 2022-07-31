@@ -95,8 +95,9 @@ class League:
     def isSlutspilMatch(self,match):
         if self.name.lower() != "superliga":
             return False
-        if match.date >= datetime.date(datetime.datetime.now().year,4,1):
-            return True
+        if match.date.month >= 7 and match.date.day > 1: #if we are in the first half of the season the slutspil begins next year (otherwise it is the current year)
+            return match.date >= datetime.date(datetime.datetime.now().year+1,4,1)
+        return match.date >= datetime.date(datetime.datetime.now().year,4,1)
         
     def calculateFourGoalWinBonusPoints(self,match,players):
         if (match.homeTeamIsWinner and match.homeTeamIsPlayerTeam) and (match.homeGoals - match.awayGoals) >= 4:

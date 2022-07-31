@@ -58,5 +58,8 @@ class Soup:
             elif info.get('data-stat') == "squad_b":
                 match.awayTeam = info.text
             elif info.get('data-stat') == "score":
+                #if text is empty the match hasnt been played, and we return a match object with no score which will be handled later
+                if info.text == None or info.text == "":
+                    return match
                 match.homeGoals,match.awayGoals = util.splitAndConvertToInt(info.text,"–")#for some reason this is not a dash (-), but instead – (which is not a dash)
         return match
