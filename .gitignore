@@ -1,5 +1,7 @@
 # saves:
 data/*/
+data/*/
+data
 
 # config:
 /Email.ini

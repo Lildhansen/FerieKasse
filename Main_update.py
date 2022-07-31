@@ -134,7 +134,7 @@ def mailShouldBeSent():
     #returner true eller false
     
 def sendPeriodicMail():
-    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"email.ini"))
+    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
     email.sendPeriodicMail()
     #brug Email class
     
