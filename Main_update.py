@@ -89,7 +89,7 @@ def UpdateFerieKasse():
         sendPeriodicMail()
     
 def addToLastEditedFile():
-    with open("./data/teams.json","w") as file:
+    with open("./data/lastEdited.txt","w") as file:
         file.write(date.today().isoformat())
 
 def getLatestMatchCovered(league):
@@ -129,14 +129,10 @@ def mailShouldBeSent():
     with open(lastEditedFilePath,"r") as file:
         dateLastEdited = util.textToDate(file.read())
     return (date.today() - dateLastEdited).days >= const.SEND_MAIL_INTERVAL_DAYS
-        
-    #læs fra lastEdited.txt og check dato med dagens dato (og se om der er gået x dage siden) - hvor x er hvor ofte vi skal sende mails     
-    #returner true eller false
     
 def sendPeriodicMail():
     email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
     email.sendPeriodicMail()
-    #brug Email class
     
 if __name__ == "__main__":
     UpdateFerieKasse()

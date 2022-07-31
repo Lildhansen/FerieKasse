@@ -97,7 +97,7 @@ def getConstValue(prompt,type=int,minValue=0):
 
 def setupLastEditedFile():
     with open(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt","w") as _:
-        pass
+        pass #just to create the file
 
 def setupEmailIniFile():
     email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
