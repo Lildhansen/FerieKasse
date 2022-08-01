@@ -1,3 +1,4 @@
+from msilib.schema import Condition
 import smtplib
 import configparser
 import os
@@ -8,9 +9,15 @@ from email import encoders
 from email.mime.text import MIMEText 
 from email.mime.multipart import MIMEMultipart
 from email.message import EmailMessage
+from random import shuffle
+import copy
 
-from datetime import date 
+
+from datetime import date
+from Main_initiate import initiateFerieKasse 
 import utilities.constants as const
+import utilities.util as util
+import classes.EmailBody as EmailBody
   
 class Email:
     def __init__(self,emailIniFile):
@@ -44,7 +51,8 @@ class Email:
         
     def sendPeriodicMail(self):
         message = EmailMessage()
-        mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse."
+        mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse.\n"
+        self.addExtraToBody(mailBody)
         #tilføj evt. extra til mailBody
         subject = f"feriekassen, {const.FERIEKASSE_NAME}, has been updated"
         self.setupMailInfo(message,self.sender,self.receivers,subject,mailBody)
@@ -72,4 +80,15 @@ class Email:
         smtp.login(self.sender,self.password)
         smtp.sendmail(to_addrs=self.receivers,msg=message.as_string(),from_addr=self.sender)
         smtp.quit()
+    
+    def addExtraToBody(self,mailBody):
+        allExtraBodyPickers = EmailBody.extraBodyPickers.allExtraBodyPickers
+        shuffle(allExtraBodyPickers)
+        for extraBodyPicker in allExtraBodyPickers:
+            if not extraBodyPicker.condition():
+                continue
+            mailBody += extraBodyPicker.getText() + "\n"
+            return
+  
+
 

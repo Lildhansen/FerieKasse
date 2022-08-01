@@ -4,4 +4,5 @@ class Team():
         self.playerName = playerName
         self.leagueName = leagueName
         self.bonusPoints = 0
+        self.points = 0 #used for Email
 
