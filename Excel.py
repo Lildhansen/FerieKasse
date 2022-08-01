@@ -1,9 +1,11 @@
 #own modules
 import utilities.util as util
 import utilities.constants as const
-import random
+from classes.Team import Team
+from classes.Player import Player
 
 #imports
+import random
 from ast import Raise
 import openpyxl
 import os
@@ -63,7 +65,7 @@ class Excel:
     #updates the excel file. this is done when a game is in progress
     def updateExcelFile(self,players):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
-        ws = wb.active #new worksheet
+        ws = wb.active #current worksheet?
         column = 1
         for player in players:
             for match in player.matches:
@@ -111,3 +113,51 @@ class Excel:
                 pointCell.value += "+" + str(match.points)
                 break
             row += 1
+        #Gets the total points for a player
+    def getPlayerScoreFromExcelFile(self,player):
+        wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
+        ws = wb.active #current worksheet?
+        player = None
+        column = 1
+        while True:
+            if player.name == ws.cell(1,column).value:
+                player = Player(player.name)
+                break
+            if ws.cell(1,column).value == "":
+                Raise(Exception("player not found in excel file"))
+            column += 2
+        row = 1
+        while True:
+            if ws.cell(row,column).value == "Total:":
+                player.totalPoints = ws.cell(row,column+1).value
+                break
+            column += 2
+        wb.close()
+        return player
+        
+        #gets the team that has the most points
+    def getHighestScoreTeam(self):
+        return self.getTeamAndPoints(lambda teams : teams.sort(key=lambda player: player.totalPoints, reverse = True)[0]) #not sure it is possible
+        
+        #gets the team that has the least points
+    def getLowestScoreTeam(self):
+        return self.getTeamAndPoints(lambda teams : teams.sort(key=lambda player: player.totalPoints)[0]) #not sure it is possible
+        
+        #gets a team based on a function that returns a specific team
+    def getTeam(self,getSpecificTeamFunction):
+        teams = []
+        wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
+        ws = wb.active #current worksheet?
+        column = 1
+        while column + 1 != "":
+            row = 2
+            playerName = ws.cell(row-1,column).value
+            while row + 1 != "":
+                teamName = ws.cell(row,column).value
+                newTeam = Team(teamName,playerName)
+                newTeam.points = ws.cell(row,column+1).value
+                teams.append(newTeam)
+                row += 1
+            column += 2
+        wb.close()
+        return getSpecificTeamFunction(teams)

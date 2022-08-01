@@ -10,6 +10,7 @@ from random import getrandbits
 from random import choice
 
 import utilities.util as util
+from Excel import Excel
 
 
 class ExtraBodyPickers:
@@ -48,7 +49,7 @@ class LeadingExtraBodyPicker(ExtraBodyPicker):
         return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
     def getPlayerInformation(self,players):
         for player in players:
-            util.getPlayerScoreFromExcelFile(player)
+            Excel.getPlayerScoreFromExcelFile(player)
         players.sort(key=lambda player: player.totalPoints) #small -> big
         leastPointsPlayer = player[0]
         self.leastPointsPlayerName = leastPointsPlayer.name
@@ -77,7 +78,7 @@ class LosingExtraBodyPicker(ExtraBodyPicker):
         return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
     def getPlayerInformation(self,players):
         for player in players:
-            util.getPlayerScoreFromExcelFile(player)
+            Excel.getPlayerScoreFromExcelFile(player)
         players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
         mostPointsPlayer = player[0]
         self.mostPointsPlayerName = mostPointsPlayer.name
@@ -106,7 +107,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
     def condition(self,players):
         shuffle(players)
         for player in players:
-            util.getPlayerScoreFromExcelFile(player) #should be made ----------------
+            Excel.getPlayerScoreFromExcelFile(player)
         players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
         previousPlayer = None
         for player in players:
@@ -151,7 +152,7 @@ class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         pointDescription = choice(self.pointDescriptions)
         return f"{initialExpression} {self.mostPointsPlayerName}'s team, {self.mostPointsTeamName}, {pointDescription} {self.playerPoints} points"
     def getPlayerInformation(self,players):
-        mostPointsTeam = util.getHighestScoreTeam()
+        mostPointsTeam = Excel.getHighestScoreTeam()
         self.mostPointsTeamName = mostPointsTeam.name
         self.teamPoints = mostPointsTeam.points
         self.mostPointsTeamPlayerName = util.getPlayerThatHasTeam(self.mostPointsTeamName,players)
@@ -173,7 +174,7 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         pointDescription = choice(self.pointDescriptions)
         return f"{initialExpression} {self.leastPointsPlayerName}'s team, {self.leastPointsTeamName}, {pointDescription} {self.playerPoints} points"
     def getPlayerInformation(self,players):
-        leastPointsTeam = util.getHighestScoreTeam()
+        leastPointsTeam = Excel.getLowestScoreTeam()
         self.leastPointsTeamName = leastPointsTeam.name
         self.teamPoints = leastPointsTeam.points
         self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players)
