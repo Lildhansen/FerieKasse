@@ -117,8 +117,8 @@ class Excel:
     def getPlayerScoreFromExcelFile(self,player):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
         ws = wb.active #current worksheet?
-        player = None
         column = 1
+        #finds the player in the excel file
         while True:
             if player.name == ws.cell(1,column).value:
                 player = Player(player.name)
@@ -126,22 +126,32 @@ class Excel:
             if ws.cell(1,column).value == "":
                 Raise(Exception("player not found in excel file"))
             column += 2
-        row = 1
+        #finds the total points of the player - does this for all teams rather than looking at total, since the result of total is an equation (SUM[A1:A6])
+        row = 2
+        totalPoints = 0
         while True:
             if ws.cell(row,column).value == "Total:":
-                player.totalPoints = ws.cell(row,column+1).value
                 break
-            column += 2
+            totalPoints += util.getSumOfExcelCell(ws.cell(row,column+1).value)
+            row += 1
+        player.totalPoints += totalPoints
         wb.close()
         return player
         
         #gets the team that has the most points
     def getHighestScoreTeam(self):
-        return self.getTeamAndPoints(lambda teams : teams.sort(key=lambda player: player.totalPoints, reverse = True)[0]) #not sure it is possible
+        def getHighestScoreTeamHelper(teams):
+            teams.sort(key=lambda team: team.points, reverse=True)
+            return teams[0]
+            
+        return self.getTeam(getHighestScoreTeamHelper)
         
         #gets the team that has the least points
     def getLowestScoreTeam(self):
-        return self.getTeamAndPoints(lambda teams : teams.sort(key=lambda player: player.totalPoints)[0]) #not sure it is possible
+        def getLowestScoreTeamHelper(teams):
+            teams.sort(key=lambda team: team.points, reverse=False)
+            return teams[0]
+        return self.getTeam(getLowestScoreTeamHelper) 
         
         #gets a team based on a function that returns a specific team
     def getTeam(self,getSpecificTeamFunction):
@@ -149,13 +159,13 @@ class Excel:
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
         ws = wb.active #current worksheet?
         column = 1
-        while column + 1 != "":
+        while ws.cell(2,column+1).value != None:
             row = 2
             playerName = ws.cell(row-1,column).value
-            while row + 1 != "":
+            while ws.cell(row+1,column).value != None:
                 teamName = ws.cell(row,column).value
                 newTeam = Team(teamName,playerName)
-                newTeam.points = ws.cell(row,column+1).value
+                newTeam.points = util.getSumOfExcelCell(ws.cell(row,column+1).value)
                 teams.append(newTeam)
                 row += 1
             column += 2

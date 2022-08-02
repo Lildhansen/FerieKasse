@@ -67,6 +67,15 @@ def numberToExcelColumn(number):
         result += chars[number]
     return result
 
+#gets the sum of an excel cell like: "=1+2+3+4+5"
+def getSumOfExcelCell(cell):
+    cell = cell.strip("=")
+    numbersInCell = cell.split("+")
+    sum = 0
+    for number in numbersInCell:
+        sum += int(number)
+    return sum
+
 #does the same as split, but converts the parts to ints and finally returns a list (which can be unpacked as a tuple) of the parts
 def splitAndConvertToInt(inputString,seperator):
     result = []
@@ -82,7 +91,6 @@ def textToDate(text):
     
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
-    print(matchTuple)
     return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
 
 #gets all players from leaguesAndTeams.json and make a Player object for each of them and finally returns a list of them

@@ -12,14 +12,15 @@ from random import choice
 import utilities.util as util
 from Excel import Excel
 
+excel = Excel()
 
 class ExtraBodyPickers:
-    def __init__(self):
-        self.leadingExtraBodyPicker = None
-        self.trailingExtraBodyPicker = None
-        self.losingExtraBodyPicker = None
-        self.highestScoreTeamExtraBodyPicker = None
-        self.lowestScoreTeamExtraBodyPicker = None
+    def __init__(self,leadingExtraBodyPicker,trailingExtraBodyPicker,losingExtraBodyPicker,highestScoreTeamExtraBodyPicker,lowestScoreTeamExtraBodyPicker):
+        self.leadingExtraBodyPicker = leadingExtraBodyPicker
+        self.trailingExtraBodyPicker = trailingExtraBodyPicker
+        self.losingExtraBodyPicker = losingExtraBodyPicker
+        self.highestScoreTeamExtraBodyPicker = highestScoreTeamExtraBodyPicker
+        self.lowestScoreTeamExtraBodyPicker = lowestScoreTeamExtraBodyPicker
         self.allExtraBodyPickers = [self.leadingExtraBodyPicker,self.trailingExtraBodyPicker,self.losingExtraBodyPicker,self.highestScoreTeamExtraBodyPicker,self.lowestScoreTeamExtraBodyPicker] 
         
 #abstract class
@@ -31,58 +32,6 @@ class ExtraBodyPicker:
     def getText(self):
         pass
 
-#Holy Cow! player1 is in the lead with just 165 points
-class LeadingExtraBodyPicker(ExtraBodyPicker):
-    def __init__(self):
-        self.initialExpressions = []
-        self.positionDescriptions = []
-        self.pointDescriptions = []
-        self.leastPointsPlayerName = None
-        self.playerPoints = None
-    def condition(self,players):
-        self.getPlayerInformation(players)
-        return True
-    def getText(self):
-        initialExpression = choice(self.initialExpressions)
-        positionDescription = choice(self.positionDescriptions)
-        pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
-    def getPlayerInformation(self,players):
-        for player in players:
-            Excel.getPlayerScoreFromExcelFile(player)
-        players.sort(key=lambda player: player.totalPoints) #small -> big
-        leastPointsPlayer = player[0]
-        self.leastPointsPlayerName = leastPointsPlayer.name
-        self.playerPoints = leastPointsPlayer.totalPoints
-    
-#Oh no! player2 is in the last place at a whopping 560 points
-#Oh no! = initial expression
-#mostPointsPlayer
-#is in the last place = positionDescription
-#at a whopping = pointsDescription
-#points
-class LosingExtraBodyPicker(ExtraBodyPicker):
-    def __init__(self):
-        self.initialExpressions = []
-        self.positionDescriptions = []
-        self.pointDescriptions = []
-        self.mostPointsPlayerName = None
-        self.playerPoints = None
-    def condition(self,players):
-        self.getPlayerInformation(players)
-        return True
-    def getText(self):
-        initialExpression = choice(self.initialExpressions)
-        positionDescription = choice(self.positionDescriptions)
-        pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
-    def getPlayerInformation(self,players):
-        for player in players:
-            Excel.getPlayerScoreFromExcelFile(player)
-        players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
-        mostPointsPlayer = player[0]
-        self.mostPointsPlayerName = mostPointsPlayer.name
-        self.playerPoints = mostPointsPlayer.totalPoints
 #examples
 #
 #almost there! player2 leads player1 by just 30 points 
@@ -105,9 +54,11 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
         self.leadingPlayerName = None
         self.trailingPlayerName = None
     def condition(self,players):
+        if len(players) == 1:
+            return False
         shuffle(players)
         for player in players:
-            Excel.getPlayerScoreFromExcelFile(player)
+            player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
         players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
         previousPlayer = None
         for player in players:
@@ -132,9 +83,62 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
         pointDescription = choice(self.pointDescriptions)
         return f"{initialExpression} {firstPlayerName} {comparison} {secondPlayerName} {pointDescription} {self.pointDifference} points"
 
-    
-                
-            
+
+#Oh no! player2 is in the last place at a whopping 560 points
+#Oh no! = initial expression
+#mostPointsPlayer
+#is in the last place = positionDescription
+#at a whopping = pointsDescription
+#points
+
+class LosingExtraBodyPicker(ExtraBodyPicker):
+    def __init__(self):
+        self.initialExpressions = []
+        self.positionDescriptions = []
+        self.pointDescriptions = []
+        self.mostPointsPlayerName = None
+        self.playerPoints = None
+    def condition(self,players):
+        self.getPlayerInformation(players)
+        return True
+    def getText(self):
+        initialExpression = choice(self.initialExpressions)
+        positionDescription = choice(self.positionDescriptions)
+        pointDescription = choice(self.pointDescriptions)
+        return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
+    def getPlayerInformation(self,players):
+        for player in players:
+            player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
+        players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
+        mostPointsPlayer = players[0]
+        self.mostPointsPlayerName = mostPointsPlayer.name
+        self.playerPoints = mostPointsPlayer.totalPoints
+
+
+#Holy Cow! player1 is in the lead with just 165 points
+class LeadingExtraBodyPicker(ExtraBodyPicker):
+    def __init__(self):
+        self.initialExpressions = []
+        self.positionDescriptions = []
+        self.pointDescriptions = []
+        self.leastPointsPlayerName = None
+        self.playerPoints = None
+    def condition(self,players):
+        self.getPlayerInformation(players)
+        return True
+    def getText(self):
+        initialExpression = choice(self.initialExpressions)
+        positionDescription = choice(self.positionDescriptions)
+        pointDescription = choice(self.pointDescriptions)
+        return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
+    def getPlayerInformation(self,players):
+        for player in players:
+            player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
+        players.sort(key=lambda player: player.totalPoints) #small -> big
+        leastPointsPlayer = players[0]
+        self.leastPointsPlayerName = leastPointsPlayer.name
+        self.playerPoints = leastPointsPlayer.totalPoints
+                     
             
 #Oh no! player1's FCK has the most points of all teams with 200 points         
 class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
@@ -150,12 +154,12 @@ class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
     def getText(self):
         initialExpression = choice(self.initialExpressions)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.mostPointsPlayerName}'s team, {self.mostPointsTeamName}, {pointDescription} {self.playerPoints} points"
+        return f"{initialExpression} {self.mostPointsTeamPlayerName}'s team, {self.mostPointsTeamName}, {pointDescription} {self.teamPoints} points"
     def getPlayerInformation(self,players):
-        mostPointsTeam = Excel.getHighestScoreTeam()
+        mostPointsTeam = excel.getHighestScoreTeam()
         self.mostPointsTeamName = mostPointsTeam.name
         self.teamPoints = mostPointsTeam.points
-        self.mostPointsTeamPlayerName = util.getPlayerThatHasTeam(self.mostPointsTeamName,players)
+        self.mostPointsTeamPlayerName = util.getPlayerThatHasTeam(self.mostPointsTeamName,players).name
     
     
 #Nice one! player1's Liverpool has the least points of all teams with 35 points
@@ -172,17 +176,16 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
     def getText(self):
         initialExpression = choice(self.initialExpressions)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.leastPointsPlayerName}'s team, {self.leastPointsTeamName}, {pointDescription} {self.playerPoints} points"
+        return f"{initialExpression} {self.leastPointsTeamPlayerName}'s team, {self.leastPointsTeamName}, {pointDescription} {self.teamPoints} points"
     def getPlayerInformation(self,players):
-        leastPointsTeam = Excel.getLowestScoreTeam()
+        leastPointsTeam = excel.getLowestScoreTeam()
         self.leastPointsTeamName = leastPointsTeam.name
         self.teamPoints = leastPointsTeam.points
-        self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players)
+        self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players).name
 
         
 
-#shoudl be called englishExtraBodyPickers
-extraBodyPickers = ExtraBodyPickers()
+
 
 positiveInitialExpressions = ["Nice one!","Damn!","Very good,"]
 negativeInitialExpressions = ["Oh no!","Damn!","How unfortunate,"]
@@ -192,26 +195,23 @@ trailingExtraBody.initialExpressions = ["So close!","Almost There!","Come on!","
 trailingExtraBody.leadingPlayerFirstComparisons = ["has a lead on","leads","only leads","has a small lead on","currently leads","is just ahead of"]
 trailingExtraBody.trailingPlayerFirstComparisons = ["is behind","is just behind","is only behind","trails","trails by a hair on","is after","is at the heel of"]
 trailingExtraBody.pointDescriptions = ["by a mere","by merely","by just","with merely","with a mere","with just","by nothing more than","with nothing more than"] 
-extraBodyPickers.trailingExtraBodyPicker = trailingExtraBody
 
 losingExtraBodyPicker = LosingExtraBodyPicker()
 losingExtraBodyPicker.initialExpressions = negativeInitialExpressions
 losingExtraBodyPicker.positionDescriptions = ["is in the last place","is last","has the most points"]
 losingExtraBodyPicker.pointDescriptions = ["at a whopping","with","with a total of","with a whopping"]
-extraBodyPickers.losingExtraBodyPicker = losingExtraBodyPicker
 
 leadingExtraBodyPicker = LeadingExtraBodyPicker()
 leadingExtraBodyPicker.initialExpressions = positiveInitialExpressions
 leadingExtraBodyPicker.positionDescriptions = ["is in the first place","is first","has the least points"]
 leadingExtraBodyPicker.pointDescriptions = ["at only","at","with","with a total of","with just"]
-extraBodyPickers.leadingExtraBodyPicker = leadingExtraBodyPicker
 
 lowestScoreTeamExtraBodyPicker = LowestScoreTeamExtraBodyPicker()
 lowestScoreTeamExtraBodyPicker.initialExpressions = positiveInitialExpressions
-lowestScoreTeamExtraBodyPicker.pointDescriptions = ["has the least points with","has the least points of all teams with","has scored the least total points","is the best team so far with"]
-extraBodyPickers.lowestScoreTeamExtraBodyPicker = lowestScoreTeamExtraBodyPicker
+lowestScoreTeamExtraBodyPicker.pointDescriptions = ["has the least points with","has the least points of all teams with","has scored the least total points with","is the best team so far with"]
 
 highestScoreTeamExtraBodyPicker = HighestScoreTeamExtraBodyPicker()
 highestScoreTeamExtraBodyPicker.initialExpressions = negativeInitialExpressions
-highestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points with","has the most points of all teams with","has scored the most total points","is the worst team so far with"]
-extraBodyPickers.highestScoreTeamExtraBodyPicker = highestScoreTeamExtraBodyPicker
+highestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points with","has the most points of all teams with","has scored the most total points with","is the worst team so far with"]
+
+englishExtraBodyPickers = ExtraBodyPickers(trailingExtraBody,losingExtraBodyPicker,leadingExtraBodyPicker,lowestScoreTeamExtraBodyPicker,highestScoreTeamExtraBodyPicker)

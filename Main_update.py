@@ -86,7 +86,7 @@ def UpdateFerieKasse():
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
     if mailShouldBeSent():
-        sendPeriodicMail()
+        sendPeriodicMail(players)
     
 def addToLastEditedFile():
     with open("./data/lastEdited.txt","w") as file:
@@ -130,9 +130,9 @@ def mailShouldBeSent():
         dateLastEdited = util.textToDate(file.read())
     return (date.today() - dateLastEdited).days >= const.SEND_MAIL_INTERVAL_DAYS
     
-def sendPeriodicMail():
+def sendPeriodicMail(players):
     email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
-    email.sendPeriodicMail()
+    email.sendPeriodicMail(players)
     
 if __name__ == "__main__":
     UpdateFerieKasse()

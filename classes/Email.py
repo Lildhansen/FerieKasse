@@ -14,7 +14,6 @@ import copy
 
 
 from datetime import date
-from Main_initiate import initiateFerieKasse 
 import utilities.constants as const
 import utilities.util as util
 import classes.EmailBody as EmailBody
@@ -49,11 +48,12 @@ class Email:
         
         self.connectToSmtpAndSendMail(message)
         
-    def sendPeriodicMail(self):
+    def sendPeriodicMail(self,players):
         message = EmailMessage()
         mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse.\n"
-        self.addExtraToBody(mailBody)
-        #tilføj evt. extra til mailBody
+        mailBody += self.getExtraBody(players)
+        print(mailBody)
+        quit()
         subject = f"feriekassen, {const.FERIEKASSE_NAME}, has been updated"
         self.setupMailInfo(message,self.sender,self.receivers,subject,mailBody)
         
@@ -81,14 +81,13 @@ class Email:
         smtp.sendmail(to_addrs=self.receivers,msg=message.as_string(),from_addr=self.sender)
         smtp.quit()
     
-    def addExtraToBody(self,mailBody):
-        allExtraBodyPickers = EmailBody.extraBodyPickers.allExtraBodyPickers
+    def getExtraBody(self,players):
+        allExtraBodyPickers = EmailBody.englishExtraBodyPickers.allExtraBodyPickers
         shuffle(allExtraBodyPickers)
         for extraBodyPicker in allExtraBodyPickers:
-            if not extraBodyPicker.condition():
+            if not extraBodyPicker.condition(players):
                 continue
-            mailBody += extraBodyPicker.getText() + "\n"
-            return
+            return extraBodyPicker.getText() + "\n"
   
 
 
