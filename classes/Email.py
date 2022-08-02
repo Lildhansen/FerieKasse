@@ -1,21 +1,12 @@
 from msilib.schema import Condition
 import smtplib
 import configparser
-import os
-import ssl
-from email.mime.base import MIMEBase
-from email.utils import formatdate
-from email import encoders
-from email.mime.text import MIMEText 
-from email.mime.multipart import MIMEMultipart
 from email.message import EmailMessage
 from random import shuffle
-import copy
 
 
 from datetime import date
 import utilities.constants as const
-import utilities.util as util
 import classes.EmailBody as EmailBody
   
 class Email:

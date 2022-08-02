@@ -9,7 +9,6 @@ import random
 from ast import Raise
 import openpyxl
 import os
-from openpyxl.styles import colors
 from openpyxl.styles import Font, Color
 #import xlsxwriter
 

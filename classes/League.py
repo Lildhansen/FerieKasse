@@ -1,9 +1,7 @@
 #libraries - standard or pip
 import codecs
 import datetime
-from datetime import date
 import json
-import orjson
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 import copy
 
@@ -11,7 +9,6 @@ import copy
 from classes.Match import Match
 from utilities.Soup import Soup
 import utilities.constants as const
-import utilities.util as util
 
 class League:
     def __init__(self,name,country):

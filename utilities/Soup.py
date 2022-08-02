@@ -12,10 +12,6 @@ class Soup:
     def __init__(self):
         self.res = None
         self.soup = None
-    #sets up services and options for the soup
-    def setupDriver(self):
-        self.res = None
-        self.soup = None
     #gets the content of the links and saves it in self.soup
     def getLinkContent(self,link):
         time.sleep(2)

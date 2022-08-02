@@ -3,7 +3,7 @@ used for the body of the Email
 
 """
 
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import abstractmethod
 import copy
 from random import shuffle
 from random import getrandbits
@@ -32,18 +32,8 @@ class ExtraBodyPicker:
     def getText(self):
         pass
 
-#examples
-#
 #almost there! player2 leads player1 by just 30 points 
 #So close! player1 is behind player2 by a mere 30 points
-#so close = initial expression
-#player 1 = trailing player
-#is behind = comparison
-#by a mere = pointDescription (in lack of better word)
-#30 = pointDifference
-#player1Points
-#player2Points
-#trailingPlayerFirst (true or false) (altså både a er foran b    og    b er bagved a)
 class TrailingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -83,14 +73,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
         pointDescription = choice(self.pointDescriptions)
         return f"{initialExpression} {firstPlayerName} {comparison} {secondPlayerName} {pointDescription} {self.pointDifference} points"
 
-
 #Oh no! player2 is in the last place at a whopping 560 points
-#Oh no! = initial expression
-#mostPointsPlayer
-#is in the last place = positionDescription
-#at a whopping = pointsDescription
-#points
-
 class LosingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -113,7 +96,6 @@ class LosingExtraBodyPicker(ExtraBodyPicker):
         mostPointsPlayer = players[0]
         self.mostPointsPlayerName = mostPointsPlayer.name
         self.playerPoints = mostPointsPlayer.totalPoints
-
 
 #Holy Cow! player1 is in the lead with just 165 points
 class LeadingExtraBodyPicker(ExtraBodyPicker):
@@ -138,8 +120,7 @@ class LeadingExtraBodyPicker(ExtraBodyPicker):
         leastPointsPlayer = players[0]
         self.leastPointsPlayerName = leastPointsPlayer.name
         self.playerPoints = leastPointsPlayer.totalPoints
-                     
-            
+                               
 #Oh no! player1's FCK has the most points of all teams with 200 points         
 class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
@@ -160,8 +141,7 @@ class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         self.mostPointsTeamName = mostPointsTeam.name
         self.teamPoints = mostPointsTeam.points
         self.mostPointsTeamPlayerName = util.getPlayerThatHasTeam(self.mostPointsTeamName,players).name
-    
-    
+     
 #Nice one! player1's Liverpool has the least points of all teams with 35 points
 class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
@@ -183,35 +163,31 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         self.teamPoints = leastPointsTeam.points
         self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players).name
 
-        
+englishPositiveInitialExpressions = ["Nice one!","Damn!","Very good,"]
+englishNegativeInitialExpressions = ["Oh no!","Damn!","How unfortunate,"]
 
+englishTrailingExtraBody = TrailingExtraBodyPicker()
+englishTrailingExtraBody.initialExpressions = ["So close!","Almost There!","Come on!","Nearly there!","Oh my!"]
+englishTrailingExtraBody.leadingPlayerFirstComparisons = ["has a lead on","leads","only leads","has a small lead on","currently leads","is just ahead of"]
+englishTrailingExtraBody.trailingPlayerFirstComparisons = ["is behind","is just behind","is only behind","trails","trails by a hair on","is after","is at the heel of"]
+englishTrailingExtraBody.pointDescriptions = ["by a mere","by merely","by just","with merely","with a mere","with just","by nothing more than","with nothing more than"] 
 
+englishLosingExtraBodyPicker = LosingExtraBodyPicker()
+englishLosingExtraBodyPicker.initialExpressions = englishNegativeInitialExpressions
+englishLosingExtraBodyPicker.positionDescriptions = ["is in the last place","is last","has the most points"]
+englishLosingExtraBodyPicker.pointDescriptions = ["at a whopping","with","with a total of","with a whopping"]
 
-positiveInitialExpressions = ["Nice one!","Damn!","Very good,"]
-negativeInitialExpressions = ["Oh no!","Damn!","How unfortunate,"]
+englishLeadingExtraBodyPicker = LeadingExtraBodyPicker()
+englishLeadingExtraBodyPicker.initialExpressions = englishPositiveInitialExpressions
+englishLeadingExtraBodyPicker.positionDescriptions = ["is in the first place","is first","has the least points"]
+englishLeadingExtraBodyPicker.pointDescriptions = ["at only","at","with","with a total of","with just"]
 
-trailingExtraBody = TrailingExtraBodyPicker()
-trailingExtraBody.initialExpressions = ["So close!","Almost There!","Come on!","Nearly there!","Oh my!"]
-trailingExtraBody.leadingPlayerFirstComparisons = ["has a lead on","leads","only leads","has a small lead on","currently leads","is just ahead of"]
-trailingExtraBody.trailingPlayerFirstComparisons = ["is behind","is just behind","is only behind","trails","trails by a hair on","is after","is at the heel of"]
-trailingExtraBody.pointDescriptions = ["by a mere","by merely","by just","with merely","with a mere","with just","by nothing more than","with nothing more than"] 
+englishLowestScoreTeamExtraBodyPicker = LowestScoreTeamExtraBodyPicker()
+englishLowestScoreTeamExtraBodyPicker.initialExpressions = englishPositiveInitialExpressions
+englishLowestScoreTeamExtraBodyPicker.pointDescriptions = ["has the least points with","has the least points of all teams with","has scored the least total points with","is the best team so far with"]
 
-losingExtraBodyPicker = LosingExtraBodyPicker()
-losingExtraBodyPicker.initialExpressions = negativeInitialExpressions
-losingExtraBodyPicker.positionDescriptions = ["is in the last place","is last","has the most points"]
-losingExtraBodyPicker.pointDescriptions = ["at a whopping","with","with a total of","with a whopping"]
+englishHighestScoreTeamExtraBodyPicker = HighestScoreTeamExtraBodyPicker()
+englishHighestScoreTeamExtraBodyPicker.initialExpressions = englishNegativeInitialExpressions
+englishHighestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points with","has the most points of all teams with","has scored the most total points with","is the worst team so far with"]
 
-leadingExtraBodyPicker = LeadingExtraBodyPicker()
-leadingExtraBodyPicker.initialExpressions = positiveInitialExpressions
-leadingExtraBodyPicker.positionDescriptions = ["is in the first place","is first","has the least points"]
-leadingExtraBodyPicker.pointDescriptions = ["at only","at","with","with a total of","with just"]
-
-lowestScoreTeamExtraBodyPicker = LowestScoreTeamExtraBodyPicker()
-lowestScoreTeamExtraBodyPicker.initialExpressions = positiveInitialExpressions
-lowestScoreTeamExtraBodyPicker.pointDescriptions = ["has the least points with","has the least points of all teams with","has scored the least total points with","is the best team so far with"]
-
-highestScoreTeamExtraBodyPicker = HighestScoreTeamExtraBodyPicker()
-highestScoreTeamExtraBodyPicker.initialExpressions = negativeInitialExpressions
-highestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points with","has the most points of all teams with","has scored the most total points with","is the worst team so far with"]
-
-englishExtraBodyPickers = ExtraBodyPickers(trailingExtraBody,losingExtraBodyPicker,leadingExtraBodyPicker,lowestScoreTeamExtraBodyPicker,highestScoreTeamExtraBodyPicker)
+englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosingExtraBodyPicker,englishLeadingExtraBodyPicker,englishLowestScoreTeamExtraBodyPicker,englishHighestScoreTeamExtraBodyPicker)
