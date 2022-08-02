@@ -100,6 +100,12 @@ def setupLastEditedFile():
         pass #just to create the file
 
 def setupEmailIniFile():
+    userInput = None
+    while (userInput == None):
+        userInput = util.parseIntOrNone(input("how often do you want to receive emails (in days) (0 = does not want to receive emails)"),0,365)
+    if userInput == 0:
+        return
+    
     email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
     config = configparser.ConfigParser()
     try:
@@ -111,7 +117,21 @@ def setupEmailIniFile():
     config.set("email_config", "server", email.server)
     config.set("email_config", "port", str(email.port))
     config.set("email_config", "initialEmailSent", "False")
+    config.set("email_config", "emailInterval", str(userInput))
 
+    
+    #set language
+    userInput = None
+    while userInput != 1 and userInput != 2:
+        userInput = util.parseIntOrNone(input("What language do you want the email to be in (1=Danish, 2=English) "))
+    language = None
+    if userInput == 1:
+        language = "danish"
+    elif userInput == 2:
+        language = "english"
+    config.set("email_config", "language", language)  
+        
+    #options for initial mail
     userInput = ""
     while userInput.lower() != "y" and userInput.lower() != "n":
         userInput = input("Do you want to input the receiving Emails and send the initial mail now (y/n) ")

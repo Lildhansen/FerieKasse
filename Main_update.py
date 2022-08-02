@@ -4,6 +4,7 @@ from datetime import date
 import json
 from collections import namedtuple
 import os
+import configparser
 
 
 #own modules
@@ -123,11 +124,18 @@ def tryAppendMatch(player,match):
     player.matches.append(match)
     
 def mailShouldBeSent():
+    if not os.path.exists(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
+        return False
     lastEditedFilePath = fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt"
     if os.path.getsize(lastEditedFilePath) == 0:
         return True
     with open(lastEditedFilePath,"r") as file:
         dateLastEdited = util.textToDate(file.read())
+        
+    config = configparser.ConfigParser()
+    config.read("data/{const.FERIEKASSE_NAME}/Email.ini")
+    const.SEND_MAIL_INTERVAL_DAYS = int(config.get("email_config","emailInterval"))
+    
     return (date.today() - dateLastEdited).days >= const.SEND_MAIL_INTERVAL_DAYS
     
 def sendPeriodicMail(players):
