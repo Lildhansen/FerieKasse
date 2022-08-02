@@ -15,7 +15,11 @@ class Email:
         self.password = None
         self.server = None
         self.port = None
+        self.language = None
         self.receivers = []
+        self.mailBody = None #what should be the body of the email
+        self.subject = None
+        self.emailBody = EmailBody #a reference to the module EmailBody
         self.setupEmailInformationFromConfigFile(emailIniFile)
     def setupEmailInformationFromConfigFile(self,emailIniFile):
         configSection = "email_config"
@@ -26,12 +30,18 @@ class Email:
         self.server = config.get(configSection,'server')
         self.port = int(config.getint(configSection,'port'))
         self.receivers = config.get(configSection,'receivers').split(';')
+        self.language = config.get(configSection,'language')
     def sendInitialEmail(self):
         message = EmailMessage()
-        mailBody = "The feriekasse has been created and the teams picked by each player is visible in the attached excel file (.xlsx)."
-        subject = f"feriekassen, {const.FERIEKASSE_NAME}, has been created"
+        if self.language == "english":
+            self.subject = self.emailBody.englishInitialSubject
+            self.mailBody = self.emailBody.englishInitialEmailBody
+        elif self.language == "danish":
+            self.subject = self.emailBody.danishInitialSubject
+            self.mailBody = self.emailBody.danishInitialEmailBody
         
-        self.setupMailInfo(message,self.sender,self.receivers,subject,mailBody)
+        
+        self.setupMailInfo(message,self.sender,self.receivers,self.subject,self.mailBody)
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
@@ -41,12 +51,12 @@ class Email:
         
     def sendPeriodicMail(self,players):
         message = EmailMessage()
-        mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse.\n"
-        mailBody += self.getExtraBody(players)
-        print(mailBody)
-        quit()
-        subject = f"feriekassen, {const.FERIEKASSE_NAME}, has been updated"
-        self.setupMailInfo(message,self.sender,self.receivers,subject,mailBody)
+        self.mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse.\n"
+        self.mailBody += self.getExtraBody(players)
+        print(self.mailBody)
+        quit() #should be removed
+        self.subject = f"feriekassen, {const.FERIEKASSE_NAME}, has been updated"
+        self.setupMailInfo(message,self.sender,self.receivers,self.subject,self.mailBody)
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
@@ -73,7 +83,10 @@ class Email:
         smtp.quit()
     
     def getExtraBody(self,players):
-        allExtraBodyPickers = EmailBody.englishExtraBodyPickers.allExtraBodyPickers
+        if self.language == "english":
+            allExtraBodyPickers = self.emailBody.englishExtraBodyPickers.allExtraBodyPickers
+        elif self.language == "danish":
+            allExtraBodyPickers = self.emailBody.danishExtraBodyPickers.allExtraBodyPickers
         shuffle(allExtraBodyPickers)
         for extraBodyPicker in allExtraBodyPickers:
             if not extraBodyPicker.condition(players):

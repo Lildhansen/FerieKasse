@@ -163,6 +163,13 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         self.teamPoints = leastPointsTeam.points
         self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players).name
 
+englishInitialSubject = "The feriekasse has been created"
+englishInitialEmailBody = "The feriekasse has been created and the teams picked by each player is visible in the attached excel file (.xlsx)."
+danishInitialSubject = "feriekassen er blevet oprettet"
+danishInitialEmailBody = "feriekassen er blevet oprettet og holdene er blevet valgt for hver spiller og er synlig i den vedhæftede excel fil (.xlsx)."
+                        
+
+
 englishPositiveInitialExpressions = ["Nice one!","Damn!","Very good,"]
 englishNegativeInitialExpressions = ["Oh no!","Damn!","How unfortunate,"]
 
@@ -191,3 +198,8 @@ englishHighestScoreTeamExtraBodyPicker.initialExpressions = englishNegativeIniti
 englishHighestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points with","has the most points of all teams with","has scored the most total points with","is the worst team so far with"]
 
 englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosingExtraBodyPicker,englishLeadingExtraBodyPicker,englishLowestScoreTeamExtraBodyPicker,englishHighestScoreTeamExtraBodyPicker)
+
+
+#add danish translations
+
+danishExtraBodyPickers = ExtraBodyPickers()

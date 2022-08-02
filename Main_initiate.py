@@ -102,7 +102,7 @@ def setupLastEditedFile():
 def setupEmailIniFile():
     userInput = None
     while (userInput == None):
-        userInput = util.parseIntOrNone(input("how often do you want to receive emails (in days) (0 = does not want to receive emails)"),0,365)
+        userInput = util.parseIntOrNone(input("how often do you want to receive emails (in days) (0 = does not want to receive emails) "),0,365)
     if userInput == 0:
         return
     
