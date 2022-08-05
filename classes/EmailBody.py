@@ -29,11 +29,14 @@ class ExtraBodyPicker:
     def condition(self):
         pass
     @abstractmethod
-    def getText(self):
+    def getText(self,language):
         pass
 
 #almost there! player2 leads player1 by just 30 points 
 #So close! player1 is behind player2 by a mere 30 points
+
+#Nøj hvor tæt! Player 2 fører over player1 med sølle 30 point
+#Ej hvor tæt på! Player1 er sølle 30 point bag player2
 class TrailingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -64,16 +67,22 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
                 self.trailingPlayerName = player.name
                 return True
         return False
-    def getText(self):
+    def getText(self,language):
         trailingPlayerFirst = getrandbits(1) #getting a random bit (0 or 1) (faster than getting a bool)
         firstPlayerName = self.trailingPlayerName if trailingPlayerFirst else self.leadingPlayerName
         secondPlayerName = self.leadingPlayerName if trailingPlayerFirst else self.trailingPlayerName
         initialExpression = choice(self.initialExpressions)
         comparison = choice(self.trailingPlayerFirstComparisons) if trailingPlayerFirst else choice(self.leadingPlayerFirstComparisons)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {firstPlayerName} {comparison} {secondPlayerName} {pointDescription} {self.pointDifference} points"
-
+        if language.lower() == "english":
+            return f"{initialExpression} {firstPlayerName} {comparison} {secondPlayerName} {pointDescription} {self.pointDifference} points"
+        #danish
+        if trailingPlayerFirst:
+            return f"{initialExpression} {firstPlayerName} er {pointDescription} {self.pointDifference} point {comparison} {secondPlayerName}"
+        return f"{initialExpression} {firstPlayerName} {comparison} {secondPlayerName} med {pointDescription} {self.pointDifference} point"
+            
 #Oh no! player2 is in the last place at a whopping 560 points
+#Åh nej! player2 ligger på sidste pladsen med hele 560 point
 class LosingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -84,11 +93,13 @@ class LosingExtraBodyPicker(ExtraBodyPicker):
     def condition(self,players):
         self.getPlayerInformation(players)
         return True
-    def getText(self):
+    def getText(self,language):
         initialExpression = choice(self.initialExpressions)
         positionDescription = choice(self.positionDescriptions)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
+        if language.lower() == "english":
+            return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
+        return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} med {pointDescription} {self.playerPoints} point"
     def getPlayerInformation(self,players):
         for player in players:
             player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
@@ -98,6 +109,7 @@ class LosingExtraBodyPicker(ExtraBodyPicker):
         self.playerPoints = mostPointsPlayer.totalPoints
 
 #Holy Cow! player1 is in the lead with just 165 points
+#Hold da op! player1 er på første pladsen med sølle 165 point
 class LeadingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -108,11 +120,13 @@ class LeadingExtraBodyPicker(ExtraBodyPicker):
     def condition(self,players):
         self.getPlayerInformation(players)
         return True
-    def getText(self):
+    def getText(self,language):
         initialExpression = choice(self.initialExpressions)
         positionDescription = choice(self.positionDescriptions)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
+        if language.lower == "english":
+            return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} {pointDescription} {self.playerPoints} points"
+        return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} med {pointDescription} {self.playerPoints} point"
     def getPlayerInformation(self,players):
         for player in players:
             player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
@@ -121,21 +135,26 @@ class LeadingExtraBodyPicker(ExtraBodyPicker):
         self.leastPointsPlayerName = leastPointsPlayer.name
         self.playerPoints = leastPointsPlayer.totalPoints
                                
-#Oh no! player1's FCK has the most points of all teams with 200 points         
+#Oh no! player1's FCK has the most points of all teams with 200 points
+#For dælen! player1s FCK har med 200 point mest point af alle hold
 class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
         self.pointDescriptions = []
+        self.pointComparisons = []
         self.mostPointsTeamName = None
         self.mostPointsTeamPlayerName = None
         self.teamPoints = None
     def condition(self,players):
         self.getPlayerInformation(players)
         return True
-    def getText(self):
+    def getText(self,language):
         initialExpression = choice(self.initialExpressions)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.mostPointsTeamPlayerName}'s team, {self.mostPointsTeamName}, {pointDescription} {self.teamPoints} points"
+        if language.lower() == "english":
+            return f"{initialExpression} {self.mostPointsTeamPlayerName}'s team, {self.mostPointsTeamName}, {pointDescription} {self.teamPoints} points"
+        pointComparison = choice(self.pointComparisons)
+        return f"{initialExpression} {self.mostPointsTeamPlayerName}s hold, {self.mostPointsTeamName}, har med {pointDescription} {self.teamPoints} point {pointComparison}"
     def getPlayerInformation(self,players):
         mostPointsTeam = excel.getHighestScoreTeam()
         self.mostPointsTeamName = mostPointsTeam.name
@@ -143,35 +162,41 @@ class HighestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         self.mostPointsTeamPlayerName = util.getPlayerThatHasTeam(self.mostPointsTeamName,players).name
      
 #Nice one! player1's Liverpool has the least points of all teams with 35 points
+#Sådan! player1s liverpool har med 35 point fået færrest point af alle hold
 class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
         self.pointDescriptions = []
+        self.pointComparisons = []
         self.leastPointsTeamName = None
         self.leastPointsTeamPlayerName = None
         self.teamPoints = None
     def condition(self,players):
         self.getPlayerInformation(players)
         return True
-    def getText(self):
+    def getText(self,language):
         initialExpression = choice(self.initialExpressions)
         pointDescription = choice(self.pointDescriptions)
-        return f"{initialExpression} {self.leastPointsTeamPlayerName}'s team, {self.leastPointsTeamName}, {pointDescription} {self.teamPoints} points"
+        if language.lower() == "english":
+            return f"{initialExpression} {self.leastPointsTeamPlayerName}'s team, {self.leastPointsTeamName}, {pointDescription} {self.teamPoints} points"
+        pointComparison = choice(self.pointComparisons)
+        return f"{initialExpression} {self.leastPointsTeamPlayerName}s hold, {self.leastPointsTeamName}, har med {pointDescription} {self.teamPoints} point {pointComparison}"
     def getPlayerInformation(self,players):
         leastPointsTeam = excel.getLowestScoreTeam()
         self.leastPointsTeamName = leastPointsTeam.name
         self.teamPoints = leastPointsTeam.points
         self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players).name
 
+#english
+
 englishInitialSubject = "The feriekasse has been created"
 englishInitialEmailBody = "The feriekasse has been created and the teams picked by each player is visible in the attached excel file (.xlsx)."
-danishInitialSubject = "feriekassen er blevet oprettet"
-danishInitialEmailBody = "feriekassen er blevet oprettet og holdene er blevet valgt for hver spiller og er synlig i den vedhæftede excel fil (.xlsx)."
-                        
 
 
 englishPositiveInitialExpressions = ["Nice one!","Damn!","Very good,"]
 englishNegativeInitialExpressions = ["Oh no!","Damn!","How unfortunate,"]
+
+
 
 englishTrailingExtraBody = TrailingExtraBodyPicker()
 englishTrailingExtraBody.initialExpressions = ["So close!","Almost There!","Come on!","Nearly there!","Oh my!"]
@@ -199,7 +224,40 @@ englishHighestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points
 
 englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosingExtraBodyPicker,englishLeadingExtraBodyPicker,englishLowestScoreTeamExtraBodyPicker,englishHighestScoreTeamExtraBodyPicker)
 
+#danish
+danishInitialSubject = "feriekassen er blevet oprettet"
+danishInitialEmailBody = "feriekassen er blevet oprettet og holdene er blevet valgt for hver spiller og er synlig i den vedhæftede excel fil (.xlsx)."
+danishLowPointDescriptions = ["sølle","kun","kun lige","egentlig kun","sådan set kun",""]
+danishHighPointDescriptions = ["hele","noget så meget som","","intet mindre end","sådan set intet mindre end"]
+                        
+danishPositiveInitialExpressions = ["Flot klaret!","Hold da op","Wow!","Sådan!","Godt klaret!","Hold nu op!"]
+danishNegativeInitialExpressions = ["Åh nej!","For dælen da!","Hvor ærgeligt!","Åh nej","For dælen!"]
 
-#add danish translations
+danishTrailingExtraBody = TrailingExtraBodyPicker()
+danishTrailingExtraBody.initialExpressions = ["Så tæt på","Nøj hvor tæt!","Ej hvor tæt på!","Kom nu!","Næsten!","Hold da op!"]
+danishTrailingExtraBody.leadingPlayerFirstComparisons = ["fører over","er foran","har en lille føring over","er et hår foran","er kun lige foran","er med en lille føring foran"]
+danishTrailingExtraBody.trailingPlayerFirstComparisons = ["bag","bagved","efter"]
+danishTrailingExtraBody.pointDescriptions = danishLowPointDescriptions
+
+danishLosingExtraBodyPicker = LosingExtraBodyPicker()
+danishLosingExtraBodyPicker.initialExpressions = danishNegativeInitialExpressions
+danishLosingExtraBodyPicker.positionDescriptions = ["ligger sidst","er sidst","har flest point","ligger på sidste pladsen"]
+danishLosingExtraBodyPicker.pointDescriptions = danishHighPointDescriptions
+
+danishLeadingExtraBodyPicker = LeadingExtraBodyPicker()
+danishLeadingExtraBodyPicker.initialExpressions = danishPositiveInitialExpressions
+danishLeadingExtraBodyPicker.positionDescriptions = ["fører","er først","er på første pladsen","ligger først","ligger på første pladsen","har færrest point","er bedst"]
+danishLeadingExtraBodyPicker.pointDescriptions = danishLowPointDescriptions
+
+danishLowestScoreTeamExtraBodyPicker = LowestScoreTeamExtraBodyPicker()
+danishLowestScoreTeamExtraBodyPicker.initialExpressions = danishPositiveInitialExpressions
+danishLowestScoreTeamExtraBodyPicker.pointDescriptions = danishLowPointDescriptions
+danishLowestScoreTeamExtraBodyPicker.pointComparisons = ["færrest point","fået færrest point af alle hold","færrest point af alle hold","fået færrest point","scoret færrest point","scoret færrest point af alle hold"]
+
+danishHighestScoreTeamExtraBodyPicker = HighestScoreTeamExtraBodyPicker()
+danishHighestScoreTeamExtraBodyPicker.initialExpressions = danishNegativeInitialExpressions
+danishHighestScoreTeamExtraBodyPicker.pointDescriptions = danishHighPointDescriptions
+danishLowestScoreTeamExtraBodyPicker.pointComparisons = ["flest point","fået flest point af alle hold","flest point af alle hold","fået flest point","scoret flest point","scoret flest point af alle hold"]
+
 
 danishExtraBodyPickers = ExtraBodyPickers()

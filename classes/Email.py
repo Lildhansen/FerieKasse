@@ -91,7 +91,7 @@ class Email:
         for extraBodyPicker in allExtraBodyPickers:
             if not extraBodyPicker.condition(players):
                 continue
-            return extraBodyPicker.getText() + "\n"
+            return extraBodyPicker.getText(self.language) + "\n"
   
 
 
