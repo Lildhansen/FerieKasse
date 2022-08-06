@@ -1,11 +1,14 @@
 #libraries - standard or pip
 import codecs
+from datetime import date
 import json
 from collections import namedtuple
 import os
+import configparser
 
 
 #own modules
+from classes.Email import Email
 from Excel import Excel
 import utilities.util as util
 import helperMain
@@ -82,6 +85,8 @@ def UpdateFerieKasse():
             assignMatchToPlayers(match,players)
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
+    if mailShouldBeSent():
+        sendPeriodicMail(players)
     
 
 def getLatestMatchCovered(league):
@@ -113,7 +118,28 @@ def tryAppendMatch(player,match):
     if player == None:
         return
     player.matches.append(match)
-          
     
+def mailShouldBeSent():
+    if not os.path.exists(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
+        return False
+    lastSentMailDate = None
+    with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini","r") as file:
+        config = configparser.ConfigParser()
+        config.read_file(file)
+        try:
+            lastSentMailDate = util.textToDate(config.get("email_config","lastdatesent"))
+        except configparser.NoOptionError:
+            return True #if no last sent mail date is found, send mail always
+        const.SEND_MAIL_INTERVAL_DAYS = int(config.get("email_config","emailInterval"))
+    
+    return (date.today() - lastSentMailDate).days >= const.SEND_MAIL_INTERVAL_DAYS
+
+def sendPeriodicMail(players):
+    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
+    email.sendPeriodicMail(players)
+    email.updateLastMailSentValue()
+
+        
+
 if __name__ == "__main__":
     UpdateFerieKasse()

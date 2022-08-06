@@ -22,6 +22,12 @@ def parseIntOrNone(input,minValue=0,maxValue=0):
             return None
     return output
 
+#returns True if "1", 1, or "True"
+def parseBool(input):
+    if input == "True" or parseIntOrNone(input) == 1:
+        return True
+    else:
+        return False
 #parses input into a float if possible - otherwise returns None (rather than throwing an exception)
 def parseFloatOrNone(input,minValue=0,maxValue=0):
     output = None
@@ -60,6 +66,15 @@ def numberToExcelColumn(number):
     if (number != 0):
         result += chars[number]
     return result
+
+#gets the sum of an excel cell like: "=1+2+3+4+5"
+def getSumOfExcelCell(cell):
+    cell = cell.strip("=")
+    numbersInCell = cell.split("+")
+    sum = 0
+    for number in numbersInCell:
+        sum += int(number)
+    return sum
 
 #does the same as split, but converts the parts to ints and finally returns a list (which can be unpacked as a tuple) of the parts
 def splitAndConvertToInt(inputString,seperator):
@@ -113,4 +128,6 @@ def findPlayerObjectInPlayerListFromPlayerName(playerName,players):
         else:
             continue
     return None
+
+
     

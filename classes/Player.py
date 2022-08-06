@@ -5,6 +5,7 @@ class Player:
         self.teams = []
         self.matches = []
         self.points = []
+        self.totalPoints = 0 #used for Email
         self.availableLeagues = [] #used for menu
         self.pickedLeagues = [] #used for menu
 

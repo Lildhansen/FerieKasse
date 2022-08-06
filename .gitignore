@@ -1,10 +1,11 @@
 # saves:
 data/*/
+data/*/
+data
 
 # config:
-/app.config
+/Email.ini
 *.ini
-
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

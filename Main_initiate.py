@@ -1,8 +1,10 @@
 #libraries - standard or pip
 import codecs
+from importlib.resources import path
 import os
 import orjson
 import time
+import configparser
 from collections import OrderedDict
 
 #own modules
@@ -13,10 +15,12 @@ from Excel import Excel
 import helperMain
 import utilities.constants as const
 import random
-
+from classes.Email import Email
 
 leagues = []
 players = []
+email = None
+
 #terminal prompting the user the selection of players, then initiating the menu for selecting teams
 def setupMenuInitiation():
     numOfPlayers = ""
@@ -91,6 +95,59 @@ def getConstValue(prompt,type=int,minValue=0):
             raise Exception(f"type must be int or float, not {type}")
     return value
 
+
+def setupEmailIniFile():
+    userInput = None
+    while (userInput == None):
+        userInput = util.parseIntOrNone(input("how often do you want to receive emails (in days) (0 = does not want to receive emails) "),0,365)
+    if userInput == 0:
+        return
+    
+    email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
+    config = configparser.ConfigParser()
+    try:
+        config.add_section("email_config")
+    except configparser.DuplicateSectionError:
+        pass
+    config.set("email_config", "sender", email.sender)
+    config.set("email_config", "password", email.password)
+    config.set("email_config", "server", email.server)
+    config.set("email_config", "port", str(email.port))
+    config.set("email_config", "initialEmailSent", "False")
+    config.set("email_config", "emailInterval", str(userInput))
+
+    
+    #set language
+    userInput = None
+    while userInput != 1 and userInput != 2:
+        userInput = util.parseIntOrNone(input("What language do you want the email to be in (1=Danish, 2=English) "))
+    language = None
+    if userInput == 1:
+        language = "danish"
+    elif userInput == 2:
+        language = "english"
+    config.set("email_config", "language", language)  
+        
+    #options for initial mail
+    userInput = ""
+    while userInput.lower() != "y" and userInput.lower() != "n":
+        userInput = input("Do you want to input the receiving Emails and send the initial mail now (y/n) ")
+    if userInput == "y":
+        receivers = ""
+        receiverInput = None
+        print("write the emails to add seperated by enters (terminates on empty input)")
+        while receiverInput != "":
+            receiverInput = input()
+            receivers += receiverInput + ";"
+        receivers = receivers.rstrip(";")
+        config.set("email_config","receivers",receivers)
+    else:  
+        config.set("email_config", "receivers", "")
+        print("ini file has been created, please add emails to receivers (seperated by semicolon) if you want to add automatic email service")
+        print("You can then run make start start again to send initial email or just ignore the intial email.")
+        
+    with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
+        config.write(config_file)
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
     #opening prompts
@@ -133,6 +190,18 @@ def initiateFerieKasse():
         myExcel.setupExcelFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/latestMatchCovered.json"):
         setupLatestMatchCoveredForEachLeagueFile()
+    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
+        setupExtraRulesFile()
+    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
+        setupEmailIniFile()
+    config = configparser.ConfigParser()
+    config.read(fr"data/{const.FERIEKASSE_NAME}/Email.ini")
+    email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"email.ini"))
+    if not util.parseBool(config.get("email_config","initialEmailSent")):
+        email.sendInitialEmail()
+        config.set("email_config","initialEmailSent","True")
+        with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
+            config.write(config_file)
     print("succesfully updated all data of feriekasse:",const.FERIEKASSE_NAME)
     
 if __name__ == "__main__":

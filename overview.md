@@ -11,7 +11,7 @@ Nu skal alt data (undtagen teams.json) så gemmes i den mappe
 evt. mail med holdene til alle spillerne
 # update
 send mail
-    hver uge/anden uge / måned
+    hver uge/anden uge / måned (brug lastEdited.txt)
 
 # Menu
 cleanup

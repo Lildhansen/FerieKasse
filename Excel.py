@@ -1,13 +1,14 @@
 #own modules
 import utilities.util as util
 import utilities.constants as const
-import random
+from classes.Team import Team
+from classes.Player import Player
 
 #imports
+import random
 from ast import Raise
 import openpyxl
 import os
-from openpyxl.styles import colors
 from openpyxl.styles import Font, Color
 #import xlsxwriter
 
@@ -63,7 +64,7 @@ class Excel:
     #updates the excel file. this is done when a game is in progress
     def updateExcelFile(self,players):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
-        ws = wb.active #new worksheet
+        ws = wb.active #current worksheet?
         column = 1
         for player in players:
             for match in player.matches:
@@ -111,3 +112,61 @@ class Excel:
                 pointCell.value += "+" + str(match.points)
                 break
             row += 1
+        #Gets the total points for a player
+    def getPlayerScoreFromExcelFile(self,player):
+        wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
+        ws = wb.active #current worksheet?
+        column = 1
+        #finds the player in the excel file
+        while True:
+            if player.name == ws.cell(1,column).value:
+                player = Player(player.name)
+                break
+            if ws.cell(1,column).value == "":
+                Raise(Exception("player not found in excel file"))
+            column += 2
+        #finds the total points of the player - does this for all teams rather than looking at total, since the result of total is an equation (SUM[A1:A6])
+        row = 2
+        totalPoints = 0
+        while True:
+            if ws.cell(row,column).value == "Total:":
+                break
+            totalPoints += util.getSumOfExcelCell(ws.cell(row,column+1).value)
+            row += 1
+        player.totalPoints += totalPoints
+        wb.close()
+        return player
+        
+        #gets the team that has the most points
+    def getHighestScoreTeam(self):
+        def getHighestScoreTeamHelper(teams):
+            teams.sort(key=lambda team: team.points, reverse=True)
+            return teams[0]
+            
+        return self.getTeam(getHighestScoreTeamHelper)
+        
+        #gets the team that has the least points
+    def getLowestScoreTeam(self):
+        def getLowestScoreTeamHelper(teams):
+            teams.sort(key=lambda team: team.points, reverse=False)
+            return teams[0]
+        return self.getTeam(getLowestScoreTeamHelper) 
+        
+        #gets a team based on a function that returns a specific team
+    def getTeam(self,getSpecificTeamFunction):
+        teams = []
+        wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
+        ws = wb.active #current worksheet?
+        column = 1
+        while ws.cell(2,column+1).value != None:
+            row = 2
+            playerName = ws.cell(row-1,column).value
+            while ws.cell(row+1,column).value != None:
+                teamName = ws.cell(row,column).value
+                newTeam = Team(teamName,playerName)
+                newTeam.points = util.getSumOfExcelCell(ws.cell(row,column+1).value)
+                teams.append(newTeam)
+                row += 1
+            column += 2
+        wb.close()
+        return getSpecificTeamFunction(teams)
