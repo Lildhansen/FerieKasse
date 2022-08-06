@@ -93,7 +93,7 @@ def getLatestMatchCovered(league):
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
     fileDict = fileJson[f"{league.name},{league.country}"]
-    if fileDict == {}: #if no latest match was covered - ie it is the first time we run main_update
+    if fileDict == {} or fileDict == None: #if no latest match was covered - ie it is the first time we run main_update
         return None
     match = json.loads(fileDict)
     matchJson = json.dumps(match)
