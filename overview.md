@@ -1,18 +1,3 @@
-# multiple games
-## main initiate:
-flyt .json filer og excel fil til **data** mappe.
-Når man laver et nyt game skal der laves en mappe i **data**, som hedder navnet på den **save** man nu laver
-    der skal promptes om hvad den save skal hedde
-    en constant med den save skal gemmes, så dataet kan accesses
-Nu skal alt data (undtagen teams.json) så gemmes i den mappe
-
-
-# initiate
-evt. mail med holdene til alle spillerne
-# update
-send mail
-    hver uge/anden uge / måned (brug lastEdited.txt)
-
 # Menu
 cleanup
 comments
@@ -25,6 +10,9 @@ comments
 
 # extra shit:
     kunne laves så man kunne lave en sorteringfunktion - fx kun klubber med danskere - og så vil værdierne ændres
+
+# JSON files:
+    json filerne skal have bool værdierne false, true eller null (med all lowercase!)
 
 # small todo
     fix casing
