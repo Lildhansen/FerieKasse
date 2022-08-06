@@ -83,15 +83,11 @@ def UpdateFerieKasse():
         league.removeMatchesYielding0Points()
         for match in league.matches:
             assignMatchToPlayers(match,players)
-    addToLastEditedFile()
     myExcel = Excel(leagues)
     myExcel.updateExcelFile(players)
     if mailShouldBeSent():
         sendPeriodicMail(players)
     
-def addToLastEditedFile():
-    with open("./data/lastEdited.txt","w") as file:
-        file.write(date.today().isoformat())
 
 def getLatestMatchCovered(league):
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r")
@@ -126,21 +122,24 @@ def tryAppendMatch(player,match):
 def mailShouldBeSent():
     if not os.path.exists(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
         return False
-    lastEditedFilePath = fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt"
-    if os.path.getsize(lastEditedFilePath) == 0:
-        return True
-    with open(lastEditedFilePath,"r") as file:
-        dateLastEdited = util.textToDate(file.read())
-        
-    config = configparser.ConfigParser()
-    config.read("data/{const.FERIEKASSE_NAME}/Email.ini")
-    const.SEND_MAIL_INTERVAL_DAYS = int(config.get("email_config","emailInterval"))
+    lastSentMailDate = None
+    with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini","r") as file:
+        config = configparser.ConfigParser()
+        config.read_file(file)
+        try:
+            lastSentMailDate = util.textToDate(config.get("email_config","lastdatesent"))
+        except configparser.NoOptionError:
+            return True #if no last sent mail date is found, send mail always
+        const.SEND_MAIL_INTERVAL_DAYS = int(config.get("email_config","emailInterval"))
     
-    return (date.today() - dateLastEdited).days >= const.SEND_MAIL_INTERVAL_DAYS
-    
+    return (date.today() - lastSentMailDate).days >= const.SEND_MAIL_INTERVAL_DAYS
+
 def sendPeriodicMail(players):
     email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
     email.sendPeriodicMail(players)
-    
+    email.updateLastMailSentValue()
+
+        
+
 if __name__ == "__main__":
     UpdateFerieKasse()

@@ -180,13 +180,15 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         pointDescription = choice(self.pointDescriptions)
         if language.lower() == "english":
             return f"{initialExpression} {self.leastPointsTeamPlayerName}'s team, {self.leastPointsTeamName}, {pointDescription} {self.teamPoints} points"
-        pointComparison = choice(self.pointComparisons)
+        pointComparison = choice(self.pointComparisons) #this is empty somehow?
         return f"{initialExpression} {self.leastPointsTeamPlayerName}s hold, {self.leastPointsTeamName}, har med {pointDescription} {self.teamPoints} point {pointComparison}"
     def getPlayerInformation(self,players):
         leastPointsTeam = excel.getLowestScoreTeam()
         self.leastPointsTeamName = leastPointsTeam.name
         self.teamPoints = leastPointsTeam.points
         self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players).name
+
+#tied for the most points with player1 and player2
 
 class EmptyExtraBodyPicker(ExtraBodyPicker):
     def condition(self,players):
@@ -240,7 +242,7 @@ danishLowPointDescriptions = ["sølle","kun","kun lige","egentlig kun","sådan s
 danishHighPointDescriptions = ["hele","noget så meget som","","intet mindre end","sådan set intet mindre end"]
                         
 danishPositiveInitialExpressions = ["Flot klaret!","Hold da op","Wow!","Sådan!","Godt klaret!","Hold nu op!"]
-danishNegativeInitialExpressions = ["Åh nej!","For dælen da!","Hvor ærgeligt!","Åh nej","For dælen!"]
+danishNegativeInitialExpressions = ["Åh nej!","For dælen da!","Hvor ærgeligt!","For dælen!"]
 
 danishTrailingExtraBody = TrailingExtraBodyPicker()
 danishTrailingExtraBody.initialExpressions = ["Så tæt på","Nøj hvor tæt!","Ej hvor tæt på!","Kom nu!","Næsten!","Hold da op!"]
@@ -266,7 +268,7 @@ danishLowestScoreTeamExtraBodyPicker.pointComparisons = ["færrest point","fået
 danishHighestScoreTeamExtraBodyPicker = HighestScoreTeamExtraBodyPicker()
 danishHighestScoreTeamExtraBodyPicker.initialExpressions = danishNegativeInitialExpressions
 danishHighestScoreTeamExtraBodyPicker.pointDescriptions = danishHighPointDescriptions
-danishLowestScoreTeamExtraBodyPicker.pointComparisons = ["flest point","fået flest point af alle hold","flest point af alle hold","fået flest point","scoret flest point","scoret flest point af alle hold"]
+danishHighestScoreTeamExtraBodyPicker.pointComparisons = ["flest point","fået flest point af alle hold","flest point af alle hold","fået flest point","scoret flest point","scoret flest point af alle hold"]
 
 
 danishExtraBodyPickers = ExtraBodyPickers(danishTrailingExtraBody,danishLosingExtraBodyPicker,danishLeadingExtraBodyPicker,danishLowestScoreTeamExtraBodyPicker,danishHighestScoreTeamExtraBodyPicker,emptyExtraBodyPicker)

@@ -95,9 +95,6 @@ def getConstValue(prompt,type=int,minValue=0):
             raise Exception(f"type must be int or float, not {type}")
     return value
 
-def setupLastEditedFile():
-    with open(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt","w") as _:
-        pass #just to create the file
 
 def setupEmailIniFile():
     userInput = None
@@ -195,8 +192,6 @@ def initiateFerieKasse():
         setupLatestMatchCoveredForEachLeagueFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
         setupExtraRulesFile()
-    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/lastEdited.txt"):
-        setupLastEditedFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
         setupEmailIniFile()
     config = configparser.ConfigParser()
