@@ -15,13 +15,14 @@ from Excel import Excel
 excel = Excel()
 
 class ExtraBodyPickers:
-    def __init__(self,leadingExtraBodyPicker,trailingExtraBodyPicker,losingExtraBodyPicker,highestScoreTeamExtraBodyPicker,lowestScoreTeamExtraBodyPicker):
+    def __init__(self,leadingExtraBodyPicker,trailingExtraBodyPicker,losingExtraBodyPicker,highestScoreTeamExtraBodyPicker,lowestScoreTeamExtraBodyPicker,emptyExtraBodyPicker):
         self.leadingExtraBodyPicker = leadingExtraBodyPicker
         self.trailingExtraBodyPicker = trailingExtraBodyPicker
         self.losingExtraBodyPicker = losingExtraBodyPicker
         self.highestScoreTeamExtraBodyPicker = highestScoreTeamExtraBodyPicker
         self.lowestScoreTeamExtraBodyPicker = lowestScoreTeamExtraBodyPicker
-        self.allExtraBodyPickers = [self.leadingExtraBodyPicker,self.trailingExtraBodyPicker,self.losingExtraBodyPicker,self.highestScoreTeamExtraBodyPicker,self.lowestScoreTeamExtraBodyPicker] 
+        self.emptyExtraBodyPicker = emptyExtraBodyPicker
+        self.allExtraBodyPickers = [self.leadingExtraBodyPicker,self.trailingExtraBodyPicker,self.losingExtraBodyPicker,self.highestScoreTeamExtraBodyPicker,self.lowestScoreTeamExtraBodyPicker,self.emptyExtraBodyPicker] 
         
 #abstract class
 class ExtraBodyPicker:
@@ -187,6 +188,14 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
         self.teamPoints = leastPointsTeam.points
         self.leastPointsTeamPlayerName = util.getPlayerThatHasTeam(self.leastPointsTeamName,players).name
 
+class EmptyExtraBodyPicker(ExtraBodyPicker):
+    def condition(self,players):
+        return True
+    def getText(self,language):
+        return ""
+
+emptyExtraBodyPicker = EmptyExtraBodyPicker()
+
 #english
 
 englishInitialSubject = "The feriekasse has been created"
@@ -222,7 +231,7 @@ englishHighestScoreTeamExtraBodyPicker = HighestScoreTeamExtraBodyPicker()
 englishHighestScoreTeamExtraBodyPicker.initialExpressions = englishNegativeInitialExpressions
 englishHighestScoreTeamExtraBodyPicker.pointDescriptions = ["has the most points with","has the most points of all teams with","has scored the most total points with","is the worst team so far with"]
 
-englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosingExtraBodyPicker,englishLeadingExtraBodyPicker,englishLowestScoreTeamExtraBodyPicker,englishHighestScoreTeamExtraBodyPicker)
+englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosingExtraBodyPicker,englishLeadingExtraBodyPicker,englishLowestScoreTeamExtraBodyPicker,englishHighestScoreTeamExtraBodyPicker,emptyExtraBodyPicker)
 
 #danish
 danishInitialSubject = "feriekassen er blevet oprettet"
@@ -260,4 +269,4 @@ danishHighestScoreTeamExtraBodyPicker.pointDescriptions = danishHighPointDescrip
 danishLowestScoreTeamExtraBodyPicker.pointComparisons = ["flest point","fået flest point af alle hold","flest point af alle hold","fået flest point","scoret flest point","scoret flest point af alle hold"]
 
 
-danishExtraBodyPickers = ExtraBodyPickers()
+danishExtraBodyPickers = ExtraBodyPickers(danishTrailingExtraBody,danishLosingExtraBodyPicker,danishLeadingExtraBodyPicker,danishLowestScoreTeamExtraBodyPicker,danishHighestScoreTeamExtraBodyPicker,emptyExtraBodyPicker)
