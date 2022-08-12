@@ -7,6 +7,8 @@ import time
 import configparser
 from collections import OrderedDict
 
+import sys #cmd args
+
 #own modules
 from menuStuff.Menu import Menu
 import utilities.util as util
@@ -48,7 +50,7 @@ def setupLatestMatchCoveredForEachLeagueFile():
 def folderIsValid(folderName):
     if const.FERIEKASSE_NAME == "" or const.FERIEKASSE_NAME.isspace():
         return False
-    if const.FERIEKASSE_NAME == "all":
+    if const.FERIEKASSE_NAME[0] == "-":
         print("invalid name for a feriekasse")
         return False
     invalidSymbols = "/\\:*?\"<>|"
