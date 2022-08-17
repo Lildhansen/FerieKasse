@@ -49,9 +49,9 @@ class Soup:
         for info in rawMatchData:
             if info.get('data-stat') == "date":
                 match.date = util.textToDate(info.text)
-            elif info.get('data-stat') == "squad_a":
+            elif info.get('data-stat') == "home_team":
                 match.homeTeam = info.text
-            elif info.get('data-stat') == "squad_b":
+            elif info.get('data-stat') == "away_team":
                 match.awayTeam = info.text
             elif info.get('data-stat') == "score":
                 #if text is empty the match hasnt been played, and we return a match object with no score which will be handled later
