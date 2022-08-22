@@ -36,7 +36,7 @@ def loadFerieKasser():
                 feriekasseDirectory = os.path.join("data", feriekasse)
                 if os.path.isdir(feriekasseDirectory):
                     print(feriekasse)
-    if userInput.lower() == "-a":
+    if userInput.lower() == "-a": #this doesnt work
         feriekasser = [feriekasse]
         for feriekasse in os.listdir("data"):
             feriekasseDirectory = os.path.join("data", feriekasse)
