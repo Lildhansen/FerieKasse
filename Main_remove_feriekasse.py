@@ -19,12 +19,17 @@ def resetFeriekasse():
             dataDir = fr"./data"
             for subdir, dirs, files in os.walk(dataDir):
                 for dir in dirs:
-                    shutil.rmtree(fr"{dataDir}/{dir}")
+                    removeFeriekasse(fr"{dataDir}/{dir}")
             print("All feriekasser has been removed")
         quit()
     if userInput == "n":
         print("cancelled")
         exit()
+    
+    if "," in userInput:
+        feriekasser = helperMain.handleMultipleArgumentsForFeriekasser(userInput)
+        for feriekasse in feriekasser:
+            removeFeriekasse(feriekasse)
         
     const.FERIEKASSE_NAME = userInput
     feriekasseDir = fr"./data/{const.FERIEKASSE_NAME}"
@@ -35,8 +40,13 @@ def resetFeriekasse():
     while (prompt != "y" and prompt != "n"):
         prompt = input("are you sure you want to reset this feriekasse? (y/n) ")
     if (prompt == "y"):
+        removeFeriekasse(feriekasseDir)
+
+    def removeFeriekasse(feriekasseDir):
         shutil.rmtree(feriekasseDir)
-        print("Feriekasse removed")
+        feriekasseName = feriekasseDir.split("/")[-1]
+        print(f"Feriekasse, {feriekasseName}, has been removed")
+        
 
 if __name__ == "__main__":
     resetFeriekasse()

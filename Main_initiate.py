@@ -53,7 +53,7 @@ def folderIsValid(folderName):
     if const.FERIEKASSE_NAME[0] == "-":
         print("invalid name for a feriekasse")
         return False
-    invalidSymbols = "/\\:*?\"<>|"
+    invalidSymbols = "/\\:*?\"<>|," #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments)
     for invalidSymbol in invalidSymbols:
         if invalidSymbol in folderName:
             return False
@@ -166,7 +166,7 @@ def initiateFerieKasse():
     if not folderIsValid(nameInput):
         print("invalid folder name")
         quit()
-    const.FERIEKASSE_NAME = nameInput
+    const.FERIEKASSE_NAME = nameInput.strip()
 
     newDir = fr"./data/{const.FERIEKASSE_NAME}"
     #if the folder already exist - the user is either mid game or havent filled out all information

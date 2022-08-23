@@ -24,3 +24,14 @@ def listAllFeriekasser():
         feriekasseDirectory = os.path.join("data", feriekasse)
         if os.path.isdir(feriekasseDirectory):
             print(feriekasse)
+            
+def handleMultipleArgumentsForFeriekasser(userInput):
+    feriekasser = []
+    feriekasseArguments = userInput.split(",")
+    for feriekasse in feriekasseArguments:
+        if not os.path.exists(fr"data/{feriekasse}"):
+            raise Exception(f"feriekasse {feriekasse} does not exist")
+        if feriekasse == "" or feriekasse.isspace():
+            continue
+        feriekasser.append(feriekasse.strip())
+    return feriekasser
