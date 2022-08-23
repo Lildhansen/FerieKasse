@@ -36,8 +36,8 @@ def loadFerieKasser():
                 feriekasseDirectory = os.path.join("data", feriekasse)
                 if os.path.isdir(feriekasseDirectory):
                     print(feriekasse)
-    if userInput.lower() == "-a": #this doesnt work
-        feriekasser = [feriekasse]
+    if userInput.lower() == "-a":
+        feriekasser = []
         for feriekasse in os.listdir("data"):
             feriekasseDirectory = os.path.join("data", feriekasse)
             if os.path.isdir(feriekasseDirectory):
@@ -86,6 +86,7 @@ def UpdateFerieKasse():
     if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
         configureExtraRules()
     for feriekasse in feriekasser: #usually just one, but with the -a flag we run multiple feriekasser
+        const.FERIEKASSE_NAME = feriekasse
         leagues = helperMain.getAllLeagues()
         setupLinks(leagues)
         players = util.getPlayerObjectsFromFile()
