@@ -41,7 +41,7 @@ def loadFerieKasser():
                 feriekasser.append(feriekasse)
         return feriekasser  
     if "," in userInput:
-        helperMain.handleMultipleArgumentsForFeriekasser(userInput)
+        return helperMain.handleMultipleArgumentsForFeriekasser(userInput)
         
     const.FERIEKASSE_NAME = userInput
     
