@@ -30,7 +30,7 @@ def loadFerieKasser():
     print("updating feriekasse ...")
     userInput = ""
     while userInput == "" or userInput.lower() == "-l":
-        userInput = input("Which feriekasse do you want to update? (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) ")
+        userInput = input("Which feriekasse do you want to update? (if multiple - seperate each by comma) (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) ")
         if userInput.lower() == "-l":
             helperMain.listAllFeriekasser()
     if userInput.lower() == "-a":
@@ -40,13 +40,16 @@ def loadFerieKasser():
             if os.path.isdir(feriekasseDirectory):
                 feriekasser.append(feriekasse)
         return feriekasser  
+    if "," in userInput:
+        return helperMain.handleMultipleArgumentsForFeriekasser(userInput)
+        
     const.FERIEKASSE_NAME = userInput
+    
     if const.FERIEKASSE_NAME.lower() == "n":
         print("cancelled")
         exit()
     elif not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
-        print("This feriekasse does not exist")
-        exit()
+        raise Exception(f"feriekasse {const.FERIEKASSE_NAME} does not exist")
     return [const.FERIEKASSE_NAME]
 
 def configureExtraRules():

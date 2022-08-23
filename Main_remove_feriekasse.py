@@ -4,6 +4,11 @@ import shutil
 
 import helperMain
     
+def removeFeriekasse(feriekasseDir):
+    shutil.rmtree(feriekasseDir)
+    feriekasseName = feriekasseDir.split("/")[-1]
+    print(f"Feriekasse, {feriekasseName}, has been removed")
+    
 def resetFeriekasse():
     print("removing a feriekasse")
     userInput = ""
@@ -19,11 +24,18 @@ def resetFeriekasse():
             dataDir = fr"./data"
             for subdir, dirs, files in os.walk(dataDir):
                 for dir in dirs:
-                    shutil.rmtree(fr"{dataDir}/{dir}")
+                    removeFeriekasse(fr"{dataDir}/{dir}")
             print("All feriekasser has been removed")
-        quit()
+        exit()
     if userInput == "n":
         print("cancelled")
+        exit()
+    
+    if "," in userInput:
+        feriekasser = helperMain.handleMultipleArgumentsForFeriekasser(userInput)
+        for feriekasse in feriekasser:
+            removeFeriekasse(fr"./data/{feriekasse}")
+        print("The selected feriekasser has been removed")
         exit()
         
     const.FERIEKASSE_NAME = userInput
@@ -35,8 +47,10 @@ def resetFeriekasse():
     while (prompt != "y" and prompt != "n"):
         prompt = input("are you sure you want to reset this feriekasse? (y/n) ")
     if (prompt == "y"):
-        shutil.rmtree(feriekasseDir)
-        print("Feriekasse removed")
+        removeFeriekasse(feriekasseDir)
+
+    
+        
 
 if __name__ == "__main__":
     resetFeriekasse()

@@ -53,7 +53,7 @@ def folderIsValid(folderName):
     if const.FERIEKASSE_NAME[0] == "-":
         print("invalid name for a feriekasse")
         return False
-    invalidSymbols = "/\\:*?\"<>|"
+    invalidSymbols = "/\\:*?\"<>|," #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments)
     for invalidSymbol in invalidSymbols:
         if invalidSymbol in folderName:
             return False
@@ -137,7 +137,7 @@ def setupEmailIniFile():
     if userInput == "y":
         receivers = ""
         receiverInput = None
-        print("write the emails to add seperated by enters (terminates on empty input)")
+        print("write the emails to add seperated by enters (terminates on empty input) ")
         while receiverInput != "":
             receiverInput = input()
             receivers += receiverInput + ";"
@@ -156,7 +156,7 @@ def initiateFerieKasse():
     print("starting a new feriekasse")
     nameInput = ""
     while nameInput == "" or nameInput.lower() == "-l":
-        nameInput = input("What name would you like to give the feriekasse? (n to cancel) (-l = list all feriekasser)")
+        nameInput = input("What name would you like to give the feriekasse? (n to cancel) (-l = list all feriekasser) ")
         if nameInput.lower() == "-l":
             helperMain.listAllFeriekasser()
     #checking/validating user input
@@ -166,7 +166,7 @@ def initiateFerieKasse():
     if not folderIsValid(nameInput):
         print("invalid folder name")
         quit()
-    const.FERIEKASSE_NAME = nameInput
+    const.FERIEKASSE_NAME = nameInput.strip()
 
     newDir = fr"./data/{const.FERIEKASSE_NAME}"
     #if the folder already exist - the user is either mid game or havent filled out all information
