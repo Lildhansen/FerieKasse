@@ -1,12 +1,16 @@
 import os
 import utilities.constants as const
 import shutil
+
+import helperMain
     
 def resetFeriekasse():
     print("removing a feriekasse")
     userInput = ""
-    while userInput == "" or userInput.isspace():
-        userInput = input("What feriekasse would you like to remove? (n = cancel) (-a = remove all feriekasser) ") #add remove all option
+    while userInput == ""  or userInput.lower() == "-l":
+        userInput = input("What feriekasse would you like to remove? (n = cancel) (-a = remove all feriekasser) (-l = list all feriekasser) ")
+        if userInput.lower() == "-l":
+            helperMain.listAllFeriekasser()
     if userInput == "-a":
         prompt = ""
         while (prompt != "y" and prompt != "n"):

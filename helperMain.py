@@ -2,6 +2,7 @@ from classes.League import League
 from classes.Team import Team
 import utilities.constants as const
 
+import os
 import orjson
 import codecs #for reading non-ascii chars
 
@@ -17,3 +18,9 @@ def getAllLeagues():
             league.teams.append(Team(teamName,player,league.name))
         leagues.append(league)
     return leagues
+
+def listAllFeriekasser():
+    for feriekasse in os.listdir("data"):
+        feriekasseDirectory = os.path.join("data", feriekasse)
+        if os.path.isdir(feriekasseDirectory):
+            print(feriekasse)

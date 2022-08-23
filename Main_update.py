@@ -32,10 +32,7 @@ def loadFerieKasser():
     while userInput == "" or userInput.lower() == "-l":
         userInput = input("Which feriekasse do you want to update? (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) ")
         if userInput.lower() == "-l":
-            for feriekasse in os.listdir("data"):
-                feriekasseDirectory = os.path.join("data", feriekasse)
-                if os.path.isdir(feriekasseDirectory):
-                    print(feriekasse)
+            helperMain.listAllFeriekasser()
     if userInput.lower() == "-a":
         feriekasser = []
         for feriekasse in os.listdir("data"):

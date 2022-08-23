@@ -154,14 +154,19 @@ def setupEmailIniFile():
 def initiateFerieKasse():
     #opening prompts
     print("starting a new feriekasse")
-    const.FERIEKASSE_NAME = input("What name would you like to give the feriekasse? (n to cancel) ")
+    nameInput = ""
+    while nameInput == "" or nameInput.lower() == "-l":
+        nameInput = input("What name would you like to give the feriekasse? (n to cancel) (-l = list all feriekasser)")
+        if nameInput.lower() == "-l":
+            helperMain.listAllFeriekasser()
     #checking/validating user input
-    if const.FERIEKASSE_NAME == "n":
+    if nameInput == "n":
         print("cancelled")
         exit()
-    if not folderIsValid(const.FERIEKASSE_NAME):
+    if not folderIsValid(nameInput):
         print("invalid folder name")
         quit()
+    const.FERIEKASSE_NAME = nameInput
 
     newDir = fr"./data/{const.FERIEKASSE_NAME}"
     #if the folder already exist - the user is either mid game or havent filled out all information
