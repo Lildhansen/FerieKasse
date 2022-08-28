@@ -36,8 +36,8 @@ class ExtraBodyPicker:
 #almost there! player2 leads player1 by just 30 points 
 #So close! player1 is behind player2 by a mere 30 points
 
-#Nøj hvor tæt! Player 2 fører over player1 med sølle 30 point
-#Ej hvor tæt på! Player1 er sølle 30 point bag player2
+#Nøj hvor tæt! Player 2 fører over player1 med kun 30 point
+#Ej hvor tæt på! Player1 er kun 30 point bag player2
 class TrailingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -56,9 +56,9 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
         players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
         previousPlayer = None
         for player in players:
-            previousPlayer = copy.deepcopy(player)
             if previousPlayer == None:
                 continue
+            previousPlayer = copy.deepcopy(player)
             #value used to make the threshold scale by number of points they have rather than by a constant
             deltaThreshold = (player.totalPoints + previousPlayer.totalPoints) / 20 #divided by 2 (since there are 2 teams) and then by 10
             pointDifference = abs(player.totalPoints - previousPlayer.totalPoints)
@@ -110,7 +110,7 @@ class LosingExtraBodyPicker(ExtraBodyPicker):
         self.playerPoints = mostPointsPlayer.totalPoints
 
 #Holy Cow! player1 is in the lead with just 165 points
-#Hold da op! player1 er på første pladsen med sølle 165 point
+#Hold da op! player1 er på første pladsen med kun 165 point
 class LeadingExtraBodyPicker(ExtraBodyPicker):
     def __init__(self):
         self.initialExpressions = []
@@ -238,7 +238,7 @@ englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosin
 #danish
 danishInitialSubject = "feriekassen er blevet oprettet"
 danishInitialEmailBody = "feriekassen er blevet oprettet og holdene er blevet valgt for hver spiller og er synlig i den vedhæftede excel fil (.xlsx)."
-danishLowPointDescriptions = ["sølle","kun","kun lige","egentlig kun","sådan set kun",""]
+danishLowPointDescriptions = ["kun","kun lige","egentlig kun","sådan set kun",""]
 danishHighPointDescriptions = ["hele","noget så meget som","","intet mindre end","sådan set intet mindre end"]
                         
 danishPositiveInitialExpressions = ["Flot klaret!","Hold da op","Wow!","Sådan!","Godt klaret!","Hold nu op!"]
