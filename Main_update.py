@@ -26,17 +26,31 @@ def setupLinks(leagues):
             league.link = "https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures"
         elif league.name == "laliga":
             league.link = "https://fbref.com/en/comps/12/schedule/La-Liga-Scores-and-Fixtures"
-def loadFerieKasse():
+def loadFerieKasser():
     print("updating feriekasse ...")
-    const.FERIEKASSE_NAME = input("Which feriekasse do you want to update? (n to cancel) ")
-    if const.FERIEKASSE_NAME == "n":
+    userInput = ""
+    while userInput == "" or userInput.lower() == "-l":
+        userInput = input("Which feriekasse do you want to update? (if multiple - seperate each by comma) (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) ")
+        if userInput.lower() == "-l":
+            helperMain.listAllFeriekasser()
+    if userInput.lower() == "-a":
+        feriekasser = []
+        for feriekasse in os.listdir("data"):
+            feriekasseDirectory = os.path.join("data", feriekasse)
+            if os.path.isdir(feriekasseDirectory):
+                feriekasser.append(feriekasse)
+        return feriekasser  
+    if "," in userInput:
+        return helperMain.handleMultipleArgumentsForFeriekasser(userInput)
+        
+    const.FERIEKASSE_NAME = userInput
+    
+    if const.FERIEKASSE_NAME.lower() == "n":
         print("cancelled")
         exit()
-    if not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
-        print("This feriekasse does not exist")
-        exit()
-    if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
-        configureExtraRules()
+    elif not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
+        raise Exception(f"feriekasse {const.FERIEKASSE_NAME} does not exist")
+    return [const.FERIEKASSE_NAME]
 
 def configureExtraRules():
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","r") as file:
@@ -68,25 +82,29 @@ def setConstant(constantString,value):
         
 
 def UpdateFerieKasse():
-    loadFerieKasse()
-    leagues = helperMain.getAllLeagues()
-    setupLinks(leagues)
-    players = util.getPlayerObjectsFromFile()
-    for league in leagues:
-        print("working on",league.name)
-        match = getLatestMatchCovered(league)
-        if match == None:
-            league.getMatchesAfterLatestMatch()
-        else:
-            league.getMatchesAfterLatestMatch(match)
-        league.calculatePointsForMatches(players)
-        league.removeMatchesYielding0Points()
-        for match in league.matches:
-            assignMatchToPlayers(match,players)
-    myExcel = Excel(leagues)
-    myExcel.updateExcelFile(players)
-    if mailShouldBeSent():
-        sendPeriodicMail(players)
+    feriekasser = loadFerieKasser()
+    if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
+        configureExtraRules()
+    for feriekasse in feriekasser: #usually just one, but with the -a flag we run multiple feriekasser
+        const.FERIEKASSE_NAME = feriekasse
+        leagues = helperMain.getAllLeagues()
+        setupLinks(leagues)
+        players = util.getPlayerObjectsFromFile()
+        for league in leagues:
+            print("working on",league.name)
+            match = getLatestMatchCovered(league)
+            if match == None:
+                league.getMatchesAfterLatestMatch()
+            else:
+                league.getMatchesAfterLatestMatch(match)
+            league.calculatePointsForMatches(players)
+            league.removeMatchesYielding0Points()
+            for match in league.matches:
+                assignMatchToPlayers(match,players)
+        myExcel = Excel(leagues)
+        myExcel.updateExcelFile(players)
+        if mailShouldBeSent():
+            sendPeriodicMail(players)
     
 
 def getLatestMatchCovered(league):
