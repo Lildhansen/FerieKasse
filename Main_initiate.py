@@ -48,9 +48,10 @@ def setupLatestMatchCoveredForEachLeagueFile():
 
 #function that return false if folder is invalid (that is consists of any of the invalid chars or does not comply with predefined rules) and true otherwise
 def folderIsValid(folderName):
-    if const.FERIEKASSE_NAME == "" or const.FERIEKASSE_NAME.isspace():
+    print(folderName)
+    if folderName == "" or folderName.isspace():
         return False
-    if const.FERIEKASSE_NAME[0] == "-":
+    if folderName[0] == "-":
         print("invalid name for a feriekasse")
         return False
     invalidSymbols = "/\\:*?\"<>|," #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments)
