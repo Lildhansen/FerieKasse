@@ -201,8 +201,7 @@ emptyExtraBodyPicker = EmptyExtraBodyPicker()
 #english
 
 englishInitialSubject = "The feriekasse has been created"
-englishInitialEmailBody = "The feriekasse has been created and the teams picked by each player is visible in the attached excel file (.xlsx)."
-
+englishInitialEmailBody = "The feriekasse has been created and the teams picked by each player is visible in the attached excel file (.xlsx), as well as in in the screenshot attached"
 
 englishPositiveInitialExpressions = ["Nice one!","Damn!","Very good,"]
 englishNegativeInitialExpressions = ["Oh no!","Damn!","How unfortunate,"]
@@ -237,7 +236,7 @@ englishExtraBodyPickers = ExtraBodyPickers(englishTrailingExtraBody,englishLosin
 
 #danish
 danishInitialSubject = "feriekassen er blevet oprettet"
-danishInitialEmailBody = "feriekassen er blevet oprettet og holdene er blevet valgt for hver spiller og er synlig i den vedhæftede excel fil (.xlsx)."
+danishInitialEmailBody = "feriekassen er blevet oprettet og holdene er blevet valgt for hver spiller og er synlig i den vedhæftede excel fil (.xlsx), samt i det vedhæftede billede af excelfilen."
 danishLowPointDescriptions = ["kun","kun lige","egentlig kun","sådan set kun",""]
 danishHighPointDescriptions = ["hele","noget så meget som","","intet mindre end","sådan set intet mindre end"]
                         

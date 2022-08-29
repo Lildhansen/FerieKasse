@@ -5,6 +5,7 @@ import json
 from collections import namedtuple
 import os
 import configparser
+import excel2img
 
 
 #own modules
@@ -160,4 +161,5 @@ def sendPeriodicMail(players):
         
 
 if __name__ == "__main__":
-    UpdateFerieKasse()
+    excel2img.export_img("data/Feriekassen/Feriekasse.xlsx", "data/Feriekassen/test.png", "Feriekasse", None)
+    #UpdateFerieKasse()

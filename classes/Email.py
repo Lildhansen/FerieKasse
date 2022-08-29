@@ -4,6 +4,7 @@ import smtplib
 import configparser
 from email.message import EmailMessage
 from random import shuffle
+import excel2img
 
 
 from datetime import date
@@ -46,7 +47,7 @@ class Email:
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
-        self.attachExcelFile(message,excelFile,filename)
+        self.attachFiles(message,excelFile,filename,"Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
         
@@ -65,7 +66,7 @@ class Email:
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
-        self.attachExcelFile(message,excelFile,filename)
+        self.attachFiles(message,excelFile,filename,"Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
         
@@ -75,11 +76,19 @@ class Email:
         message['Subject'] = subject
         message.set_content(body)
     
-    def attachExcelFile(self,message,excelFile,newFileName):
+    def attachFiles(self,message,excelFile,newFileName,screenshotName):
+        self.attachExcelFiles(message,excelFile,newFileName)
+        self.attachExcelFileScreenshot(message,excelFile,screenshotName)
+    def attachExcelFiles(self,message,excelFile,newFileName):
         with open(excelFile, 'rb') as f:
-            file_data = f.read()
-        message.add_attachment(file_data, maintype="application", subtype="xlsx", filename=newFileName)
-
+            fileData = f.read()
+        message.add_attachment(fileData, maintype="application", subtype="xlsx", filename=newFileName)
+    def attachExcelFileScreenshot(self,message,excelFile,screenshotName):
+        excel2img.export_img(excelFile,screenshotName, "Feriekasse", None) #"Feriekasse" = sheetname
+        with open(screenshotName, 'rb') as f:
+            imgData = f.read()
+        message.add_attachment(imgData, maintype="image", subtype="png", filename=screenshotName)
+        
     def connectToSmtpAndSendMail(self,message):
         smtp = smtplib.SMTP_SSL(self.server)
         smtp.connect(self.server,self.port)
