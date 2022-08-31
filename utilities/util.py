@@ -73,7 +73,7 @@ def getSumOfExcelCell(cell):
     numbersInCell = cell.split("+")
     sum = 0
     for number in numbersInCell:
-        sum += int(number)
+        sum += int(float(number))
     return sum
 
 #does the same as split, but converts the parts to ints and finally returns a list (which can be unpacked as a tuple) of the parts

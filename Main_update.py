@@ -161,5 +161,4 @@ def sendPeriodicMail(players):
         
 
 if __name__ == "__main__":
-    excel2img.export_img("data/Feriekassen/Feriekasse.xlsx", "data/Feriekassen/test.png", "Feriekasse", None)
-    #UpdateFerieKasse()
+    UpdateFerieKasse()
