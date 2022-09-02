@@ -48,7 +48,7 @@ def loadFerieKasser():
     
     if const.FERIEKASSE_NAME.lower() == "n":
         print("cancelled")
-        exit()
+        quit()
     elif not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
         raise Exception(f"feriekasse {const.FERIEKASSE_NAME} does not exist")
     return [const.FERIEKASSE_NAME]

@@ -162,7 +162,7 @@ def initiateFerieKasse():
     #checking/validating user input
     if nameInput == "n":
         print("cancelled")
-        exit()
+        quit()
     if not folderIsValid(nameInput):
         print("invalid folder name")
         quit()
