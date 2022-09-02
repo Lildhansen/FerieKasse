@@ -9,8 +9,7 @@ def removeFeriekasse(feriekasseDir):
     feriekasseName = feriekasseDir.split("/")[-1]
     print(f"Feriekasse, {feriekasseName}, has been removed")
     
-def removeFeriekasse():
-    print("removing a feriekasse")
+def handleRemoveFeriekasse():
     userInput = ""
     while userInput == ""  or userInput.lower() == "-l":
         userInput = input("What feriekasse would you like to remove? (n = cancel) (-a = remove all feriekasser) (-l = list all feriekasser) ")
@@ -19,7 +18,7 @@ def removeFeriekasse():
     if userInput == "-a":
         prompt = ""
         while (prompt != "y" and prompt != "n"):
-            prompt = input("are you sure you want to remove all feriekasser? (y/n) ")
+            prompt = input("are you sure you want to reset all feriekasser? (y/n) ")
         if (prompt == "y"):
             for subdir, dirs, files in os.walk("./data"):
                 for dir in dirs:
@@ -44,9 +43,9 @@ def removeFeriekasse():
         quit()
     prompt = ""
     while (prompt != "y" and prompt != "n"):
-        prompt = input("are you sure you want to remove this feriekasse? (y/n) ")
+        prompt = input("are you sure you want to reset this feriekasse? (y/n) ")
     if (prompt == "y"):
         removeFeriekasse(feriekasseDir)   
 
 if __name__ == "__main__":
-    removeFeriekasse()
+    handleRemoveFeriekasse()
