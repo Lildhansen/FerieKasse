@@ -1,13 +1,10 @@
-import email
-from msilib.schema import Condition
 import smtplib
 import configparser
 from email.message import EmailMessage
 from random import shuffle
 import excel2img
-
-
 from datetime import date
+
 import utilities.constants as const
 import classes.EmailBody as EmailBody
   
@@ -21,9 +18,11 @@ class Email:
         self.receivers = []
         self.mailBody = None #what should be the body of the email
         self.subject = None
-        self.emailBody = EmailBody #a reference to the module EmailBody
-        self.setupEmailInformationFromConfigFile(emailIniFile)
-    def setupEmailInformationFromConfigFile(self,emailIniFile):
+        self.emailBody = EmailBody #a reference to the EmailBody module
+        self.__setupEmailInformationFromConfigFile(emailIniFile)
+        #sets the attributes of the current Email object up based on a .ini file (directory of that file is the parameter of the method)
+        # this method is only called when instantiating an Email object
+    def __setupEmailInformationFromConfigFile(self,emailIniFile):
         configSection = "email_config"
         config = configparser.ConfigParser()
         config.read(emailIniFile)

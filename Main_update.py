@@ -15,6 +15,7 @@ import utilities.util as util
 import helperMain
 import utilities.constants as const
 
+#sets up the predefined links for each league
 def setupLinks(leagues):
     for league in leagues:
         if league.name == "superliga":
@@ -27,6 +28,9 @@ def setupLinks(leagues):
             league.link = "https://fbref.com/en/comps/11/schedule/Serie-A-Scores-and-Fixtures"
         elif league.name == "laliga":
             league.link = "https://fbref.com/en/comps/12/schedule/La-Liga-Scores-and-Fixtures"
+
+#prompts the user for which feriekasse(r) to update - either a single one, multiple, all of them, or none of them (if it is cancelled)
+#returns a list of the name of all the feriekasser to update
 def loadFerieKasser():
     print("updating feriekasse ...")
     userInput = ""
@@ -53,12 +57,14 @@ def loadFerieKasser():
         raise Exception(f"feriekasse {const.FERIEKASSE_NAME} does not exist")
     return [const.FERIEKASSE_NAME]
 
+#sets the extra rules of the feriekasse by reading from the extra rules JSON file and then setting the constant values
 def configureExtraRules():
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","r") as file:
         extraRules = json.loads(file.read())
         for constant,value in extraRules.items():
             setConstant(constant,value)
 
+#sets the constant value to the value inputted, the constant value to change is based on a string of the name of the constant
 def setConstant(constantString,value):
     if constantString == "DRAW_POINTS":
         const.DRAW_POINTS = value
@@ -79,35 +85,7 @@ def setConstant(constantString,value):
     else:
         raise Exception(f"the constant {constantString} not found")
     
-        
-        
-
-def UpdateFerieKasse():
-    feriekasser = loadFerieKasser()
-    if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
-        configureExtraRules()
-    for feriekasse in feriekasser: #usually just one, but with the -a flag we run multiple feriekasser
-        const.FERIEKASSE_NAME = feriekasse
-        leagues = helperMain.getAllLeagues()
-        setupLinks(leagues)
-        players = util.getPlayerObjectsFromFile()
-        for league in leagues:
-            print("working on",league.name)
-            match = getLatestMatchCovered(league)
-            if match == None:
-                league.getMatchesAfterLatestMatch()
-            else:
-                league.getMatchesAfterLatestMatch(match)
-            league.calculatePointsForMatches(players)
-            league.removeMatchesYielding0Points()
-            for match in league.matches:
-                assignMatchToPlayers(match,players)
-        myExcel = Excel(leagues)
-        myExcel.updateExcelFile(players)
-        if mailShouldBeSent():
-            sendPeriodicMail(players)
-    
-
+#Gets the latest match covered for a specific league from the latest match covered JSON file, and returns that match as a Match object
 def getLatestMatchCovered(league):
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r")
     fileJson = json.loads(file.read())
@@ -132,12 +110,14 @@ def assignMatchToPlayers(match,players):
         tryAppendMatch(awayPlayer,match)
     if not match.homeTeamIsWinner or match.draw:
         tryAppendMatch(homePlayer,match)
-
+        
+#appends match to player's matches, except if player is None, then nothing happens
 def tryAppendMatch(player,match):
     if player == None:
         return
     player.matches.append(match)
-    
+
+#returns true if a mail should be sent - that is if an Email.ini exists and that there has passed enough days since the last sent mail
 def mailShouldBeSent():
     if not os.path.exists(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
         return False
@@ -153,12 +133,37 @@ def mailShouldBeSent():
     
     return (date.today() - lastSentMailDate).days >= const.SEND_MAIL_INTERVAL_DAYS
 
+#sends the periodic mail using the Email object, and afterwards updates the last mail sent value of the .ini file 
 def sendPeriodicMail(players):
     email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
     email.sendPeriodicMail(players)
     email.updateLastMailSentValue()
 
+#the main function of the file - updates an or multiple feriekasser
+def UpdateFerieKasse():
+    feriekasser = loadFerieKasser()
+    if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
+        configureExtraRules()
+    for feriekasse in feriekasser: #usually just one, but with the -a flag we run multiple feriekasser
+        const.FERIEKASSE_NAME = feriekasse
+        leagues = helperMain.getAllLeagues()
+        setupLinks(leagues)
+        players = util.getPlayerObjectsFromFile()
+        for league in leagues:
+            print("working on",league.name)
+            match = getLatestMatchCovered(league)
+            if match == None:
+                league.getMatchesAfterLatestMatch()
+            else:
+                league.getMatchesAfterLatestMatch(match)
+            league.calculatePointsForMatches(players)
+            league.removeMatchesYielding0Points()
+            for match in league.matches:
+                assignMatchToPlayers(match,players)
+        myExcel = Excel(leagues)
+        myExcel.updateExcelFile(players)
+        if mailShouldBeSent():
+            sendPeriodicMail(players)
         
-
 if __name__ == "__main__":
     UpdateFerieKasse()
