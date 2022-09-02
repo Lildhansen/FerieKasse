@@ -34,13 +34,20 @@ class Excel:
         ws.title = "Feriekasse"
         row = 1
         column = 1
+        cellWidths = []
         for player in self.players:
+            playerNameLength = len(player.name)
+            cellWidth = playerNameLength if playerNameLength > len("Total:") else len("Total:")
             #first column set
             ws.cell(row,column,player.name)
             for team in player.teams:
+                teamNameLength = len(team.name)
+                if teamNameLength > cellWidth:
+                    cellWidth = teamNameLength
                 row += 1
                 ws.cell(row,column,team.name)
                 ws[f"{util.numberToExcelColumn(column)}{row}"].font = Font(color=Color(self.leaguesAndColors[team.leagueName]))
+            cellWidths.append(cellWidth)
             row += 1
             ws.cell(row,column,"Total:")
             #second column set
@@ -59,6 +66,14 @@ class Excel:
             row += 1
             ws.cell(row,column,league.name)
             ws[f"{util.numberToExcelColumn(column)}{row}"].font = Font(color=Color(self.leaguesAndColors[league.name]))
+        
+        #set widths:
+        i = 1
+        #ws.column_dimensions.width = 100 
+        for cellWidth in cellWidths:
+            ws.column_dimensions[util.numberToExcelColumn(i)].width = cellWidth * 1.23
+            i += 2
+        
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
     #updates the excel file. this is done when a game is in progress
