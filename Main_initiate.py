@@ -48,7 +48,6 @@ def setupLatestMatchCoveredForEachLeagueFile():
 
 #function that return false if folder is invalid (that is consists of any of the invalid chars or does not comply with predefined rules) and true otherwise
 def folderIsValid(folderName):
-    print(folderName)
     if folderName == "" or folderName.isspace():
         return False
     if folderName[0] == "-":
@@ -104,7 +103,7 @@ def setupEmailIniFile():
     while (userInput == None):
         userInput = util.parseIntOrNone(input("how often do you want to receive emails (in days) (0 = does not want to receive emails) "),0,365)
     if userInput == 0:
-        return
+        quit()
     
     email = Email((os.path.join(os.path.dirname(__file__)),'Email.ini'))
     config = configparser.ConfigParser()

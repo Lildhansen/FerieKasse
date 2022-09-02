@@ -1,6 +1,7 @@
 from datetime import date
 import orjson
 import codecs
+import math
 
 from classes.Match import Match
 from classes.Player import Player
@@ -11,13 +12,13 @@ import utilities.constants as const
 INVALID_LETTERS = "æøå"
 
 #parses input into an int if possible - otherwise returns None (rather than throwing an exception)
-def parseIntOrNone(input,minValue=0,maxValue=0):
+def parseIntOrNone(input,minValue=0,maxValue=math.inf):
     output = None
     try:
         output = int(input)
     except ValueError:
         return None
-    if minValue != 0 or maxValue != 0:
+    if minValue != 0 or maxValue != math.inf:
         if output > maxValue or output < minValue:
             return None
     return output
@@ -29,13 +30,13 @@ def parseBool(input):
     else:
         return False
 #parses input into a float if possible - otherwise returns None (rather than throwing an exception)
-def parseFloatOrNone(input,minValue=0,maxValue=0):
+def parseFloatOrNone(input,minValue=0,maxValue=math.inf):
     output = None
     try:
         output = float(input)
     except ValueError:
         return None
-    if minValue != 0 or maxValue != 0:
+    if minValue != 0 or maxValue != math.inf:
         if output > maxValue or output < minValue:
             return None
     return output
