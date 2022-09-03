@@ -20,8 +20,9 @@ class Email:
         self.subject = None
         self.emailBody = EmailBody #a reference to the EmailBody module
         self.__setupEmailInformationFromConfigFile(emailIniFile)
-        #sets the attributes of the current Email object up based on a .ini file (directory of that file is the parameter of the method)
-        # this method is only called when instantiating an Email object
+        
+    #sets the attributes of the current Email object up based on a .ini file (directory of that file is the parameter of the method)
+    # this method is only called when instantiating an Email object
     def __setupEmailInformationFromConfigFile(self,emailIniFile):
         configSection = "email_config"
         config = configparser.ConfigParser()
@@ -32,6 +33,8 @@ class Email:
         self.port = int(config.getint(configSection,'port'))
         self.receivers = config.get(configSection,'receivers').split(';')
         self.language = config.get(configSection,'language')
+        
+    #sends the initial email with the initial standings in the excel file through SMTP
     def sendInitialEmail(self):
         message = EmailMessage()
         if self.language == "english":
@@ -50,6 +53,7 @@ class Email:
         
         self.connectToSmtpAndSendMail(message)
         
+    #sends the periodic email with attached image and excel file through smtp
     def sendPeriodicMail(self,players):
         message = EmailMessage()
         if self.language == "english":
@@ -59,8 +63,7 @@ class Email:
             self.mailBody = f"En excel fil (.xlsx) med pointfordelingen for feriekassen er vedhæftet\n"
             self.subject = f"feriekassen er blevet opdateret"
         self.mailBody += self.getExtraBody(players)
-        print(self.mailBody)
-        #quit() #should be removed
+        print("Body of the email:",self.mailBody)
         self.setupMailInfo(message,self.sender,self.receivers,self.subject,self.mailBody)
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
@@ -68,26 +71,33 @@ class Email:
         self.attachFiles(message,excelFile,filename,"Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
-        
+    
+    #sets up the basic information of the email
     def setupMailInfo(self,message,sender,receivers,subject,body):
         message['From'] = sender
         message['To'] = receivers
         message['Subject'] = subject
         message.set_content(body)
     
+    #attach the files (that is excelfile and screenshot thereof) to the email
     def attachFiles(self,message,excelFile,newFileName,screenshotName):
         self.attachExcelFiles(message,excelFile,newFileName)
         self.attachExcelFileScreenshot(message,excelFile,screenshotName)
+        
+    #attach the excel file to the email
     def attachExcelFiles(self,message,excelFile,newFileName):
         with open(excelFile, 'rb') as f:
             fileData = f.read()
         message.add_attachment(fileData, maintype="application", subtype="xlsx", filename=newFileName)
+        
+    #attach the screenshot of the excel file to the email
     def attachExcelFileScreenshot(self,message,excelFile,screenshotName):
         excel2img.export_img(excelFile,screenshotName, "Feriekasse", None) #"Feriekasse" = sheetname
         with open(screenshotName, 'rb') as f:
             imgData = f.read()
         message.add_attachment(imgData, maintype="image", subtype="png", filename=screenshotName)
         
+    #connect to smtp server and send the email
     def connectToSmtpAndSendMail(self,message):
         smtp = smtplib.SMTP_SSL(self.server)
         smtp.connect(self.server,self.port)
@@ -96,6 +106,7 @@ class Email:
         smtp.quit()
         print("Email sent")
     
+    #get the extra body of the email (the part that is not the same for every email)
     def getExtraBody(self,players):
         if self.language == "english":
             allExtraBodyPickers = self.emailBody.englishExtraBodyPickers.allExtraBodyPickers
@@ -106,6 +117,8 @@ class Email:
             if not extraBodyPicker.condition(players):
                 continue
             return extraBodyPicker.getText(self.language) + "\n"
+    
+    #Updates the last mail sent value in the email.ini file
     def updateLastMailSentValue(self):
         emailIniFile = fr"data/{const.FERIEKASSE_NAME}/email.ini"
         config = configparser.ConfigParser()
