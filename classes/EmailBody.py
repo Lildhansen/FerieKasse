@@ -57,8 +57,8 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
         previousPlayer = None
         for player in players:
             if previousPlayer == None:
+                previousPlayer = copy.deepcopy(player)
                 continue
-            previousPlayer = copy.deepcopy(player)
             #value used to make the threshold scale by number of points they have rather than by a constant
             deltaThreshold = (player.totalPoints + previousPlayer.totalPoints) / 20 #divided by 2 (since there are 2 teams) and then by 10
             pointDifference = abs(player.totalPoints - previousPlayer.totalPoints)
@@ -67,6 +67,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
                 self.leadingPlayerName = previousPlayer.name
                 self.trailingPlayerName = player.name
                 return True
+            previousPlayer = copy.deepcopy(player)
         return False
     def getText(self,language):
         trailingPlayerFirst = getrandbits(1) #getting a random bit (0 or 1) (faster than getting a bool)
