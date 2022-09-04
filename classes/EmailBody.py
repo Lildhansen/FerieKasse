@@ -11,6 +11,7 @@ from random import choice
 
 import utilities.util as util
 from Excel import Excel
+import utilities.constants as const
 
 excel = Excel()
 
@@ -60,7 +61,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
                 previousPlayer = copy.deepcopy(player)
                 continue
             #value used to make the threshold scale by number of points they have rather than by a constant
-            deltaThreshold = (player.totalPoints + previousPlayer.totalPoints) / 20 #divided by 2 (since there are 2 teams) and then by 10
+            deltaThreshold = (player.totalPoints + previousPlayer.totalPoints) / 2 / const.TRAILING_PERCENTAGE_THRESHOLD #divided by 2 (since there are 2 teams)
             pointDifference = abs(player.totalPoints - previousPlayer.totalPoints)
             if pointDifference <= deltaThreshold:
                 self.pointDifference = pointDifference
@@ -191,6 +192,7 @@ class LowestScoreTeamExtraBodyPicker(ExtraBodyPicker):
 
 #tied for the most points with player1 and player2
 
+#so that there not is an extra message every time - there is a chance of an emtpy extra body
 class EmptyExtraBodyPicker(ExtraBodyPicker):
     def condition(self,players):
         return True
