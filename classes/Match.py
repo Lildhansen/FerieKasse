@@ -24,7 +24,7 @@ class Match:
             self.homeTeamIsWinner = False
         else:
             self.draw = True
-    #calculate the points and return them    
+    #calculate the points for current match and return them    
     def calculate(self):
         if not self.draw:
             #if it is not an indbyrdes match
@@ -37,10 +37,10 @@ class Match:
         #draw
         else:
             return const.DRAW_POINTS
-    #calculates the points for a loss
+    #calculates the points for a loss and returns it
     def calculateLoss(self):
         return const.LOSE_POINTS + abs(self.awayGoals - self.homeGoals) * const.POINTS_PER_GOAL            
-
+    #overriden equals method - if date and homeTeam is the same, the matches are the same
     def __eq__(self, other):
         if other == None:
             return False

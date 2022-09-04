@@ -1,16 +1,16 @@
+#imports
+import random
+from ast import Raise
+import openpyxl
+from openpyxl.styles import Font, Color 
+import os
+
 #own modules
 import utilities.util as util
 import utilities.constants as const
 from classes.Team import Team
 from classes.Player import Player
 
-#imports
-import random
-from ast import Raise
-import openpyxl
-import os
-from openpyxl.styles import Font, Color
-#import xlsxwriter
 
 class Excel:
     def __init__(self,leagues=[]):
@@ -20,7 +20,7 @@ class Excel:
         self.leaguesAndColors = {}
         self.addColorsToLeagues(self.leagues)
     
-    #sets up the excel file. This is done when starting a game
+    #decide the colors for each league (to be used in the excel sheet)
     def addColorsToLeagues(self,leagues):
         availableColors = const.AVAILABLE_COLORS.copy()
         random.shuffle(const.AVAILABLE_COLORS)
@@ -28,6 +28,7 @@ class Excel:
             self.leaguesAndColors[league.name] = availableColors[0]
             availableColors.pop(0)
             
+    #sets up the excel file. This is done when starting a game
     def setupExcelFile(self):
         wb = openpyxl.Workbook() # new workbook
         ws = wb.active #new worksheet
@@ -76,10 +77,11 @@ class Excel:
         
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
+    
     #updates the excel file. this is done when a game is in progress
     def updateExcelFile(self,players):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
-        ws = wb.active #current worksheet?
+        ws = wb.active #current worksheet
         column = 1
         for player in players:
             for match in player.matches:
@@ -89,7 +91,8 @@ class Excel:
             self.addFourGoalWinBonusPoints(ws,players)
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
-    #adds bonus points for for four goal win rule
+    
+    #adds bonus points for four goal win rule
     def addFourGoalWinBonusPoints(self,ws,players):
         column = 1
         row = 1
@@ -107,14 +110,13 @@ class Excel:
                     pointCell = ws.cell(row,column+1)
                     pointCell.value += "+" + str(team.bonusPoints)
                 else:
-                    row += 1
-                
-                
+                    row += 1   
         
     #deletes the excel file. this is done when a game is over
     def deleteExcelFile(self):
         if (os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")):
             os.remove(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
+            
     #updates the points in the excel file for a single match
     def updateTeamPointsInColumn(self,match,ws,column):
         row = 2
@@ -127,10 +129,11 @@ class Excel:
                 pointCell.value += "+" + str(match.points)
                 break
             row += 1
-        #Gets the total points for a player
+            
+    #Gets the total points for a player and returns that player
     def getPlayerScoreFromExcelFile(self,player):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
-        ws = wb.active #current worksheet?
+        ws = wb.active #current worksheet
         column = 1
         #finds the player in the excel file
         while True:
@@ -152,7 +155,7 @@ class Excel:
         wb.close()
         return player
         
-        #gets the team that has the most points
+    #gets the team that has the most points
     def getHighestScoreTeam(self):
         def getHighestScoreTeamHelper(teams):
             teams.sort(key=lambda team: team.points, reverse=True)
@@ -160,18 +163,18 @@ class Excel:
             
         return self.getTeam(getHighestScoreTeamHelper)
         
-        #gets the team that has the least points
+    #gets the team that has the least points
     def getLowestScoreTeam(self):
         def getLowestScoreTeamHelper(teams):
             teams.sort(key=lambda team: team.points, reverse=False)
             return teams[0]
         return self.getTeam(getLowestScoreTeamHelper) 
         
-        #gets a team based on a function that returns a specific team
+    #gets a team based on a function that returns a specific team
     def getTeam(self,getSpecificTeamFunction):
         teams = []
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
-        ws = wb.active #current worksheet?
+        ws = wb.active #current worksheet
         column = 1
         while ws.cell(2,column+1).value != None:
             row = 2

@@ -18,8 +18,7 @@ class League:
         self.teams = []
         self.matches = []
         self.link = None
-    #will update "matches" with all matches after the date 
-    #(and perhaps after a certain match - the last one taken)
+    #will update "matches" with all matches after date of latest match covered (if any)
     def getMatchesAfterLatestMatch(self,match=Match()):
         if match.date == None:
             if datetime.datetime.now().month > 7: #if we are in the first half of the season we must get all matches from this year till now
@@ -32,7 +31,7 @@ class League:
         self.saveLatestMatchCovered()
         self.filterMatches()
 
-        
+    #saves the latest match covered for each league in the JSON file
     def saveLatestMatchCovered(self):
         if len(self.matches) == 0:
             return
@@ -89,6 +88,8 @@ class League:
                 return
             else:
                 match.points *= const.INDBYRDES_MULTIPLIER
+    #returns true if the match is a slutspil match (this is only relevant for superliga matches)
+    #Returns false if it is not - also if the league is not the superliga
     def isSlutspilMatch(self,match):
         if self.name.lower() != "superliga":
             return False
@@ -96,12 +97,14 @@ class League:
             return match.date >= datetime.date(datetime.datetime.now().year+1,4,1)
         return match.date >= datetime.date(datetime.datetime.now().year,4,1)
         
+    #calculates the bonus points for the extra rule - that is if a team wins by 4 goals or more
     def calculateFourGoalWinBonusPoints(self,match,players):
         if (match.homeTeamIsWinner and match.homeTeamIsPlayerTeam) and (match.homeGoals - match.awayGoals) >= 4:
             self.findTeamByTeamName(match.homeTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
         elif (not match.homeTeamIsWinner and match.awayTeamIsPlayerTeam) and (match.awayGoals - match.homeGoals) >= 4:
             self.findTeamByTeamName(match.awayTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
-            
+    
+    #find team in list of teams based one team name
     def findTeamByTeamName(self,teamName):
         for team in self.teams:
             if team.name.lower() == teamName.lower():

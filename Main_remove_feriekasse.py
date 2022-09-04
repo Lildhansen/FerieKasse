@@ -3,12 +3,14 @@ import utilities.constants as const
 import shutil
 
 import helperMain
-    
+
+#Takes the directory of a feriekasse and removes it - deleting the folder and everything within it
 def removeFeriekasse(feriekasseDir):
     shutil.rmtree(feriekasseDir)
     feriekasseName = feriekasseDir.split("/")[-1]
     print(f"Feriekasse, {feriekasseName}, has been removed")
-    
+
+#the main function of the file - handles the deletion of a or multiple feriekasser
 def handleRemoveFeriekasse():
     userInput = ""
     while userInput == ""  or userInput.lower() == "-l":

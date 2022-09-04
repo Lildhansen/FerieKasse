@@ -1,13 +1,9 @@
 #libraries - standard or pip
 import codecs
-from importlib.resources import path
 import os
 import orjson
 import time
 import configparser
-from collections import OrderedDict
-
-import sys #cmd args
 
 #own modules
 from menuStuff.Menu import Menu
@@ -19,12 +15,9 @@ import utilities.constants as const
 import random
 from classes.Email import Email
 
-leagues = []
-players = []
-email = None
-
-#terminal prompting the user the selection of players, then initiating the menu for selecting teams
+#Sets up the feriekasse using a menu then saves it using a JSON file
 def setupMenuInitiation():
+    players = []
     numOfPlayers = ""
     while (util.parseIntOrNone(numOfPlayers,1,8) == None):
         numOfPlayers = input("number of players: ")
@@ -41,8 +34,8 @@ def setupMenuInitiation():
     myMenu.run()
     myMenu.saveInJson()
 
-#orjson
-def setupLatestMatchCoveredForEachLeagueFile():
+#sets up the default latest match covered file for each league - that is no match at all
+def setupDefaultLatestMatchCoveredForEachLeagueFile():
     with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","wb") as file:
         file.write(orjson.dumps(const.LeagueNationsDict))
 
@@ -58,7 +51,8 @@ def folderIsValid(folderName):
         if invalidSymbol in folderName:
             return False
     return True
-        
+    
+#sets up the extra rules file. Prompts the user whether or not they want different constants and/or new rules, or alternatively the user can choose to have no change.
 def setupExtraRulesFile():
     extraRulesDictionary = {}
     userInput = ""
@@ -67,12 +61,12 @@ def setupExtraRulesFile():
     while userInput != "n" and userInput != "y":
         userInput = input("would you like to the change the constant values for points (y/n) ").lower()
     if userInput == "y":
-        const.LOSE_POINTS = getConstValue("Points for loss ")
-        const.DRAW_POINTS = getConstValue("Points for draw ")
-        const.POINTS_PER_GOAL = getConstValue("Points per goal ")
-        const.INDBYRDES_MULTIPLIER = getConstValue("Multiplier for indbyrdes matches ",float)
-        const.EXTRA_TEAMS_PER_PLAYER = getConstValue("Number of extra teams per player (where all leagues are available) ")
-        const.TEAMS_PER_PLAYER = getConstValue("Number of teams per player (including extra teams) ",minValue=const.EXTRA_TEAMS_PER_PLAYER)
+        const.LOSE_POINTS = parseIntOrFloat("Points for loss ")
+        const.DRAW_POINTS = parseIntOrFloat("Points for draw ")
+        const.POINTS_PER_GOAL = parseIntOrFloat("Points per goal ")
+        const.INDBYRDES_MULTIPLIER = parseIntOrFloat("Multiplier for indbyrdes matches ",float)
+        const.EXTRA_TEAMS_PER_PLAYER = parseIntOrFloat("Number of extra teams per player (where all leagues are available) ")
+        const.TEAMS_PER_PLAYER = parseIntOrFloat("Number of teams per player (including extra teams) ",minValue=const.EXTRA_TEAMS_PER_PLAYER)
         extraRulesDictionary = {"LOSE_POINTS":const.LOSE_POINTS,"DRAW_POINTS":const.DRAW_POINTS,"POINTS_PER_GOAL":const.POINTS_PER_GOAL,"INDBYRDES_MULTIPLIER":const.INDBYRDES_MULTIPLIER,"EXTRA_TEAMS_PER_PLAYER":const.EXTRA_TEAMS_PER_PLAYER,"TEAMS_PER_PLAYER":const.TEAMS_PER_PLAYER}
     
     #new rules
@@ -80,13 +74,15 @@ def setupExtraRulesFile():
     while userInput != "n" and userInput != "y":
         userInput = input("would you like to the add the rule where you lose points (earn money) with at least a 4 goal win (y/n) ").lower()
     if userInput == "y":
-        const.FOUR_GOAL_WIN_BONUS_POINTS = - abs(getConstValue("number of points for 4 goal win ")) #will always be negative
+        const.FOUR_GOAL_WIN_BONUS_POINTS = - abs(parseIntOrFloat("number of points for 4 goal win ")) #will always be negative
         extraRulesDictionary["FOUR_GOAL_WIN_RULE"] = True
         extraRulesDictionary["FOUR_GOAL_WIN_BONUS_POINTS"] = const.FOUR_GOAL_WIN_BONUS_POINTS
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","wb") as file:
         file.write(orjson.dumps(extraRulesDictionary))
 
-def getConstValue(prompt,type=int,minValue=0):
+#prompts the user for a value, which is parsed as either int or float. additionally a minimum value can be specified
+#The "prompt" argument specify the string that is prompted to the user for that specific value
+def promptFloatOrInt(prompt,type=int,minValue=0):
     value = None
     while not isinstance(value,type) or value < minValue:
         if type == float:
@@ -97,7 +93,8 @@ def getConstValue(prompt,type=int,minValue=0):
             raise Exception(f"type must be int or float, not {type}")
     return value
 
-
+#sets up the .ini file for the Email based on a default ini-file in the root folder
+#Prompts the user for how often they want e-mails, the language of the emails (currently only danish and english), and options for the email sent when initiating a feriekasse
 def setupEmailIniFile():
     userInput = None
     while (userInput == None):
@@ -150,6 +147,7 @@ def setupEmailIniFile():
         
     with open(fr"data/{const.FERIEKASSE_NAME}/Email.ini", "w") as config_file:
         config.write(config_file)
+
 #the main function of the file - sets up the feriekasse
 def initiateFerieKasse():
     #opening prompts
@@ -169,6 +167,7 @@ def initiateFerieKasse():
     const.FERIEKASSE_NAME = nameInput.strip()
 
     newDir = fr"./data/{const.FERIEKASSE_NAME}"
+    leagues = []
     #if the folder already exist - the user is either mid game or havent filled out all information
     if os.path.exists(newDir):
         print("a feriekasse with this name already exists")
@@ -187,7 +186,7 @@ def initiateFerieKasse():
         leagues = helperMain.getAllLeagues()
         myExcel = Excel(leagues)
         myExcel.setupExcelFile()
-        setupLatestMatchCoveredForEachLeagueFile()
+        setupDefaultLatestMatchCoveredForEachLeagueFile()
         print("successfully started feriekasse:",const.FERIEKASSE_NAME)
     #completes the setup if the user has added the folder themselves - and then added the leaguesAndTeams.json file
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
@@ -196,7 +195,7 @@ def initiateFerieKasse():
         myExcel = Excel(leagues)
         myExcel.setupExcelFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/latestMatchCovered.json"):
-        setupLatestMatchCoveredForEachLeagueFile()
+        setupDefaultLatestMatchCoveredForEachLeagueFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
         setupExtraRulesFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):

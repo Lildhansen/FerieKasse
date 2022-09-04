@@ -6,19 +6,9 @@ import os
 import colorama
 import copy
 
-
 import utilities.constants as const
 
 #todo
-"""
-den er kinda ustabil
-    den kører igen (kun 1 gang til) hvis den crasher
-    hvis man trykker enter i lidt for lang tid registrerer den  det for begge
-har ikke testet for mere end 2 spillere
-clean up
-comments
-tests?
-"""
 
 
         
@@ -35,10 +25,11 @@ class Menu:
         self.round = 1
         self.endOfRound = False
         self.teamsPickedCount = 0
-        self.lastRound = False
-        time.sleep(4)
+        self.bonusRound = False
+        time.sleep(1) #prevent the enter from previous input to be read as input here
     def getSelectedIndex(self):
         return self.__selectedIndex
+    #sets up the menu, so that it can be run
     def setupMenu(self):
         with open("./data/teams.json","r",encoding='utf-8') as file:
             leagueDict = json.load(file)
@@ -48,37 +39,41 @@ class Menu:
             subMenu.options = leagueDict[leagueItem]
             for player in self.players:
                 player.availableLeagues.append(subMenu)
-    def setupLastRound(self):
+    #sets up the bonus round - that is the round where every league is available
+    def setupBonusRound(self):
         for player in self.players:
             for league in player.pickedLeagues:
                 player.availableLeagues.append(league)
+    #runs the menu
     def run(self):
         self.running = True
         os.system("cls")
         while self.running:
-            #if final round
+            #if bonus round
             if (self.currentPlayer.availableLeagues == []):
-                self.lastRound = True
-                self.setupLastRound()
+                self.bonusRound = True
+                self.setupBonusRound()
             #if we are done
             if (self.round == const.TEAMS_PER_PLAYER+1):
                 self.running = False
                 return
             self.displayMenu()
             self.readInput()
+    #displays the menu on the command line
     def displayMenu(self):
         os.system("cls")
-        if (self.lastRound):
+        if (self.bonusRound):
             print("-----Last round - every league is available now-----\n")
         print(self.title," - ",self.currentPlayer.name)
         self.printOptions()
+    #Return the title of an option (in a prettier format)
     def getOptionTitle(self,league):
         leagueList = league.split(",")
         return leagueList[0] + "(" + leagueList[1] +")"
-        #does the reverse of getOptionTitle - returns a string of the form "team,player"
+    #does the reverse of getOptionTitle - returns a string of the form "team,player"
     def unGetOptionTitle(self,league):
         return league.replace("(",",").replace(")","")
-         
+    #Gets input from the user, and calls the appropriate functions based on key press
     def readInput(self):
         i = 0
         while True:
@@ -101,18 +96,21 @@ class Menu:
                 if (prompt == "y"):
                     self.running = False
                 return
+    #move one option up in the menu
     def moveUp(self):
         time.sleep(.1)
         if (self.__selectedIndex - 1 < 0):
             self.__selectedIndex = len(self.currentPlayer.availableLeagues)-1
         else:
             self.__selectedIndex -= 1
+    #move one option down in the menu
     def moveDown(self):
         time.sleep(.1)
         if (self.__selectedIndex + 1 >= len(self.currentPlayer.availableLeagues)):
             self.__selectedIndex = 0
         else:
             self.__selectedIndex += 1
+    #selects the currently selected option
     def selectOption(self):
         time.sleep(.1)
         #self.running = False
@@ -124,9 +122,10 @@ class Menu:
         self.teamsPickedCount += 1
         self.nextPlayer()
         self.__selectedIndex = 0 #sets picker pointer to top of menu (avoids index out of bounds error)
+    #displays the current available options to the user - as well as the cursor (which is the currently selected option)
     def printOptions(self):
         #if last round
-        if (self.lastRound == True):
+        if (self.bonusRound == True):
             for i in range(len(self.currentPlayer.availableLeagues)):
                 if (i == self.__selectedIndex):
                     print("  >",end="")
@@ -147,6 +146,7 @@ class Menu:
         print("\nunavailable leagues: ")
         for league in self.currentPlayer.pickedLeagues:
             print(colorama.Fore.RED,league.title,colorama.Style.RESET_ALL)
+    #Let the next player have their turn
     def nextPlayer(self):
         if (self.teamsPickedCount % self.playerCount == 0 and self.teamsPickedCount != 0): #if end of round
             self.round += 1
@@ -159,7 +159,7 @@ class Menu:
         print(nextPlayerIndex)
         self.currentPlayer = self.players[nextPlayerIndex]
         self.run()
-    
+    #save the result of the menu to a json file
     def saveInJson(self):
         jsonData = copy.deepcopy(const.LeagueNationsDict)
         #save jsonData and then overwrite it with the new data
@@ -171,6 +171,8 @@ class Menu:
                             jsonData[self.unGetOptionTitle(league.title)].update({team:player.name})
         with open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","wb") as file:
             file.write(orjson.dumps(jsonData))
+
+
 
 class SubMenu(Menu):
     def __init__(self, players, title, menu):
@@ -184,6 +186,7 @@ class SubMenu(Menu):
         self.options = [] #list of strings
         self.pickedOptions = [] #list of strings
         self.currentPlayer = None
+    #runs the Submenu
     def run(self):
         self.__selectedIndex = 0 #sets picker pointer to top of menu (avoids index out of bounds error)
         self.running = True
@@ -193,13 +196,16 @@ class SubMenu(Menu):
             self.readInput()
             if self.hasExitted:
                 return False
+    #displays the submenu to the user in the console
     def displayMenu(self):
         os.system("cls")
         print(self.title," - ",self.currentPlayer.name)
         self.printOptions()
+    #gets the title of the option (in a prettier format) 
     def getOptionTitle(self,league):
         leagueList = league.split(",")
         return leagueList[0] + "(" + leagueList[1] +")"
+    #displays the current available options to the user - as well as the cursor (which is the currently selected option)
     def printOptions(self):
         for i in range(len(self.options)):
             if (i == self.__selectedIndex):
@@ -209,6 +215,7 @@ class SubMenu(Menu):
             print("\n picked teams: ")
         for option in self.pickedOptions:
             print(colorama.Fore.RED,option,colorama.Style.RESET_ALL)
+    #Gets input from the user, and calls the appropriate functions based on key press
     def readInput(self):
         i = 0
         while True:
@@ -227,29 +234,32 @@ class SubMenu(Menu):
                 self.running = False
                 self.hasExitted = True
                 return
+    #moves the cursor up one option
     def moveUp(self):
         time.sleep(.1)
         if (self.__selectedIndex - 1 < 0):
             self.__selectedIndex = len(self.options)-1
         else:
             self.__selectedIndex -= 1
+    #moves the cursor down one option
     def moveDown(self):
         time.sleep(.1)
         if (self.__selectedIndex + 1 >= len(self.options)):
             self.__selectedIndex = 0
         else:
             self.__selectedIndex += 1
+    #selects the currently selected option
     def selectOption(self):
         time.sleep(.1)
         option = self.options.pop(self.__selectedIndex)
         self.pickedOptions.append(option)
         self.selectTeam(option)
+    #select the team - the one specifed in the "option" parameter by adding it to the current player's team list and removing it as an option
+    #this will close this submenu - and the user will return to the main menu
     def selectTeam(self,option):
         time.sleep(.1)
         self.currentPlayer.teams.append(option)
         self.currentPlayer.availableLeagues.remove(self)
-        #for player in self.players:
-        #    player.pickedLeagues.append(self)
         self.currentPlayer.pickedLeagues.append(self)
         self.running = False
         
