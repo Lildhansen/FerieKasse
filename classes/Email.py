@@ -57,10 +57,10 @@ class Email:
     def sendPeriodicMail(self,players):
         message = EmailMessage()
         if self.language == "english":
-            self.mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse.\n"
+            self.mailBody = f"Attached is an excel file (.xlsx) and a picture with the current standings of the feriekasse.\n"
             self.subject = f"feriekassen has been updated"
         elif self.language == "danish":
-            self.mailBody = f"En excel fil (.xlsx) med pointfordelingen for feriekassen er vedhæftet\n"
+            self.mailBody = f"En excel fil (.xlsx) samt et billede med pointfordelingen for feriekassen er vedhæftet\n"
             self.subject = f"feriekassen er blevet opdateret"
         self.mailBody += self.getExtraBody(players)
         print("Body of the email:",self.mailBody)
