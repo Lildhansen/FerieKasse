@@ -49,7 +49,7 @@ class Email:
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
-        self.attachFiles(message,excelFile,filename,"Feriekasse.png")
+        self.attachFiles(message,excelFile,filename,fr"data/{const.FERIEKASSE_NAME}/Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
         
@@ -68,7 +68,7 @@ class Email:
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
-        self.attachFiles(message,excelFile,filename,"Feriekasse.png")
+        self.attachFiles(message,excelFile,filename,fr"data/{const.FERIEKASSE_NAME}/Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
     
@@ -78,6 +78,7 @@ class Email:
         message['To'] = receivers
         message['Subject'] = subject
         message.set_content(body)
+        
     
     #attach the files (that is excelfile and screenshot thereof) to the email
     def attachFiles(self,message,excelFile,newFileName,screenshotName):

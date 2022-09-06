@@ -12,6 +12,7 @@ class Match:
         self.homeTeamIsWinner = None #will remain none if it is a draw
         self.draw = False
         self.points = 0
+        self.bonusPoints = 0
     #calculate points for match and saves it in the points property
     def calculatePoints(self):
         self.setupPointCalculation()
@@ -32,7 +33,6 @@ class Match:
             #if the player team won     if (awayteam won and awayteam is player team) or (hometeam won and hometeam is player team)
                 if (not self.homeTeamIsWinner and self.awayTeamIsPlayerTeam) or (self.homeTeamIsWinner and self.homeTeamIsPlayerTeam):
                     return 0
-
             return self.calculateLoss()
         #draw
         else:

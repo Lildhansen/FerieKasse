@@ -110,7 +110,16 @@ def assignMatchToPlayers(match,players):
         tryAppendMatch(awayPlayer,match)
     if not match.homeTeamIsWinner or match.draw:
         tryAppendMatch(homePlayer,match)
+    if const.FOUR_GOAL_WIN_BONUS_POINTS:
+        if match.bonusPoints != 0:
+
+            if match.homeTeamIsWinner:
+                tryAppendMatch(homePlayer,match)
+            else:
+                tryAppendMatch(awayPlayer,match) 
+      
         
+  
 #appends match to player's matches, except if player is None, then nothing happens
 def tryAppendMatch(player,match):
     if player == None:
@@ -156,7 +165,7 @@ def UpdateFerieKasse():
                 league.getMatchesAfterLatestMatch()
             else:
                 league.getMatchesAfterLatestMatch(match)
-            league.calculatePointsForMatches(players)
+            league.calculatePointsForMatches()
             league.removeMatchesYielding0Points()
             for match in league.matches:
                 assignMatchToPlayers(match,players)
