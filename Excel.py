@@ -85,48 +85,31 @@ class Excel:
         column = 1
         for player in players:
             for match in player.matches:
-                self.updateTeamPointsInColumn(match,ws,column)
+                self.updateTeamPointsInColumn(match,ws,column,False)
+                if const.FOUR_GOAL_WIN_RULE:
+                    self.updateTeamPointsInColumn(match,ws,column,True)
             column += 2
-        if const.FOUR_GOAL_WIN_RULE:
-            self.addFourGoalWinBonusPoints(ws,players)
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
-        wb.close()
+        wb.close() 
+     
     
-    #adds bonus points for four goal win rule
-    def addFourGoalWinBonusPoints(self,ws,players):
-        column = 1
-        row = 1
-        for player in players:
-            while True:
-                if player.name == ws.cell(row,column).value:
-                    break
-                column += 2
-            for team in player.teams:
-                row = 1
-                if team.bonusPoints == 0:
-                    continue
-                cell = ws.cell(row,column)
-                if team.name == cell.value:
-                    pointCell = ws.cell(row,column+1)
-                    pointCell.value += "+" + str(team.bonusPoints)
-                else:
-                    row += 1   
-        
     #deletes the excel file. this is done when a game is over
     def deleteExcelFile(self):
         if (os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")):
             os.remove(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
             
     #updates the points in the excel file for a single match
-    def updateTeamPointsInColumn(self,match,ws,column):
+    def updateTeamPointsInColumn(self,match,ws,column,isBonusPoints):
         row = 2
         while True:
             cell = ws.cell(row,column)
-            if cell.value == "Total:":
-                Raise(Exception("team not found in excel file"))
-            if cell.value == match.homeTeam or cell.value == match.awayTeam:
+            if cell.value == "Total:": #team not found
+                if isBonusPoints: #since the team is not necessarily found 
+                    return
+                raise Exception("team not found in excel file")
+            if (not isBonusPoints and (cell.value == match.homeTeam or cell.value == match.awayTeam)) or (isBonusPoints and ((match.homeTeamIsWinner and cell.value == match.homeTeam) or (not match.homeTeamIsWinner and cell.value == match.awayTeam))):
                 pointCell = ws.cell(row,column+1)
-                pointCell.value += "+" + str(match.points)
+                pointCell.value += "+" + str(match.bonusPoints if isBonusPoints else match.points)
                 break
             row += 1
             

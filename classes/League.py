@@ -9,6 +9,7 @@ import copy
 from classes.Match import Match
 from utilities.Soup import Soup
 import utilities.constants as const
+import utilities.util as util
 
 class League:
     def __init__(self,name,country):
@@ -68,20 +69,21 @@ class League:
         originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop
         for match in originalMatchList:
             if (not match.draw):
-                if (match.homeTeamIsWinner and not match.awayTeamIsPlayerTeam) or (not match.homeTeamIsWinner and not match.homeTeamIsPlayerTeam):
+                #if (match.homeTeamIsWinner and not match.awayTeamIsPlayerTeam) or (not match.homeTeamIsWinner and not match.homeTeamIsPlayerTeam):
+                if match.points == 0 and match.bonusPoints == 0:
                     self.matches.remove(match)           
     #calculates the points for all matches and saves the points in the match objects
-    def calculatePointsForMatches(self,players=[]):
+    def calculatePointsForMatches(self):
         for match in self.matches:
             match.calculatePoints()
             self.applyMatchMultipliers(match)
             if const.FOUR_GOAL_WIN_RULE:
-                self.calculateFourGoalWinBonusPoints(match,players)
+                self.applyFourGoalWinBonus(match)
     #apply possible multipliers for the match - if it was an "indbyrdes" match
     def applyMatchMultipliers(self,match):
         if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match
-            homeTeam = self.findTeamByTeamName(match.homeTeam)
-            awayTeam = self.findTeamByTeamName(match.awayTeam)
+            homeTeam = util.findTeamByTeamName(self.teams,match.homeTeam)
+            awayTeam = util.findTeamByTeamName(self.teams,match.awayTeam)
             if homeTeam.playerName == awayTeam.playerName:
                 match.points *= 0
             elif self.isSlutspilMatch(match) and match.homeTeamIsWinner:
@@ -98,16 +100,10 @@ class League:
         return match.date >= datetime.date(datetime.datetime.now().year,4,1)
         
     #calculates the bonus points for the extra rule - that is if a team wins by 4 goals or more
-    def calculateFourGoalWinBonusPoints(self,match,players):
-        if (match.homeTeamIsWinner and match.homeTeamIsPlayerTeam) and (match.homeGoals - match.awayGoals) >= 4:
-            self.findTeamByTeamName(match.homeTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
-        elif (not match.homeTeamIsWinner and match.awayTeamIsPlayerTeam) and (match.awayGoals - match.homeGoals) >= 4:
-            self.findTeamByTeamName(match.awayTeam).bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
+    def applyFourGoalWinBonus(self,match):
+        if (match.homeTeamIsWinner and match.homeTeamIsPlayerTeam) and (match.homeGoals - match.awayGoals) >= 4: #home win by 4+ goals
+            match.bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
+        elif (not match.homeTeamIsWinner and match.awayTeamIsPlayerTeam) and (match.awayGoals - match.homeGoals) >= 4: #away win with 4+ goals
+            match.bonusPoints += const.FOUR_GOAL_WIN_BONUS_POINTS
     
-    #find team in list of teams based one team name
-    def findTeamByTeamName(self,teamName):
-        for team in self.teams:
-            if team.name.lower() == teamName.lower():
-                return team
-        raise Exception("team not found")
            

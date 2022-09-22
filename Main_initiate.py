@@ -61,12 +61,12 @@ def setupExtraRulesFile():
     while userInput != "n" and userInput != "y":
         userInput = input("would you like to the change the constant values for points (y/n) ").lower()
     if userInput == "y":
-        const.LOSE_POINTS = parseIntOrFloat("Points for loss ")
-        const.DRAW_POINTS = parseIntOrFloat("Points for draw ")
-        const.POINTS_PER_GOAL = parseIntOrFloat("Points per goal ")
-        const.INDBYRDES_MULTIPLIER = parseIntOrFloat("Multiplier for indbyrdes matches ",float)
-        const.EXTRA_TEAMS_PER_PLAYER = parseIntOrFloat("Number of extra teams per player (where all leagues are available) ")
-        const.TEAMS_PER_PLAYER = parseIntOrFloat("Number of teams per player (including extra teams) ",minValue=const.EXTRA_TEAMS_PER_PLAYER)
+        const.LOSE_POINTS = promptFloatOrInt("Points for loss ")
+        const.DRAW_POINTS = promptFloatOrInt("Points for draw ")
+        const.POINTS_PER_GOAL = promptFloatOrInt("Points per goal ")
+        const.INDBYRDES_MULTIPLIER = promptFloatOrInt("Multiplier for indbyrdes matches ",float)
+        const.EXTRA_TEAMS_PER_PLAYER = promptFloatOrInt("Number of extra teams per player (where all leagues are available) ")
+        const.TEAMS_PER_PLAYER = promptFloatOrInt("Number of teams per player (including extra teams) ",minValue=const.EXTRA_TEAMS_PER_PLAYER)
         extraRulesDictionary = {"LOSE_POINTS":const.LOSE_POINTS,"DRAW_POINTS":const.DRAW_POINTS,"POINTS_PER_GOAL":const.POINTS_PER_GOAL,"INDBYRDES_MULTIPLIER":const.INDBYRDES_MULTIPLIER,"EXTRA_TEAMS_PER_PLAYER":const.EXTRA_TEAMS_PER_PLAYER,"TEAMS_PER_PLAYER":const.TEAMS_PER_PLAYER}
     
     #new rules
@@ -74,7 +74,7 @@ def setupExtraRulesFile():
     while userInput != "n" and userInput != "y":
         userInput = input("would you like to the add the rule where you lose points (earn money) with at least a 4 goal win (y/n) ").lower()
     if userInput == "y":
-        const.FOUR_GOAL_WIN_BONUS_POINTS = - abs(parseIntOrFloat("number of points for 4 goal win ")) #will always be negative
+        const.FOUR_GOAL_WIN_BONUS_POINTS = - abs(promptFloatOrInt("number of points for 4 goal win ")) #will always be negative
         extraRulesDictionary["FOUR_GOAL_WIN_RULE"] = True
         extraRulesDictionary["FOUR_GOAL_WIN_BONUS_POINTS"] = const.FOUR_GOAL_WIN_BONUS_POINTS
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","wb") as file:

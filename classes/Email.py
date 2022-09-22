@@ -49,7 +49,7 @@ class Email:
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
-        self.attachFiles(message,excelFile,filename,"Feriekasse.png")
+        self.attachFiles(message,excelFile,filename,fr"data/{const.FERIEKASSE_NAME}/Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
         
@@ -57,10 +57,10 @@ class Email:
     def sendPeriodicMail(self,players):
         message = EmailMessage()
         if self.language == "english":
-            self.mailBody = f"Attached is an excel file (.xlsx) with the current standings of the feriekasse.\n"
+            self.mailBody = f"Attached is an excel file (.xlsx) and a picture with the current standings of the feriekasse.\n"
             self.subject = f"feriekassen has been updated"
         elif self.language == "danish":
-            self.mailBody = f"En excel fil (.xlsx) med pointfordelingen for feriekassen er vedhæftet\n"
+            self.mailBody = f"En excel fil (.xlsx) samt et billede med pointfordelingen for feriekassen er vedhæftet\n"
             self.subject = f"feriekassen er blevet opdateret"
         self.mailBody += self.getExtraBody(players)
         print("Body of the email:",self.mailBody)
@@ -68,7 +68,7 @@ class Email:
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
-        self.attachFiles(message,excelFile,filename,"Feriekasse.png")
+        self.attachFiles(message,excelFile,filename,fr"data/{const.FERIEKASSE_NAME}/Feriekasse.png")
         
         self.connectToSmtpAndSendMail(message)
     
@@ -78,6 +78,7 @@ class Email:
         message['To'] = receivers
         message['Subject'] = subject
         message.set_content(body)
+        
     
     #attach the files (that is excelfile and screenshot thereof) to the email
     def attachFiles(self,message,excelFile,newFileName,screenshotName):

@@ -4,6 +4,7 @@ from classes.Team import Team
 from classes.Match import Match
 import utilities.constants as const
 import datetime
+import utilities.util as util
 
 def getMockLeagueForFindTeamTests():
     mockLeague = League("testName","testCountry")
@@ -96,9 +97,9 @@ def test_calculatePointsForMatches_calculates_bonus_points_correctly_for_4_goal_
     myLeague.teams.extend([team1,germany,team3,team2,brazil,team6])
     
     myLeague.calculatePointsForMatches()
-    assert team1.bonusPoints == -10 #
-    assert germany.bonusPoints == -10
-    assert team3.bonusPoints == 0
+    assert match1.bonusPoints == -10 #
+    assert match2.bonusPoints == -10
+    assert match3.bonusPoints == 0
 
 
 
@@ -244,10 +245,10 @@ def test_findTeamByTeamName_finds_team_if_it_is_there():
     mockLeague = getMockLeagueForFindTeamTests()
     newTeam = Team("newName","newPlayer")
     mockLeague.teams.append(newTeam)
-    assert mockLeague.findTeamByTeamName(newTeam.name) == newTeam
+    assert util.findTeamByTeamName(mockLeague.teams,newTeam.name) == newTeam
     
 def test_findTeamByTeamName_raises_exception_if_team_is_not_there():
     mockLeague = getMockLeagueForFindTeamTests()
     newTeamNotThere = Team("raise","exception")
     with pytest.raises(Exception):
-        mockLeague.findTeamByTeamName(newTeamNotThere.name) == newTeamNotThere
+        util.findTeamByTeamName(mockLeague.teams,newTeamNotThere.name) == newTeamNotThere

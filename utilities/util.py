@@ -94,6 +94,13 @@ def textToDate(text):
 def matchTupleToMatchObject(matchTuple):
     return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
 
+#find team in list of teams based one team name
+def findTeamByTeamName(teams,teamName):
+    for team in teams:
+        if team.name.lower() == teamName.lower():
+            return team
+    raise Exception("team not found")
+
 #gets all players from leaguesAndTeams.json and make a Player object for each of them and finally returns a list of them
 def getPlayerObjectsFromFile():
     players = []
