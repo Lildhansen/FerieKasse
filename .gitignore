@@ -1,7 +1,6 @@
 # saves:
-data/*/
-data/*/
-data
+data/*
+!data/unitTests/
 
 # config:
 /Email.ini
