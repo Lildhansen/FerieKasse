@@ -97,9 +97,9 @@ def test_calculatePointsForMatches_calculates_bonus_points_correctly_for_4_goal_
     myLeague.teams.extend([team1,germany,team3,team2,brazil,team6])
     
     myLeague.calculatePointsForMatches()
-    assert team1.bonusPoints == -10 #
-    assert germany.bonusPoints == -10
-    assert team3.bonusPoints == 0
+    assert match1.bonusPoints == -10 #
+    assert match2.bonusPoints == -10
+    assert match3.bonusPoints == 0
 
 
 
