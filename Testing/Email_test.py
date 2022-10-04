@@ -5,10 +5,10 @@ from email.message import EmailMessage
 
 from classes.Email import Email
 
-iniFileLocation = os.path.abspath(os.path.join(os.path.join(os.path.dirname(__file__),"EmailTestMocks"),'EmailTest.ini'))
+#how to handle directories with github actions
+iniFileLocation = os.path.join(os.path.join(os.path.dirname(__file__),"EmailTestMocks"),'EmailTest.ini')
 
 def test_data_is_setup_correct_from_ini_file():
-    print((os.path.join(os.path.dirname(__file__)),"EmailTestMocks",'EmailTest.ini'))
     email = Email(iniFileLocation)
     assert email.sender == "me"
     assert email.password == "pword"
