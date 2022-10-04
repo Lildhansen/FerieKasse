@@ -45,7 +45,7 @@ class Email:
             self.mailBody = self.emailBody.danishInitialEmailBody
         
         
-        self.setupMailInfo(message,self.sender,self.receivers,self.subject,self.mailBody)
+        self.setupMailInfo(message)
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
@@ -64,7 +64,7 @@ class Email:
             self.subject = f"feriekassen er blevet opdateret"
         self.mailBody += self.getExtraBody(players)
         print("Body of the email:",self.mailBody)
-        self.setupMailInfo(message,self.sender,self.receivers,self.subject,self.mailBody)
+        self.setupMailInfo(message)
         
         excelFile = fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx" 
         filename = "feriekasse (" + date.today().strftime("%d-%m-%Y") + ").xlsx"
@@ -73,25 +73,25 @@ class Email:
         self.connectToSmtpAndSendMail(message)
     
     #sets up the basic information of the email
-    def setupMailInfo(self,message,sender,receivers,subject,body):
-        message['From'] = sender
-        message['To'] = receivers
-        message['Subject'] = subject
-        message.set_content(body)
+    def setupMailInfo(self,message):
+        message['From'] = self.sender
+        message['To'] = self.receivers
+        message['Subject'] = self.subject
+        message.set_content(self.mailBody)
         
     
     #attach the files (that is excelfile and screenshot thereof) to the email
     def attachFiles(self,message,excelFile,newFileName,screenshotName):
-        self.attachExcelFiles(message,excelFile,newFileName)
+        self.attachExcelFile(message,excelFile,newFileName)
         self.attachExcelFileScreenshot(message,excelFile,screenshotName)
         
     #attach the excel file to the email
-    def attachExcelFiles(self,message,excelFile,newFileName):
+    def attachExcelFile(self,message,excelFile,newFileName):
         with open(excelFile, 'rb') as f:
             fileData = f.read()
         message.add_attachment(fileData, maintype="application", subtype="xlsx", filename=newFileName)
         
-    #attach the screenshot of the excel file to the email
+    #take screenshot of the excel file and attach it to the email
     def attachExcelFileScreenshot(self,message,excelFile,screenshotName):
         excel2img.export_img(excelFile,screenshotName, "Feriekasse", None) #"Feriekasse" = sheetname
         with open(screenshotName, 'rb') as f:
@@ -120,16 +120,15 @@ class Email:
             return extraBodyPicker.getText(self.language) + "\n"
     
     #Updates the last mail sent value in the email.ini file
-    def updateLastMailSentValue(self):
-        emailIniFile = fr"data/{const.FERIEKASSE_NAME}/email.ini"
+    def updateLastMailSentValue(self,emailIniFileLocation):
         config = configparser.ConfigParser()
-        config.read(emailIniFile)
+        config.read(emailIniFileLocation)
         try:
             config.add_section("email_config")
         except configparser.DuplicateSectionError:
             pass
         config.set("email_config", "lastDateSent", date.today().isoformat())
-        with open(emailIniFile, "w") as config_file:
+        with open(emailIniFileLocation, "w") as config_file:
             config.write(config_file)
 
 

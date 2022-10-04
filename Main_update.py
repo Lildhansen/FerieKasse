@@ -159,7 +159,7 @@ def mailShouldBeSent():
 def sendPeriodicMail(players):
     email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
     email.sendPeriodicMail(players)
-    email.updateLastMailSentValue()
+    email.updateLastMailSentValue(fr"data/{const.FERIEKASSE_NAME}/email.ini")
 
 #the main function of the file - updates an or multiple feriekasser
 def UpdateFerieKasse():
