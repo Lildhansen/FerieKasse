@@ -11,6 +11,7 @@ colorama==0.4.4
 cryptography==36.0.1
 distlib==0.3.4
 et-xmlfile==1.1.0
+excel2img==1.4.0
 executing==0.8.3
 filelock==3.4.2
 freezegun==1.2.1
@@ -26,6 +27,7 @@ orjson==3.6.8
 outcome==1.1.0
 packaging==21.3
 pickleshare==0.7.5
+Pillow==9.2.0
 pipenv==2022.1.8
 platformdirs==2.5.0
 pluggy==1.0.0
@@ -36,6 +38,7 @@ pycparser==2.21
 Pygments==2.11.2
 pyOpenSSL==22.0.0
 pyparsing==3.0.7
+pypiwin32==223
 PySocks==1.7.1
 pytest==7.0.1
 python-dateutil==2.8.2
