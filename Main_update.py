@@ -57,6 +57,19 @@ def loadFerieKasser():
         raise Exception(f"feriekasse {const.FERIEKASSE_NAME} does not exist")
     return [const.FERIEKASSE_NAME]
 
+#removes the feriekasser without the proper data/files
+def removeInvalidFeriekasserToRun(feriekasser):
+    for feriekasse in feriekasser:
+        if not os.path.exists(fr"./data/{feriekasse}/Feriekasse.xlsx"):
+            feriekasser.remove(feriekasse)
+        elif not os.path.exists(fr"./data/{feriekasse}/leaguesAndTeams.json"):
+            feriekasser.remove(feriekasse)
+        elif not os.path.exists(fr"./data/{feriekasse}/latestMatchCovered.json"):
+            feriekasser.remove(feriekasse)
+        #more checks?
+
+
+
 #sets the extra rules of the feriekasse by reading from the extra rules JSON file and then setting the constant values
 def configureExtraRules():
     with open(fr"data/{const.FERIEKASSE_NAME}/extraRules.json","r") as file:
@@ -146,14 +159,19 @@ def mailShouldBeSent():
 def sendPeriodicMail(players):
     email = Email(os.path.join(os.path.join(os.path.join(os.path.dirname(__file__),"data"),const.FERIEKASSE_NAME),"Email.ini"))
     email.sendPeriodicMail(players)
-    email.updateLastMailSentValue()
+    email.updateLastMailSentValue(fr"data/{const.FERIEKASSE_NAME}/email.ini")
 
 #the main function of the file - updates an or multiple feriekasser
 def UpdateFerieKasse():
     feriekasser = loadFerieKasser()
+    removeInvalidFeriekasserToRun(feriekasser)
+    if (feriekasser == []):
+        print("selected feriekasser cannot be run")
+        quit()
     if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
         configureExtraRules()
     for feriekasse in feriekasser: #usually just one, but with the -a flag we run multiple feriekasser
+        print(f"running feriekasse, {feriekasse}")
         const.FERIEKASSE_NAME = feriekasse
         leagues = helperMain.getAllLeagues()
         setupLinks(leagues)
