@@ -44,7 +44,6 @@ def test_filterMatches_filters_matches_not_involving_player_teams():
     myLeague.filterMatches()
     assert len(myLeague.matches) == 3
     assert myLeague.matches == [match1,match2,match3]
-    assert False
 
 def test_calculatePointsForMatches_calculates_points_correctly():
     myLeague = League("league1","country1")
