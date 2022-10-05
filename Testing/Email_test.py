@@ -17,6 +17,7 @@ def test_data_is_setup_correct_from_ini_file():
     assert len(email.receivers) == 2
     assert email.receivers[0] == "a"
     assert email.receivers[1] == "b"
+    assert False
 
 def test_setupMailInfo_sets_up_correct_info_for_message():
     email = Email(iniFileLocation)
