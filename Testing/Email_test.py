@@ -7,7 +7,7 @@ from classes.Email import Email
 
 #how to handle directories with github actions
 iniFileLocation = os.path.join(os.path.join(os.path.dirname(__file__),"EmailTestMocks"),'EmailTest.ini')
-
+iniFileLocation = "C:/Users/madsl/Github/FerieKasse/Testing/EmailTestMocks/EmailTest.ini"
 def test_data_is_setup_correct_from_ini_file():
     email = Email(iniFileLocation)
     assert email.sender == "me"
