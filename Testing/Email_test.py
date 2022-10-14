@@ -6,7 +6,6 @@ from email.message import EmailMessage
 from classes.Email import Email
 
 iniFileLocation = os.path.join(os.path.join(os.path.dirname(__file__),"EmailTestMocks"),'EmailTest.ini')
-iniFileLocation = "Testing/EmailTestMocks/EmailTest.ini"
 def test_data_is_setup_correct_from_ini_file():
     email = Email(iniFileLocation)
     assert email.sender == "me"
