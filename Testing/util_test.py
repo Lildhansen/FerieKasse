@@ -4,12 +4,31 @@ import utilities.util as util
 from classes.Player import Player
 from classes.Team import Team
 
+import json
+from collections import namedtuple
+
 def test_parseIntOrNone_parses_int_correctly():
     assert util.parseIntOrNone("100")==100
 
 @pytest.mark.parametrize("test_input", [("2.5"),("abcdef"),("")])
 def test_parseIntOrNone_returns_None_if_input_cannnot_be_int(test_input):
     assert util.parseIntOrNone(test_input) == None
+    
+@pytest.mark.parametrize("test_input,expected", [("2.5",2.5),("10",10)])    
+def test_parseFloatOrNone_parses_float_correctly(test_input,expected):
+    assert util.parseFloatOrNone(test_input)==expected
+
+@pytest.mark.parametrize("test_input", [("abcdef"),("")])
+def test_parseFloatOrNone_returns_None_if_input_cannnot_be_float(test_input):
+    assert util.parseFloatOrNone(test_input) == None
+    
+@pytest.mark.parametrize("test_input", [("1"),(1),("True")])
+def test_parseBool_returns_true_if_passed_truthy_value(test_input):
+    assert util.parseBool(test_input) == True
+
+@pytest.mark.parametrize("test_input", [(123),("this is False"),(""),(None)])
+def test_parseBool_returns_false_if_passed_non_truthy_values(test_input):
+    assert util.parseBool(test_input) == False
         
 @pytest.mark.parametrize("test_input,expected", [("abcædefgæ", "abcdefg"), ("123-. Hej øå 123312''", "123-. Hej  123312''"),
                                                  ("æøå", ""),("æøåæøåæøå abc"," abc") ])
@@ -26,9 +45,43 @@ def test_removeInvalidLetters_keeps_string_intact_in_no_invalid_letters():
 def test_numberToExcelColumn_returns_correct_columnstring(test_input,expected):
     assert util.numberToExcelColumn(test_input) == expected
 
+@pytest.mark.parametrize("test_input,expected", [("1+3+5+1",10),("=1",1)])      
+def test_getSumOfExcelCell_returns_correct_sum(test_input,expected):
+    assert util.getSumOfExcelCell(test_input) == expected
+
+@pytest.mark.parametrize("test_input,expected", [("1,2,3,4,5",[1,2,3,4,5]),("1,2,None",[1,2,None])])  
+def test_splitAndConvertToInt_returns_correct_list(test_input,expected):
+    assert util.splitAndConvertToInt(test_input,",") == expected
+
 def test_textToDate_converts_correctly():
     assert util.textToDate("2022-01-01") == date(2022,1,1)
 
+def test_matchTupleToMatchObject_gets_match_object_with_correct_data_from_tuple():
+    matchJson = "{\"date\": \"2022-05-22\", \"homeTeam\": \"Chelsea\", \"homeGoals\": 2, \"awayTeam\": \"Watford\", \"awayGoals\": 1, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0}"
+    matchTuple = json.loads(matchJson, object_hook = lambda d : namedtuple('Match', d.keys())(*d.values()))
+    match = util.matchTupleToMatchObject(matchTuple)
+    assert match.date == util.textToDate("2022-5-22")
+    assert match.homeTeam == "Chelsea"
+    assert match.homeGoals == 2
+    assert match.awayGoals == 1
+    assert match.awayTeam == "Watford"
+        
+def test_findTeamByTeamName_finds_team_if_in_list():
+    t1 = Team("Team1","player1")
+    t2 = Team("Team2","player2")
+    t3 = Team("Team3","player3")
+    teams = [t1,t2,t3]
+    assert util.findTeamByTeamName(teams,"Team1") == t1
+
+def test_findTeamByTeamName_returns_none_if_team_not_in_list():
+    t1 = Team("Team1","player1")
+    t2 = Team("Team2","player2")
+    teams = [t1,t2]
+    t3 = Team("Team3","player3")
+    with pytest.raises(Exception):
+        assert util.findTeamByTeamName(teams,"Team3") == t3
+
+    
 def test_getPlayerThatHasTeam_gets_correct_player_for_team_string():
     player1 = Player("Player1")
     player2 = Player("Player2")
@@ -50,3 +103,17 @@ def test_getPlayerThatHasTeam_returns_none_if_no_player_has_that_team():
     player3.teams = [Team("Team3","player3"),Team("Team32","player3"),Team("Team33","player3")]
     players = [player1,player2,player3]
     assert util.getPlayerThatHasTeam("Not a real team",players) == None
+    
+def test_findPlayerObjectInPlayerListFromPlayerName_finds_player_if_in_list():
+    player1 = Player("Player1")
+    player2 = Player("Player2")
+    player3 = Player("Player3")
+    players = [player1,player2,player3]
+    assert util.findPlayerObjectInPlayerListFromPlayerName("Player1",players) == player1
+    
+    
+def test_findPlayerObjectInPlayerListFromPlayerName_returns_none_if_player_not_in_list():
+    player1 = Player("Player1")
+    player2 = Player("Player2")
+    players = [player1,player2]
+    assert util.findPlayerObjectInPlayerListFromPlayerName("Player3",players) == None

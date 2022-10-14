@@ -8,8 +8,7 @@ from classes.Player import Player
 from classes.Team import Team
 import utilities.constants as const
 
-#consts
-INVALID_LETTERS = "æøå"
+
 
 #parses input into an int if possible - otherwise returns None (rather than throwing an exception)
 def parseIntOrNone(input,minValue=0,maxValue=math.inf):
@@ -23,8 +22,10 @@ def parseIntOrNone(input,minValue=0,maxValue=math.inf):
             return None
     return output
 
-#returns True if "1", 1, or "True"
+#returns True if "1", 1, or "True", otherwise ALWAYS False
 def parseBool(input):
+    if input == None:
+        return False
     if input == "True" or parseIntOrNone(input) == 1:
         return True
     else:
@@ -43,6 +44,7 @@ def parseFloatOrNone(input,minValue=0,maxValue=math.inf):
 
 #.txt files have issues reading æøå so these are simply removed when used for comparison and URL generation fx
 def removeInvalidLetters(myStr):
+    INVALID_LETTERS = "æøå"
     for letter in INVALID_LETTERS:
         if (letter in myStr.lower()):
             myStr = myStr.replace(letter,"")
@@ -82,7 +84,7 @@ def splitAndConvertToInt(inputString,seperator):
     result = []
     splittedList = inputString.split(seperator)
     for element in splittedList:
-        result.append(int(element))
+        result.append(parseIntOrNone(element))
     return result
 
 #expects input in the form 2021-08-14
