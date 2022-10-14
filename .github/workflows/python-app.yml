@@ -3,11 +3,11 @@ name: Python application
 on:
   push:
     branches: [ master ]
-    paths-ignore:
+    files_ignore:
       - 'Testing/Email_test.py'
   pull_request:
     branches: [ master ]
-    paths-ignore:
+    files_ignore:
       - 'Testing/Email_test.py'
 
 jobs:
