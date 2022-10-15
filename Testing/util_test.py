@@ -3,6 +3,7 @@ from datetime import date
 import utilities.util as util
 from classes.Player import Player
 from classes.Team import Team
+import utilities.constants as const
 
 import json
 from collections import namedtuple
@@ -81,6 +82,20 @@ def test_findTeamByTeamName_returns_none_if_team_not_in_list():
     with pytest.raises(Exception):
         assert util.findTeamByTeamName(teams,"Team3") == t3
 
+#integration test
+def test_getPlayerObjectsFromFile_returns_correct_player_objects_with_correct_data():
+    const.FERIEKASSE_NAME = "unitTests/utilTest"
+    players = util.getPlayerObjectsFromFile()
+    assert len(players) == 2
+    assert players[0].name == "player1"
+    assert len(players[0].teams) == 2
+    assert players[0].teams[0].name == "team1"
+    assert players[0].teams[1].name == "team3"
+    assert players[1].name == "player2"
+    assert len(players[1].teams) == 2
+    assert players[1].teams[0].name == "team2"
+    assert players[1].teams[1].name == "team4"
+    
     
 def test_getPlayerThatHasTeam_gets_correct_player_for_team_string():
     player1 = Player("Player1")

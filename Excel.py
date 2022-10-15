@@ -92,29 +92,28 @@ class Excel:
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close() 
      
-    
     #deletes the excel file. this is done when a game is over
     def deleteExcelFile(self):
         if (os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")):
             os.remove(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
             
-    #updates the points in the excel file for a single match
-    def updateTeamPointsInColumn(self,match,ws,column,isBonusPoints):
+    #updates the points in the excel file for a single match looking in a specific column
+    def updateTeamPointsInColumn(self,match,ws,column,isFourGoalWinRule):
         row = 2
         while True:
             cell = ws.cell(row,column)
             if cell.value == "Total:": #team not found
-                if isBonusPoints: #since the team is not necessarily found 
+                if isFourGoalWinRule: #since the team is not necessarily found 
                     return
                 raise Exception("team not found in excel file")
-            if (not isBonusPoints and (cell.value == match.homeTeam or cell.value == match.awayTeam)) or (isBonusPoints and ((match.homeTeamIsWinner and cell.value == match.homeTeam) or (not match.homeTeamIsWinner and cell.value == match.awayTeam))):
+            if (not isFourGoalWinRule and (cell.value == match.homeTeam or cell.value == match.awayTeam)) or (isFourGoalWinRule and ((match.homeTeamIsWinner and cell.value == match.homeTeam) or (not match.homeTeamIsWinner and cell.value == match.awayTeam))):
                 pointCell = ws.cell(row,column+1)
-                pointCell.value += "+" + str(match.bonusPoints if isBonusPoints else match.points)
+                pointCell.value += "+" + str(match.bonusPoints if isFourGoalWinRule else match.points)
                 break
             row += 1
             
     #Gets the total points for a player and returns that player
-    def getPlayerScoreFromExcelFile(self,player):
+    def getPlayerFromPlayerScoreFromExcelFile(self,player):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
         ws = wb.active #current worksheet
         column = 1
