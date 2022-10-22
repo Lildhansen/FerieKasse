@@ -3,6 +3,12 @@ import pytest
 from classes.Match import Match
 import utilities.constants as const
 
+def reset_constant_values():
+    const.POINTS_PER_GOAL = 5
+    const.DRAW_POINTS = 5
+    const.LOSE_POINTS = 5
+    const.INDBYRDES_MULTIPLIER = 2
+
 def test_Match_initialization_sets_up_properties_correct():
     newMatch = Match()
     assert newMatch.homeTeamIsPlayerTeam == False
@@ -33,19 +39,24 @@ def test_calculateLoss_calculates_points_correctly_based_on_score_if_game_is_a_l
 
 @pytest.mark.parametrize("test_input,expected", [(Match(None,"a",15,"b",1),80),(Match(None,"a",0,"b",1),15),(Match(None,"a",2,"b",5),25)]) 
 def test_calculateLoss_calculates_points_correctly_if_LOSE_POINT_constant_is_changed(test_input,expected):
+    reset_constant_values()
     const.LOSE_POINTS = 10
     assert test_input.calculateLoss() == expected
     
-@pytest.mark.parametrize("test_input,expected", [(Match(None,"a",15,"b",1),145),(Match(None,"a",0,"b",1),15),(Match(None,"a",2,"b",5),35)]) 
+@pytest.mark.parametrize("test_input,expected", [(Match(None,"c",15,"d",1),145),(Match(None,"c",0,"d",1),15),(Match(None,"c",2,"d",5),35)]) 
 def test_calculateLoss_calculates_points_correctly_if_POINTS_PER_GOAL_constant_is_changed(test_input,expected):
+    reset_constant_values()
     const.POINTS_PER_GOAL = 10
     assert test_input.calculateLoss() == expected
+    reset_constant_values()
 
 @pytest.mark.parametrize("test_input,expected", [(Match(None,"a",15,"b",1),155),(Match(None,"a",0,"b",1),25),(Match(None,"a",2,"b",5),45)]) 
 def test_calculateLoss_calculates_points_correctly_if_POINTS_PER_GOAL_AND_LOSE_POINTS_constants_are_changed(test_input,expected):
+    reset_constant_values()
     const.POINTS_PER_GOAL = 10
     const.LOSE_POINTS = 15
     assert test_input.calculateLoss() == expected
+    reset_constant_values()
     
 @pytest.mark.parametrize("test_input,expected", [(Match(None,"a",0,"b",0),5),(Match(None,"a",7,"b",7),5),(Match(None,"a",2,"b",5),20),(Match(None,"a",10,"b",0),55)])    
 def test_calculatePoints_calculates_points_for_matches_correctly_by_score(test_input,expected):
@@ -53,10 +64,12 @@ def test_calculatePoints_calculates_points_for_matches_correctly_by_score(test_i
     assert test_input.calculate() == expected
 
 def test_calculatePoints_calculate_draws_correctly_if_DRAW_POINTS_constant_is_changed():
+    reset_constant_values()
     const.DRAW_POINTS = 35
     match = Match(None,"a",0,"b",0)
     match.setupPointCalculation() #needs to be done - so the flags are correctly set for calculate
     assert match.calculate() == 35
+    reset_constant_values()
 
 def test_points_set_to_0_in_calculatePoints_if_player_team_won():
     homeTeamWinnerMatch = Match(None,"a",1,"b",0)
