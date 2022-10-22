@@ -78,7 +78,7 @@ class Excel:
         wb.save(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
         wb.close()
     
-    #updates the excel file. this is done when a game is in progress
+    #updates the excel file.
     def updateExcelFile(self,players):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
         ws = wb.active #current worksheet
@@ -112,8 +112,8 @@ class Excel:
                 break
             row += 1
             
-    #Gets the total points for a player and returns that player
-    def getPlayerFromPlayerScoreFromExcelFile(self,player):
+    #Sets the totalPoints variable for a player and returns that player
+    def setPlayerTotalPointsVariableAndGetPlayerFromExcelFile(self,player):
         wb = openpyxl.load_workbook(fr'data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx')
         ws = wb.active #current worksheet
         column = 1
