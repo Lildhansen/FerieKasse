@@ -8,7 +8,18 @@ from classes.Player import Player
 from classes.Team import Team
 import utilities.constants as const
 
-
+#function that return false if folder is invalid (that is consists of any of the invalid chars or does not comply with predefined rules) and true otherwise
+def folderIsValid(folderName):
+    if folderName == "" or folderName.isspace():
+        return False
+    if folderName[0] == "-":
+        print("invalid name for a feriekasse")
+        return False
+    invalidSymbols = "/\\:*?\"<>|," #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments)
+    for invalidSymbol in invalidSymbols:
+        if invalidSymbol in folderName:
+            return False
+    return True
 
 #parses input into an int if possible - otherwise returns None (rather than throwing an exception)
 def parseIntOrNone(input,minValue=0,maxValue=math.inf):

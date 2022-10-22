@@ -38,19 +38,6 @@ def setupMenuInitiation():
 def setupDefaultLatestMatchCoveredForEachLeagueFile():
     with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","wb") as file:
         file.write(orjson.dumps(const.LeagueNationsDict))
-
-#function that return false if folder is invalid (that is consists of any of the invalid chars or does not comply with predefined rules) and true otherwise
-def folderIsValid(folderName):
-    if folderName == "" or folderName.isspace():
-        return False
-    if folderName[0] == "-":
-        print("invalid name for a feriekasse")
-        return False
-    invalidSymbols = "/\\:*?\"<>|," #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments)
-    for invalidSymbol in invalidSymbols:
-        if invalidSymbol in folderName:
-            return False
-    return True
     
 #sets up the extra rules file. Prompts the user whether or not they want different constants and/or new rules, or alternatively the user can choose to have no change.
 def setupExtraRulesFile():
@@ -161,7 +148,7 @@ def initiateFerieKasse():
     if nameInput == "n":
         print("cancelled")
         quit()
-    if not folderIsValid(nameInput):
+    if not util.folderIsValid(nameInput):
         print("invalid folder name")
         quit()
     const.FERIEKASSE_NAME = nameInput.strip()

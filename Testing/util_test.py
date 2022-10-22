@@ -8,6 +8,14 @@ import utilities.constants as const
 import json
 from collections import namedtuple
 
+@pytest.mark.parametrize("test_input", [("data"),("Feriekasse..."),("123AbC")])
+def test_folderIsValid_returns_True_for_valid_folder_names(test_input):
+    assert util.folderIsValid(test_input) == True
+
+@pytest.mark.parametrize("test_input", [("a/b/c"),("a,b,c"),("/ss\\a:*xz?sad\"54<12>1|,"),(""),("    ")])
+def test_folderIsValid_returns_False_for_invalid_folder_names(test_input):
+    assert util.folderIsValid(test_input) == False
+
 def test_parseIntOrNone_parses_int_correctly():
     assert util.parseIntOrNone("100")==100
 
