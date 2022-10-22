@@ -2,6 +2,9 @@
 data/*
 !data/unitTests/
 
+#tests - generated files:
+data/unitTests/excelTest/Feriekasse.xlsx
+
 # config:
 /Email.ini
 *.ini

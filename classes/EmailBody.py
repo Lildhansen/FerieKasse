@@ -53,7 +53,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
             return False
         shuffle(players)
         for player in players:
-            player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
+            player.totalPoints = excel.setPlayerTotalPointsVariableAndGetPlayerFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
         players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
         previousPlayer = None
         for player in players:
@@ -105,7 +105,7 @@ class LosingExtraBodyPicker(ExtraBodyPicker):
         return f"{initialExpression} {self.mostPointsPlayerName} {positionDescription} med {pointDescription} {self.playerPoints} point"
     def getPlayerInformation(self,players):
         for player in players:
-            player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
+            player.totalPoints = excel.setPlayerTotalPointsVariableAndGetPlayerFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
         players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
         mostPointsPlayer = players[0]
         self.mostPointsPlayerName = mostPointsPlayer.name
@@ -132,7 +132,7 @@ class LeadingExtraBodyPicker(ExtraBodyPicker):
         return f"{initialExpression} {self.leastPointsPlayerName} {positionDescription} med {pointDescription} {self.playerPoints} point"
     def getPlayerInformation(self,players):
         for player in players:
-            player.totalPoints = excel.getPlayerScoreFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
+            player.totalPoints = excel.setPlayerTotalPointsVariableAndGetPlayerFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
         players.sort(key=lambda player: player.totalPoints) #small -> big
         leastPointsPlayer = players[0]
         self.leastPointsPlayerName = leastPointsPlayer.name
