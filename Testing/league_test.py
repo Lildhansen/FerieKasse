@@ -241,6 +241,26 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_super
     myLeague.applyMatchMultipliers(newMatch) 
     assert newMatch.points == 40    
     
+def test_applyMatchMultipliers_applies_correct_multiplier_with_changed_INDBYRDES_MULTIPLIER_constant():
+    myLeague = League("league1","country1")
+    
+    newMatch = Match()
+    team1 = Team("team1","player1")
+    team2 = Team("team2","player2")
+    newMatch.homeTeam = "team1"
+    newMatch.awayTeam = "team2"
+    newMatch.homeTeamIsPlayerTeam = True
+    newMatch.awayTeamIsPlayerTeam = True
+    newMatch.points = 30
+    
+    const.INDBYRDES_MULTIPLIER = 3
+    
+    myLeague.teams.append(team1)
+    myLeague.teams.append(team2)
+        
+    myLeague.applyMatchMultipliers(newMatch) 
+    assert newMatch.points == 90
+
 def test_findTeamByTeamName_finds_team_if_it_is_there():
     mockLeague = getMockLeagueForFindTeamTests()
     newTeam = Team("newName","newPlayer")
