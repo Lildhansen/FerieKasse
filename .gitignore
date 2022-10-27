@@ -2,12 +2,13 @@
 data/*
 !data/unitTests/
 
-#tests - generated files:
-data/unitTests/excelTest/Feriekasse.xlsx
-
 # config:
 /Email.ini
 *.ini
+
+#tests - generated files:
+data/unitTests/excelTest/Feriekasse.xlsx
+!Testing/EmailTestMocks/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
