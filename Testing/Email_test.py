@@ -38,7 +38,7 @@ def test_attachExcelFile_adds_excel_file_to_message():
     assert message.get_payload()[0].get_filename() == "feriekasse.xlsx"
 
 """
-these tests do not work with github actions:
+these tests do not work with github actions (due to them using excel2img):
 OSError: Failed to start Excel
 # def test_attachExcelFileScreenshot_adds_image_to_message():
 #     email = Email(iniFileLocation)
