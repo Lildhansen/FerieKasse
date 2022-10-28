@@ -145,6 +145,9 @@ def initiateFerieKasse():
         if nameInput.lower() == "-l":
             helperMain.listAllFeriekasser()
     #checking/validating user input
+    if nameInput.lower()[0] == "-":
+        print("invalid flag entered")
+        quit()
     if nameInput == "n":
         print("cancelled")
         quit()

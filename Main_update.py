@@ -45,7 +45,10 @@ def loadFerieKasser():
             if os.path.isdir(feriekasseDirectory):
                 feriekasser.append(feriekasse)
         return feriekasser  
-    if "," in userInput:
+    elif userInput.lower()[0] == "-":
+        print("invalid flag entered")
+        quit()
+    elif "," in userInput:
         return helperMain.handleMultipleArgumentsForFeriekasser(userInput)
         
     const.FERIEKASSE_NAME = userInput
