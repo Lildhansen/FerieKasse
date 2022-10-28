@@ -27,6 +27,9 @@ def handleRemoveFeriekasse():
                     removeFeriekasse(fr"./data/{dir}")
             print("All feriekasser has been removed")
         quit()
+    elif userInput.lower()[0] == "-":
+        print("invalid flag entered")
+        quit()
     if userInput == "n":
         print("cancelled")
         quit()
