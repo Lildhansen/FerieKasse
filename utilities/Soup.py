@@ -42,6 +42,7 @@ class Soup:
                 if not const.SKIP_POSTPONED_MATCHES: 
                     break
                 if self.matchIsPostponed(rawMatch):
+                    print(rawMatch.text)
                     continue
                 else:
                     break

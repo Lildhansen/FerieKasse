@@ -38,8 +38,11 @@ def loadFerieKasser():
         userInput = input("Which feriekasse do you want to update? (if multiple - seperate each by comma) (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) (' -sp' after a feriekasse name to skip postponed matches) (' -sp' after -a to skip postponed matches for all feriekasser): ")
         if userInput.lower() == "-l":
             helperMain.listAllFeriekasser()
-    if userInput.lower() == "-a":
-        #handle -a -sp (og hvad med -sp -a?)
+    if userInput.lower().startswith("-a"):
+        if " -sp" in userInput:
+            userInput = handleSkipPostponedMatchesFlag(userInput)
+        if userInput.lower() != "-a":
+            raise Exception("if inputting '-a', no other text than ' -sp' is allowed as well")
         feriekasser = []
         for feriekasse in os.listdir("data"):
             feriekasseDirectory = os.path.join("data", feriekasse)
@@ -57,7 +60,9 @@ def loadFerieKasser():
         print("cancelled")
         quit()
     
-    if userInput.contains("-"):
+    if "-" in userInput:
+        if not " -sp" in userInput:
+            raise Exception("Feriekasser cannot contain '-' in their name. If this was intended to be a flag, please use '-sp' to skip postponed matches")
         userInput = handleSkipPostponedMatchesFlag(userInput)
     
     const.FERIEKASSE_NAME = userInput
@@ -67,8 +72,6 @@ def loadFerieKasser():
     return [const.FERIEKASSE_NAME]
 
 def handleSkipPostponedMatchesFlag(userInput):
-    if not userInput.contains(" -sp"):
-        raise Exception("Feriekasser cannot contain '-' in their name. If this was intended to be a flag, please use a valid flag")
     const.SKIP_POSTPONED_MATCHES = True
     return userInput.removesuffix("-sp").strip() #if we remove the -sp flag and then strip the whitespace, we should get the feriekasse name, if input was valid
     
