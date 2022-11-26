@@ -34,11 +34,12 @@ def setupLinks(leagues):
 def loadFerieKasser():
     print("updating feriekasse ...")
     userInput = ""
-    while userInput == "" or userInput.lower() == "-l":
-        userInput = input("Which feriekasse do you want to update? (if multiple - seperate each by comma) (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) ")
+    while userInput == "" or userInput.lower() == "-l": #todo: implement at man kan få skipped postponed matches
+        userInput = input("Which feriekasse do you want to update? (if multiple - seperate each by comma) (n to cancel) (-a = all feriekasser) (-l = list all feriekasser) (' -sp' after a feriekasse name to skip postponed matches) (' -sp' after -a to skip postponed matches for all feriekasser): ")
         if userInput.lower() == "-l":
             helperMain.listAllFeriekasser()
     if userInput.lower() == "-a":
+        #handle -a -sp (og hvad med -sp -a?)
         feriekasser = []
         for feriekasse in os.listdir("data"):
             feriekasseDirectory = os.path.join("data", feriekasse)
@@ -51,14 +52,26 @@ def loadFerieKasser():
     elif "," in userInput:
         return helperMain.handleMultipleArgumentsForFeriekasser(userInput)
         
-    const.FERIEKASSE_NAME = userInput
     
-    if const.FERIEKASSE_NAME.lower() == "n":
+    if userInput.lower() == "n":
         print("cancelled")
         quit()
-    elif not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
+    
+    if userInput.contains("-"):
+        userInput = handleSkipPostponedMatchesFlag(userInput)
+    
+    const.FERIEKASSE_NAME = userInput
+    
+    if not os.path.exists(fr"./data/{const.FERIEKASSE_NAME}"):
         raise Exception(f"feriekasse {const.FERIEKASSE_NAME} does not exist")
     return [const.FERIEKASSE_NAME]
+
+def handleSkipPostponedMatchesFlag(userInput):
+    if not userInput.contains(" -sp"):
+        raise Exception("Feriekasser cannot contain '-' in their name. If this was intended to be a flag, please use a valid flag")
+    const.SKIP_POSTPONED_MATCHES = True
+    return userInput.removesuffix("-sp").strip() #if we remove the -sp flag and then strip the whitespace, we should get the feriekasse name, if input was valid
+    
 
 #removes the feriekasser without the proper data/files
 def removeInvalidFeriekasserToRun(feriekasser):

@@ -12,10 +12,7 @@ import utilities.constants as const
 def folderIsValid(folderName):
     if folderName == "" or folderName.isspace():
         return False
-    if folderName[0] == "-":
-        print("invalid name for a feriekasse")
-        return False
-    invalidSymbols = "/\\:*?\"<>|," #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments)
+    invalidSymbols = "/\\:*?\"<>|,-" #invalid symbols for a folder name + comma (as this is used for seperating multiple arguments) + dash (used for flags)
     for invalidSymbol in invalidSymbols:
         if invalidSymbol in folderName:
             return False
@@ -52,14 +49,6 @@ def parseFloatOrNone(input,minValue=0,maxValue=math.inf):
         if output > maxValue or output < minValue:
             return None
     return output
-
-#.txt files have issues reading æøå so these are simply removed when used for comparison and URL generation fx
-def removeInvalidLetters(myStr):
-    INVALID_LETTERS = "æøå"
-    for letter in INVALID_LETTERS:
-        if (letter in myStr.lower()):
-            myStr = myStr.replace(letter,"")
-    return myStr
         
 #for excelfile
 #number is always at least 1

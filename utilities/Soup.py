@@ -6,7 +6,7 @@ import bs4, requests
 #own libraries
 from classes.Match import Match
 import utilities.util as util
-
+import utilities.constants as const
 
 class Soup:
     def __init__(self):
@@ -35,9 +35,17 @@ class Soup:
             currentMatch = self.rawMatchToMatchObject(rawMatch)
             if currentMatch.date <= latestMatch.date: #if we have already looked at this match earlier
                 continue
-            #not sure which one it is, but if it has no score, it is in progress or havent been played (and from there on the rest of the matches are the same)
+            #not sure which one it is, but if it has no score, it is in progress or havent been played (and from there on the rest of the matches are the same (except if they have been postponed))
             elif currentMatch.homeGoals == None or currentMatch.homeGoals == "": 
-                break
+                #Although we do not know if it is a postponed match yet, 
+                # we know that it should break in all circumstances if we are not skipping postponed matches
+                if not const.SKIP_POSTPONED_MATCHES: 
+                    break
+                if self.matchIsPostponed(rawMatch):
+                    continue
+                else:
+                    break
+                
             elif currentMatch.date == date.today(): #if it is today, we don't check it
                 continue
             allMatches.append(currentMatch)
@@ -59,3 +67,12 @@ class Soup:
                     return match
                 match.homeGoals,match.awayGoals = util.splitAndConvertToInt(info.text,"–")#for some reason this is not a dash (-), but instead – (which is not a dash)
         return match
+    
+    def matchIsPostponed(self,rawMatchData):
+        print(rawMatchData)
+        for info in rawMatchData:
+            if info.get('data-stat') == "notes":
+                if info.text == "Match Postponed":
+                    return True
+        return False
+        
