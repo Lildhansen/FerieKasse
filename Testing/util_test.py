@@ -12,7 +12,7 @@ from collections import namedtuple
 def test_folderIsValid_returns_True_for_valid_folder_names(test_input):
     assert util.folderIsValid(test_input) == True
 
-@pytest.mark.parametrize("test_input", [("a/b/c"),("a,b,c"),("/ss\\a:*xz?sad\"54<12>1|,"),(""),("    ")])
+@pytest.mark.parametrize("test_input", [("a/b/c"),("a,b,c"),("/ss\\a:*xz?sad\"54<12>1|,"),(""),("    "),("a -l")])
 def test_folderIsValid_returns_False_for_invalid_folder_names(test_input):
     assert util.folderIsValid(test_input) == False
 
@@ -39,15 +39,6 @@ def test_parseBool_returns_true_if_passed_truthy_value(test_input):
 def test_parseBool_returns_false_if_passed_non_truthy_values(test_input):
     assert util.parseBool(test_input) == False
         
-@pytest.mark.parametrize("test_input,expected", [("abcædefgæ", "abcdefg"), ("123-. Hej øå 123312''", "123-. Hej  123312''"),
-                                                 ("æøå", ""),("æøåæøåæøå abc"," abc") ])
-def test_removeInvalidLetters_removes_invalid_letters(test_input,expected):
-    assert util.removeInvalidLetters(test_input) == expected
-
-def test_removeInvalidLetters_keeps_string_intact_in_no_invalid_letters():
-    validString = "Liverpool FC"
-    assert util.removeInvalidLetters(validString) == validString
-
 @pytest.mark.parametrize("test_input,expected", [(1, "A"), (26,"Z"),(27,"AA"),(53, "BA"),(14,"N"),(79,"CA"),(26*27,"ZZ")]) 
 #ZZ is max value. for 3 digits it omits one of the digits (fx AAA is AA instead) 
 # though it doesnt matter cause that many players will never play it
