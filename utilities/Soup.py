@@ -42,7 +42,6 @@ class Soup:
                 if not const.SKIP_POSTPONED_MATCHES: 
                     break
                 if self.matchIsPostponed(rawMatch):
-                    print(rawMatch.text)
                     continue
                 else:
                     break
@@ -70,7 +69,6 @@ class Soup:
         return match
     
     def matchIsPostponed(self,rawMatchData):
-        print(rawMatchData)
         for info in rawMatchData:
             if info.get('data-stat') == "notes":
                 if info.text == "Match Postponed":
