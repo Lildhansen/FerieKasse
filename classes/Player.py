@@ -12,5 +12,8 @@ class Player:
         if other == None:
             return False
         return self.name == other.name
+    def __hash__(self) -> int:
+        return hash(self.name)
+
 
 
