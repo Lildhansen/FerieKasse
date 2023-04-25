@@ -1,7 +1,8 @@
 #libraries - standard or pip
 from datetime import date
 import time
-import bs4, requests
+import bs4
+import requests
 
 #own libraries
 from classes.Match import Match
@@ -14,7 +15,7 @@ class Soup:
         self.soup = None
     #gets the content of the links and saves it in self.soup
     def getLinkContent(self,link):
-        time.sleep(2)
+        time.sleep(1)
         with requests.Session() as req:
             self.res = req.get(link)
             while self.res.status_code == 429:
@@ -22,16 +23,16 @@ class Soup:
                 time.sleep(.5)
                 self.res = req.get(link)
             self.res.raise_for_status()
-        self.soup = bs4.BeautifulSoup(self.res.text,features="lxml")
+        self.soup = bs4.BeautifulSoup(self.res.text,"html.parser")
     #takes the latest match that has been processed as input, and get all matches in that specific league between that match+1 and the last played match
     def getMatchesAfterLatestMatch(self,latestMatch):
         allMatches = []
-        for rawMatch in self.soup.findAll('tr'):
+        body = self.soup.find('tbody')
+        #this consists of a mix of matches and filler rows in the table (like headers) 
+        elementsInBody = body.find_all(recursive=False) # i think this works now
+        for rawMatch in elementsInBody:
             if len(rawMatch.text) == 0 or rawMatch.text == None:
                 continue
-            elif not rawMatch.text[0].isdigit(): 
-                continue
-            #then it is indeed a match
             currentMatch = self.rawMatchToMatchObject(rawMatch)
             if currentMatch.date <= latestMatch.date: #if we have already looked at this match earlier
                 continue
@@ -45,8 +46,7 @@ class Soup:
                     continue
                 else:
                     break
-                
-            elif currentMatch.date == date.today(): #if it is today, we don't check it
+            elif currentMatch.date == date.today(): #if it is today, we don't check it 
                 continue
             allMatches.append(currentMatch)
         return allMatches

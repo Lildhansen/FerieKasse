@@ -45,5 +45,9 @@ class Match:
         if other == None:
             return False
         return self.date == other.date and self.homeTeam == other.homeTeam
+    def __str__(self):
+        return f"{self.homeTeam} - {self.awayTeam}\n"
+    def __repr__(self):
+        return self.__str__()
 
 

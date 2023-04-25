@@ -28,7 +28,7 @@ class League:
                 match.date = datetime.date(datetime.datetime.now().year-1,7,15)
         self.soup = Soup()
         self.soup.getLinkContent(self.link)
-        self.matches = self.soup.getMatchesAfterLatestMatch(match) 
+        self.matches = self.soup.getMatchesAfterLatestMatch(match)
         self.saveLatestMatchCovered()
         self.filterMatches()
 
