@@ -23,7 +23,7 @@ def getTeams():
         table = soup.soup.find("tbody")
         for team in table.find_all("tr"):
             for column in team.find_all("td"):
-                if column.get("data-stat") == "squad" and len(column.text) > 0:
+                if column.get("data-stat") == "team" and len(column.text) > 0: #this does not work
                     teamName = column.text.strip()
                     leaguesAndTeams[league].append(teamName)
 #fjern tomme fra superliga (hul mellem mesterskabsspil og taberspil)
