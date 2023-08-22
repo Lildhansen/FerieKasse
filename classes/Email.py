@@ -4,6 +4,7 @@ from email.message import EmailMessage
 from random import shuffle
 import excel2img
 from datetime import date
+import os
 
 import utilities.constants as const
 import classes.EmailBody as EmailBody
@@ -20,7 +21,6 @@ class Email:
         self.subject = None
         self.emailBody = EmailBody #a reference to the EmailBody module
         self.__setupEmailInformationFromConfigFile(emailIniFile)
-        
     #sets the attributes of the current Email object up based on a .ini file (directory of that file is the parameter of the method)
     # this method is only called when instantiating an Email object
     def __setupEmailInformationFromConfigFile(self,emailIniFile):
@@ -57,10 +57,10 @@ class Email:
     def sendPeriodicMail(self,players):
         message = EmailMessage()
         if self.language == "english":
-            self.mailBody = f"Attached is an excel file (.xlsx) and a picture with the current standings of the feriekasse.\n"
+            self.mailBody = f"Attached is an excel file (.xlsx) and a picture with the current standings of the feriekasse.\n There is also another picture attached, which shows the standings from last time\n"
             self.subject = f"feriekassen has been updated"
         elif self.language == "danish":
-            self.mailBody = f"En excel fil (.xlsx) samt et billede med pointfordelingen for feriekassen er vedhæftet\n"
+            self.mailBody = f"En excel fil (.xlsx) samt et billede med pointfordelingen for feriekassen er vedhæftet\n Derudover er et extra billede også vedhæftet. Dette billede viser pointfordelingen sidste gang den blev sendt\n"
             self.subject = f"feriekassen er blevet opdateret"
         self.mailBody += self.getExtraBody(players)
         print("Body of the email:",self.mailBody)
@@ -81,20 +81,30 @@ class Email:
         
     
     #attach the files (that is excelfile and screenshot thereof) to the email
-    def attachFiles(self,message,excelFile,newFileName,screenshotName):
+    def attachFiles(self,message,excelFile,newFileName,screenshotDirectory):
         self.attachExcelFile(message,excelFile,newFileName)
-        self.attachExcelFileScreenshot(message,excelFile,screenshotName)
+        self.attachPreviousExcelFileScreenshot(message,screenshotDirectory,"PreviousFeriekasse.png")
+        self.attachExcelFileScreenshot(message,excelFile,screenshotDirectory,"Feriekasse.png")
         
     #attach the excel file to the email
     def attachExcelFile(self,message,excelFile,newFileName):
         with open(excelFile, 'rb') as f:
             fileData = f.read()
         message.add_attachment(fileData, maintype="application", subtype="xlsx", filename=newFileName)
-        
+    
+    def attachPreviousExcelFileScreenshot(self,message,screenshotDirectory,screenshotName):
+        if not os.path.exists(screenshotDirectory):
+            return False
+        with open(screenshotDirectory, 'rb') as f:
+            imgData = f.read()
+        message.add_attachment(imgData, maintype="image", subtype="png", filename=screenshotName)
+            
     #take screenshot of the excel file and attach it to the email
-    def attachExcelFileScreenshot(self,message,excelFile,screenshotName):
+    def attachExcelFileScreenshot(self,message,excelFile,screenshotDirectory,screenshotName):
+        if not os.path.exists(screenshotDirectory): #not sure if this would ever happen
+            return False
         excel2img.export_img(excelFile,screenshotName, "Feriekasse", None) #"Feriekasse" = sheetname
-        with open(screenshotName, 'rb') as f:
+        with open(screenshotDirectory, 'rb') as f:
             imgData = f.read()
         message.add_attachment(imgData, maintype="image", subtype="png", filename=screenshotName)
         
