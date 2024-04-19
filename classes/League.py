@@ -32,6 +32,19 @@ class League:
         self.saveLatestMatchCovered()
         self.filterMatches()
 
+    def getMatchesAfterLatestMatchForSuperliga(self,match=Match()):
+        if match.date == None:
+            if datetime.datetime.now().month > 7:
+                match.date = datetime.date(datetime.datetime.now().year,7,15)
+            else:
+                match.date = datetime.date(datetime.datetime.now().year-1,7,15)
+        self.soup = Soup()
+        self.soup.getLinkContent(self.link)
+        self.matches = self.soup.getMatchesAfterLatestMatchForSuperliga(match)
+        self.saveLatestMatchCovered()
+        self.filterMatches()
+        
+
     #saves the latest match covered for each league in the JSON file
     def saveLatestMatchCovered(self):
         if len(self.matches) == 0:

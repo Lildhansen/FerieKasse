@@ -19,7 +19,7 @@ import utilities.constants as const
 def setupLinks(leagues):
     for league in leagues:
         if league.name == "superliga":
-            league.link = "https://fbref.com/en/comps/50/schedule/Superliga-Scores-and-Fixtures"
+            league.link = "https://superstats.dk/program"
         elif league.name == "premier-league":
             league.link = "https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures"
         elif league.name == "bundesliga":
@@ -196,20 +196,28 @@ def UpdateFerieKasse():
         setupLinks(leagues)
         players = util.getPlayerObjectsFromFile()
         for league in leagues:
+            if league.name != "superliga":
+                continue
             print("working on",league.name)
             match = getLatestMatchCovered(league)
-            if match == None:
-                league.getMatchesAfterLatestMatch()
+            if league.name == "superliga": #special case for superliga, as the site does not support results for superliga anymore
+                if match == None:
+                    league.getMatchesAfterLatestMatchForSuperliga()
+                else:
+                    league.getMatchesAfterLatestMatchForSuperliga(match)
             else:
-                league.getMatchesAfterLatestMatch(match)
+                if match == None:
+                    league.getMatchesAfterLatestMatch()
+                else:
+                    league.getMatchesAfterLatestMatch(match)
             league.calculatePointsForMatches()
             league.removeMatchesYielding0Points()
             for match in league.matches:
                 assignMatchToPlayers(match,players)
-        myExcel = Excel(leagues)
-        myExcel.updateExcelFile(players)
-        if mailShouldBeSent():
-            sendPeriodicMail(players)
+        # myExcel = Excel(leagues)
+        # myExcel.updateExcelFile(players)
+        # if mailShouldBeSent():
+        #     sendPeriodicMail(players)
         
 if __name__ == "__main__":
     UpdateFerieKasse()

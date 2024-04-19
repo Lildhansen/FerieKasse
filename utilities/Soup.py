@@ -50,7 +50,57 @@ class Soup:
                 continue
             allMatches.append(currentMatch)
         return allMatches
+    
+    def getMatchesAfterLatestMatchForSuperliga(self,latestMatch):
+        allMatches = []
+        allRounds = self.soup.find_all('div',class_="box full blue multipleheader")
+        # print(f"({allRounds})")
+        for round in allRounds:
+            for match in round.find_all('tr'):
+                if match.find('th') != None and "Runde" in match.find('th').text: #it is not a match but a header for the round
+                    continue
+                #if it is the last row in the table, and thus not a match
+                th = match.find('th')
+                if th is not None and th.text.strip() == '':
+                    continue
+                currentMatch = self.rawSuperligaMatchToMatchObject(match)
+                if currentMatch.date <= latestMatch.date: #if we have already looked at this match earlier
+                    continue
+                #if it has no score, it is in progress or havent been played (and from there on the rest of the matches are the same (except if they have been postponed))
+                elif currentMatch.homeGoals == None or currentMatch.homeGoals == "": 
+                    #Although we do not know if it is a postponed match yet, 
+                    # we know that it should break in all circumstances if we are not skipping postponed matches
+                    if not const.SKIP_POSTPONED_MATCHES: 
+                        break
+                    # if self.matchIsPostponed(rawMatch): #not sure how this looks on new superliga website
+                        # continue
+                    # else:
+                    #     break
+                elif currentMatch.date == date.today(): #if it is today, we don't check it 
+                    continue
+                allMatches.append(currentMatch)
+        return allMatches
+                
+    def rawSuperligaMatchToMatchObject(self,rawMatchData):      
+        match = Match()
+        # print(rawMatchData)
+        #get all tds in this object
+        matchDetails = rawMatchData.find_all('td')
+        match.date = util.dateAndTimeToDate(matchDetails[1].text)
+        match.homeTeam,match.awayTeam = self.extractSuperLigaTeams(matchDetails[2].text)
+        score = matchDetails[3].text
+        if score.strip() == "": #if the match has not been played yet
+            return match
+        match.homeGoals,match.awayGoals = util.splitAndConvertToInt(matchDetails[3].text,"-")
+        return match
+        
 
+    def extractSuperLigaTeams(self,rawTeamData):
+        shortTeam1,shortTeam2 = rawTeamData.split("-")
+        team1 = util.extractSuperligaTeams(shortTeam1)
+        team2 = util.extractSuperligaTeams(shortTeam2)
+        return team1,team2
+    
     #Turns the data of a raw match into a match object, and returns it
     def rawMatchToMatchObject(self,rawMatchData):
         match = Match()

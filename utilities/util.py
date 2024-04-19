@@ -1,4 +1,5 @@
 from datetime import date
+import datetime
 import orjson
 import codecs
 import math
@@ -91,7 +92,44 @@ def splitAndConvertToInt(inputString,seperator):
 def textToDate(text):
     year,month,day = splitAndConvertToInt(text,"-")
     return date(year,month,day)
-    
+
+#NOT TESTED
+#expects input in the form 03/09 14.00
+def dateAndTimeToDate(dateAndTime):
+    dateAndTime = dateAndTime.strip()
+    rawDate = dateAndTime.split(" ")[0]
+    day, month = map(int, rawDate.split("/"))
+    if datetime.datetime.now().month > 7: #if we are in the first half of the season, all matches are from this year
+        year = datetime.datetime.now().year
+    else: #if we are in the final half of the season
+        if month < 7: #if the match is in the first half of the year, it is from last year
+            year = datetime.datetime.now().year-1
+        else: #if the match is in the final half of the year, it is from this year
+            year = datetime.datetime.now().year
+    return date(year,month,day)
+        
+#NOT TESTED
+#input = teams in 2/3 letter format
+def extractSuperligaTeams(shortTeamName):
+    translator = {
+        "BIF": "Brøndby",
+        "FCM": "Midtjylland",
+        "FCK": "FC Copenhagen",
+        "FCN": "Nordsjælland",
+        "AGF": "AGF",
+        "SIF": "Silkeborg",
+        "RFC": "Randers",
+        "VFF": "Viborg",
+        "OB": "Odense",
+        "LBK": "Lyngby",
+        "VB": "Vejle BK",
+        "HIF": "Hvidovre IF"
+    }
+    if shortTeamName not in translator:
+        raise ValueError(f"Unknown team: {shortTeamName}")
+    return translator[shortTeamName]
+
+
 #converts named tuple, match, into a match object and returns it - will only be called if not None
 def matchTupleToMatchObject(matchTuple):
     return Match(textToDate(matchTuple.date),matchTuple.homeTeam,matchTuple.homeGoals,matchTuple.awayTeam,matchTuple.awayGoals)
