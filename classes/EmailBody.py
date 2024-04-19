@@ -63,7 +63,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
             #value used to make the threshold scale by number of points they have rather than by a constant
             deltaThreshold = (player.totalPoints + previousPlayer.totalPoints) / 2 / const.TRAILING_PERCENTAGE_THRESHOLD #divided by 2 (since there are 2 teams)
             pointDifference = abs(player.totalPoints - previousPlayer.totalPoints)
-            if pointDifference <= deltaThreshold:
+            if pointDifference <= deltaThreshold and pointDifference != 0:
                 self.pointDifference = pointDifference
                 self.leadingPlayerName = previousPlayer.name
                 self.trailingPlayerName = player.name

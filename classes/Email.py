@@ -101,8 +101,6 @@ class Email:
             
     #take screenshot of the excel file and attach it to the email
     def attachExcelFileScreenshot(self,message,excelFile,screenshotDirectory,screenshotName):
-        if not os.path.exists(screenshotDirectory): #not sure if this would ever happen
-            return False
         excel2img.export_img(excelFile,screenshotDirectory, "Feriekasse", None) #"Feriekasse" = sheetname
         with open(screenshotDirectory, 'rb') as f:
             imgData = f.read()
