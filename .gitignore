@@ -2,6 +2,9 @@
 data/*
 !data/unitTests/
 
+#backups
+/backup/*
+
 # config:
 /Email.ini
 *.ini

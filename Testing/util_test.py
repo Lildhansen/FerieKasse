@@ -1,12 +1,14 @@
+from collections import namedtuple
+import datetime
 import pytest
 from datetime import date
 import utilities.util as util
 from classes.Player import Player
 from classes.Team import Team
 import utilities.constants as const
+from freezegun import freeze_time
 
 import json
-from collections import namedtuple
 
 @pytest.mark.parametrize("test_input", [("data"),("Feriekasse..."),("123AbC")])
 def test_folderIsValid_returns_True_for_valid_folder_names(test_input):
@@ -55,6 +57,25 @@ def test_splitAndConvertToInt_returns_correct_list(test_input,expected):
 
 def test_textToDate_converts_correctly():
     assert util.textToDate("2022-01-01") == date(2022,1,1)
+
+@freeze_time("2022-09-09")
+@pytest.mark.parametrize("test_input,expected", [("03/03 14.00",date(2022,3,3)),("10/10 14.00",date(2022,10,10))])
+def test_dateAndTimeToDate_converts_correctly_if_we_are_in_first_half_of_season(test_input,expected):
+    assert util.dateAndTimeToDate(test_input) == expected
+
+@freeze_time("2023-03-03")
+@pytest.mark.parametrize("test_input,expected", [("02/02 14.00",date(2023,2,2)),("10/10 14.00",date(2022,10,10))])
+def test_dateAndTimeToDate_converts_correctly_if_we_are_in_second_half_of_season(test_input,expected):
+    assert util.dateAndTimeToDate(test_input) == expected
+
+@pytest.mark.parametrize("test_input,expected", [("FCM","Midtjylland"),("FCK","FC Copenhagen"),("AGF","AGF"),("BIF","Brøndby"),("OB","Odense"),("FCN","Nordsjælland"),("SIF","Silkeborg"),("VB","Vejle BK")])
+def test_extractSuperligaTeams_returns_correct_teams(test_input,expected):
+    assert util.extractSuperligaTeams(test_input) == expected
+
+def test_extractSuperligaTeams_throws_error_if_team_not_in_list():
+    with pytest.raises(ValueError, match=r"Unknown team: Team1"):
+        util.extractSuperligaTeams("Team1")
+
 
 def test_matchTupleToMatchObject_gets_match_object_with_correct_data_from_tuple():
     matchJson = "{\"date\": \"2022-05-22\", \"homeTeam\": \"Chelsea\", \"homeGoals\": 2, \"awayTeam\": \"Watford\", \"awayGoals\": 1, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0}"

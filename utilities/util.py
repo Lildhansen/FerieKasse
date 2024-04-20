@@ -93,7 +93,6 @@ def textToDate(text):
     year,month,day = splitAndConvertToInt(text,"-")
     return date(year,month,day)
 
-#NOT TESTED
 #expects input in the form 03/09 14.00
 def dateAndTimeToDate(dateAndTime):
     dateAndTime = dateAndTime.strip()
@@ -102,13 +101,12 @@ def dateAndTimeToDate(dateAndTime):
     if datetime.datetime.now().month > 7: #if we are in the first half of the season, all matches are from this year
         year = datetime.datetime.now().year
     else: #if we are in the final half of the season
-        if month < 7: #if the match is in the first half of the year, it is from last year
+        if month > 7: #if the match is in the first half of the season, it is from last year
             year = datetime.datetime.now().year-1
-        else: #if the match is in the final half of the year, it is from this year
+        else: #if the match is in the final half of the season, it is from this year
             year = datetime.datetime.now().year
     return date(year,month,day)
         
-#NOT TESTED
 #input = teams in 2/3 letter format
 def extractSuperligaTeams(shortTeamName):
     translator = {
@@ -123,7 +121,7 @@ def extractSuperligaTeams(shortTeamName):
         "OB": "Odense",
         "LBK": "Lyngby",
         "VB": "Vejle BK",
-        "HIF": "Hvidovre IF"
+        "HIF": "Hvidovre IF",
     }
     if shortTeamName not in translator:
         raise ValueError(f"Unknown team: {shortTeamName}")
