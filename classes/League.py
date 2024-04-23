@@ -92,6 +92,8 @@ class League:
             self.applyMatchMultipliers(match)
             if const.FOUR_GOAL_WIN_RULE:
                 self.applyFourGoalWinBonus(match)
+            #nice debugging line if something goes wrong:
+            # print(f"{match.homeTeam} {match.homeGoals} - {match.awayGoals} {match.awayTeam} : {match.points} points")
     #apply possible multipliers for the match - if it was an "indbyrdes" match
     def applyMatchMultipliers(self,match):
         if (match.homeTeamIsPlayerTeam and match.awayTeamIsPlayerTeam): #if it is an indbyrdes match

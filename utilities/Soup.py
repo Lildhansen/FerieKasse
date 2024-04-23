@@ -74,8 +74,8 @@ class Soup:
                         break
                     # if self.matchIsPostponed(rawMatch): #not sure how this looks on new superliga website
                         # continue
-                    # else:
-                    #     break
+                    else:
+                        break
                 elif currentMatch.date == date.today(): #if it is today, we don't check it 
                     continue
                 allMatches.append(currentMatch)

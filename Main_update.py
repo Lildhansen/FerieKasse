@@ -196,8 +196,6 @@ def UpdateFerieKasse():
         setupLinks(leagues)
         players = util.getPlayerObjectsFromFile()
         for league in leagues:
-            if league.name != "superliga":
-                continue
             print("working on",league.name)
             match = getLatestMatchCovered(league)
             if league.name == "superliga": #special case for superliga, as the site does not support results for superliga anymore
@@ -214,10 +212,10 @@ def UpdateFerieKasse():
             league.removeMatchesYielding0Points()
             for match in league.matches:
                 assignMatchToPlayers(match,players)
-        # myExcel = Excel(leagues)
-        # myExcel.updateExcelFile(players)
-        # if mailShouldBeSent():
-        #     sendPeriodicMail(players)
+        myExcel = Excel(leagues)
+        myExcel.updateExcelFile(players)
+        if mailShouldBeSent():
+            sendPeriodicMail(players)
         
 if __name__ == "__main__":
     UpdateFerieKasse()
