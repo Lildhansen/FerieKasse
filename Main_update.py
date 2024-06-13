@@ -6,6 +6,7 @@ from collections import namedtuple
 import os
 import configparser
 import excel2img
+from datetime import datetime
 
 
 #own modules
@@ -19,7 +20,10 @@ import utilities.constants as const
 def setupLinks(leagues):
     for league in leagues:
         if league.name == "superliga":
-            league.link = "https://superstats.dk/program"
+            if datetime.now().month > 7:
+                league.link = f"https://superstats.dk/program?aar={datetime.now().year}%2F{datetime.now().year+1}"
+            else:
+                league.link = f"https://superstats.dk/program?aar={datetime.now().year-1}%2F{datetime.now().year}"
         elif league.name == "premier-league":
             league.link = "https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures"
         elif league.name == "bundesliga":

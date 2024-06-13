@@ -1,0 +1,7 @@
+{
+  "premier-league,england": "{\"date\": \"2023-12-28\", \"homeTeam\": \"Arsenal\", \"homeGoals\": 0, \"awayTeam\": \"West Ham\", \"awayGoals\": 2, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0, \"bonusPoints\": 0}",
+  "bundesliga,tyskland": "{\"date\": \"2023-12-20\", \"homeTeam\": \"Eint Frankfurt\", \"homeGoals\": 2, \"awayTeam\": \"M'Gladbach\", \"awayGoals\": 1, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0, \"bonusPoints\": 0}",
+  "laliga,spanien": "{\"date\": \"2023-12-23\", \"homeTeam\": \"Atl\\u00e9tico Madrid\", \"homeGoals\": 1, \"awayTeam\": \"Sevilla\", \"awayGoals\": 0, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0, \"bonusPoints\": 0}",
+  "serie-a,italien": "{\"date\": \"2023-12-30\", \"homeTeam\": \"Juventus\", \"homeGoals\": 1, \"awayTeam\": \"Roma\", \"awayGoals\": 0, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0, \"bonusPoints\": 0}",
+  "superliga,danmark": "{\"date\": \"2023-12-04\", \"homeTeam\": \"Midtjylland\", \"homeGoals\": 5, \"awayTeam\": \"Viborg\", \"awayGoals\": 1, \"homeTeamIsPlayerTeam\": false, \"awayTeamIsPlayerTeam\": false, \"homeTeamIsWinner\": null, \"draw\": false, \"points\": 0, \"bonusPoints\": 0}"
+}
