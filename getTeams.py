@@ -1,11 +1,16 @@
+import datetime
 import orjson
+from datetime import datetime
 
 from utilities.Soup import Soup
 
 leaguesAndTeams = {"premier-league,england":[],"bundesliga,tyskland":[],"laliga,spanien":[],"serie-a,italien":[],"superliga,danmark":[]}
 def getLinks(league):
     if league == "superliga,danmark":
-        return "https://fbref.com/en/comps/50/Superliga-Stats"
+            if datetime.now().month > 7:
+                return f"https://superstats.dk/program?aar={datetime.now().year}%2F{datetime.now().year+1}"
+            else:
+                return f"https://superstats.dk/program?aar={datetime.now().year-1}%2F{datetime.now().year}"
     elif league == "premier-league,england":
         return "https://fbref.com/en/comps/9/Premier-League-Stats"
     elif league == "bundesliga,tyskland":
@@ -20,6 +25,15 @@ soup = Soup()
 def getTeams():
     for league in leaguesAndTeams.keys():
         soup.getLinkContent(getLinks(league))
+        if league == "superliga,danmark":
+            table = soup.soup.find('table', {'id': 'tabel1'})
+            for row in table.find('tbody').find_all('tr'):
+                TeamName = row.find_all('td')[1]
+                if TeamName.span:
+                    TeamName.span.decompose()
+                teamName = TeamName.text.strip()
+                leaguesAndTeams[league].append(teamName)
+            continue
         table = soup.soup.find("tbody")
         for team in table.find_all("tr"):
             for column in team.find_all("td"):

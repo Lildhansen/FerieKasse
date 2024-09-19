@@ -87,19 +87,13 @@ class Soup:
         #get all tds in this object
         matchDetails = rawMatchData.find_all('td')
         match.date = util.dateAndTimeToDate(matchDetails[1].text)
-        match.homeTeam,match.awayTeam = self.extractSuperLigaTeams(matchDetails[2].text)
+        match.homeTeam,match.awayTeam = matchDetails[2].text.split("-")
         score = matchDetails[3].text
         if score.strip() == "": #if the match has not been played yet
             return match
         match.homeGoals,match.awayGoals = util.splitAndConvertToInt(matchDetails[3].text,"-")
         return match
         
-
-    def extractSuperLigaTeams(self,rawTeamData):
-        shortTeam1,shortTeam2 = rawTeamData.split("-")
-        team1 = util.extractSuperligaTeams(shortTeam1)
-        team2 = util.extractSuperligaTeams(shortTeam2)
-        return team1,team2
     
     #Turns the data of a raw match into a match object, and returns it
     def rawMatchToMatchObject(self,rawMatchData):
