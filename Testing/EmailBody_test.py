@@ -14,6 +14,8 @@ def test_TrailingExtraBodyPicker_condition_returns_true_when_player1_is_trailing
     
     players = [player1,player2]
     assert trailingBodyPicker.condition(players) == True
+    assert trailingBodyPicker.leadingPlayerName == "player1"
+    assert trailingBodyPicker.trailingPlayerName == "player2"
 
 def test_TrailingExtraBodyPicker_condition_returns_false_when_player1_is_not_trailing_player2():
     trailingBodyPicker = Emailbody.TrailingExtraBodyPicker()
@@ -64,6 +66,7 @@ def test_LeadingExtraBodyPicker_condition_is_always_true():
     
     players = [player1,player2]
     assert leadingBodyPicker.condition(players) == True
+    assert leadingBodyPicker.leastPointsPlayerName == "player1"
   
 def test_LeadingExtraBodyPicker_finds_player_with_most_points():
     leadingBodyPicker = Emailbody.LeadingExtraBodyPicker()

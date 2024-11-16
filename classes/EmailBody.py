@@ -54,7 +54,7 @@ class TrailingExtraBodyPicker(ExtraBodyPicker):
         shuffle(players)
         for player in players:
             player.totalPoints = excel.setPlayerTotalPointsVariableAndGetPlayerFromExcelFile(player).totalPoints #dont understand how this is not pass by reference
-        players.sort(key=lambda player: player.totalPoints, reverse=True) #big -> small
+        players.sort(key=lambda player: player.totalPoints) #small -> big
         previousPlayer = None
         for player in players:
             if previousPlayer == None:
