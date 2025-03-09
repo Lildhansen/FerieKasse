@@ -3,6 +3,8 @@ from datetime import date
 import time
 import bs4
 import requests
+import urllib.request
+from urllib.error import HTTPError, URLError
 
 #own libraries
 from classes.Match import Match
@@ -16,14 +18,26 @@ class Soup:
     #gets the content of the links and saves it in self.soup
     def getLinkContent(self,link):
         time.sleep(1)
-        with requests.Session() as req:
-            self.res = req.get(link)
-            while self.res.status_code == 429:
-                #time.sleep(int(self.res.headers["Retry-After"]))
-                time.sleep(.5)
-                self.res = req.get(link)
-            self.res.raise_for_status()
-        self.soup = bs4.BeautifulSoup(self.res.text,"html.parser")
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+        req = urllib.request.Request(link, headers=headers)
+        try:
+            with urllib.request.urlopen(req) as response:
+                self.res = response.read()
+                self.soup = bs4.BeautifulSoup(self.res, "html.parser")
+                # while self.res.status_code == 429:
+                #     #time.sleep(int(self.res.headers["Retry-After"]))
+                #     time.sleep(.5)
+                #     self.res = req.get(link)
+                # self.res.raise_for_status()
+            # self.soup = bs4.BeautifulSoup(self.res.text,"html.parser")
+        except HTTPError as e:
+            print(f'HTTPError: {e.code} for url: {link}')
+        except URLError as e:
+            print(f'URLError: {e.reason} for url: {link}')
+        except Exception as e:
+            print(f'Unexpected error: {e}')
+        # with requests.Session() as req:
+            # self.res = req.get(link, headers=headers)
     #takes the latest match that has been processed as input, and get all matches in that specific league between that match+1 and the last played match
     def getMatchesAfterLatestMatch(self,latestMatch):
         allMatches = []
