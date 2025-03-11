@@ -2,9 +2,9 @@
 from datetime import date
 import time
 import bs4
-import requests
 import urllib.request
 from urllib.error import HTTPError, URLError
+import re
 
 #own libraries
 from classes.Match import Match
@@ -15,6 +15,7 @@ class Soup:
     def __init__(self):
         self.res = None
         self.soup = None
+
     #gets the content of the links and saves it in self.soup
     def getLinkContent(self,link):
         time.sleep(1)
@@ -24,20 +25,13 @@ class Soup:
             with urllib.request.urlopen(req) as response:
                 self.res = response.read()
                 self.soup = bs4.BeautifulSoup(self.res, "html.parser")
-                # while self.res.status_code == 429:
-                #     #time.sleep(int(self.res.headers["Retry-After"]))
-                #     time.sleep(.5)
-                #     self.res = req.get(link)
-                # self.res.raise_for_status()
-            # self.soup = bs4.BeautifulSoup(self.res.text,"html.parser")
         except HTTPError as e:
             print(f'HTTPError: {e.code} for url: {link}')
         except URLError as e:
             print(f'URLError: {e.reason} for url: {link}')
         except Exception as e:
             print(f'Unexpected error: {e}')
-        # with requests.Session() as req:
-            # self.res = req.get(link, headers=headers)
+
     #takes the latest match that has been processed as input, and get all matches in that specific league between that match+1 and the last played match
     def getMatchesAfterLatestMatch(self,latestMatch):
         allMatches = []
@@ -68,9 +62,14 @@ class Soup:
     def getMatchesAfterLatestMatchForSuperliga(self,latestMatch):
         allMatches = []
         allRounds = self.soup.find_all('div',class_="box full blue multipleheader")
-        # print(f"({allRounds})")
         for round in allRounds:
-            for match in round.find_all('tr'):
+            if round.find('tbody') == None:
+                continue
+            round = round.find('tbody')
+            pattern = re.compile(r"<tr>.*?/>", re.DOTALL)
+            matches = pattern.findall(str(round))
+            for match in matches:
+                match = bs4.BeautifulSoup(match, "html.parser")
                 if match.find('th') != None and "Runde" in match.find('th').text: #it is not a match but a header for the round
                     continue
                 #if it is the last row in the table, and thus not a match
@@ -97,15 +96,27 @@ class Soup:
                 
     def rawSuperligaMatchToMatchObject(self,rawMatchData):      
         match = Match()
-        # print(rawMatchData)
         #get all tds in this object
         matchDetails = rawMatchData.find_all('td')
-        match.date = util.dateAndTimeToDate(matchDetails[1].text)
-        match.homeTeam,match.awayTeam = matchDetails[2].text.split("-")
-        score = matchDetails[3].text
-        if score.strip() == "": #if the match has not been played yet
-            return match
-        match.homeGoals,match.awayGoals = util.splitAndConvertToInt(matchDetails[3].text,"-")
+        for i, detail in enumerate(matchDetails):
+            #ignore first elem as we compare backwards, and seconds cause that is the weekday
+            if i == 0 or i == 1: 
+                continue
+            current = detail.text
+            prev = matchDetails[i-1].text
+            updated = prev.replace(current,"").strip()
+            #date
+            if i == 2:
+                match.date = util.dateAndTimeToDate(updated)
+            #teams
+            if i == 3:
+                match.homeTeam,match.awayTeam = updated.split("-")
+            #score
+            if i == 4:
+                #if the match has not been played yet
+                if updated.strip() == "" or updated.strip() == "Optakt":
+                    return match
+                match.homeGoals,match.awayGoals = util.splitAndConvertToInt(updated,"-")
         return match
         
     

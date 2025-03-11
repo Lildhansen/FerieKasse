@@ -45,22 +45,23 @@ class League:
         self.filterMatches()
         
 
-    #saves the latest match covered for each league in the JSON file
+    #saves the latest match covered for each league in a temporary json file (which will later replace the latestMatchCovered file)
     def saveLatestMatchCovered(self):
         if len(self.matches) == 0:
             return
         latestMatch = copy.deepcopy(self.matches[-1])
         latestMatch.date = latestMatch.date.isoformat()
-        latestMatchJSON = json.dumps(latestMatch,cls=Encoder)
-        #reading
-        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","r") as file:
+        latestMatchJSON = json.dumps(latestMatch, cls=Encoder)
+
+        # reading
+        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json", "r") as file:
             leaguesAndCountries = json.load(file)
-        
-        leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON  
-        
-        #writing  
-        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","w") as file:
-            json.dump(leaguesAndCountries,file)
+    
+        leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON
+    
+        # writing
+        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json", "w") as file:
+            json.dump(leaguesAndCountries, file)
         
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):

@@ -184,6 +184,19 @@ def sendPeriodicMail(players):
     email.sendPeriodicMail(players)
     email.updateLastMailSentValue(fr"data/{const.FERIEKASSE_NAME}/email.ini")
 
+#updates the latestMatchCovered file by replacing it with the one altered by the leagues when running the application
+def updateLatestMatchCovered():
+    oldLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCoveredToUpdate.json")
+    newLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCovered.json")
+    
+    # Remove the existing latestMatchCovered.json file
+    if os.path.exists(oldLatestMatchCovered):
+        os.remove(oldLatestMatchCovered)
+    
+    # Rename latestMatchCoveredToUpdate.json to latestMatchCovered.json
+    os.rename(newLatestMatchCovered, oldLatestMatchCovered)
+    
+
 #the main function of the file - updates an or multiple feriekasser
 def UpdateFerieKasse():
     feriekasser = loadFerieKasser()
@@ -203,6 +216,7 @@ def UpdateFerieKasse():
             print("working on",league.name)
             match = getLatestMatchCovered(league)
             if league.name == "superliga": #special case for superliga, as the site does not support results for superliga anymore
+                # continue
                 if match == None:
                     league.getMatchesAfterLatestMatchForSuperliga()
                 else:
@@ -220,6 +234,7 @@ def UpdateFerieKasse():
         myExcel.updateExcelFile(players)
         if mailShouldBeSent():
             sendPeriodicMail(players)
+        updateLatestMatchCovered()
         
 if __name__ == "__main__":
     UpdateFerieKasse()
