@@ -101,7 +101,7 @@ def dateAndTimeToDate(dateAndTime):
     if datetime.datetime.now().month > 7: #if we are in the first half of the season, all matches are from this year
         year = datetime.datetime.now().year
     else: #if we are in the final half of the season
-        if month > 7: #if the match is in the first half of the season, it is from last year
+        if month >= 7: #if the match is in the first half of the season, it is from last year
             year = datetime.datetime.now().year-1
         else: #if the match is in the final half of the season, it is from this year
             year = datetime.datetime.now().year
