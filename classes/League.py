@@ -4,6 +4,7 @@ import datetime
 import json
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 import copy
+import os
 
 #own libraries
 from classes.Match import Match
@@ -54,15 +55,20 @@ class League:
         latestMatchJSON = json.dumps(latestMatch, cls=Encoder)
 
         # reading
-        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json", "r") as file:
-            leaguesAndCountries = json.load(file)
-    
+        leaguesAndCountries = {}
+        if os.path.exists(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json"):
+            with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json", "r") as file:
+                leaguesAndCountries = json.load(file)
+
+        # updating
         leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON
-    
-        # writing
+
+        # Writing
         with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json", "w") as file:
             json.dump(leaguesAndCountries, file)
-        
+
+
+
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
         originalMatchList = self.matches.copy() #creates a copy of the list as to no alter the list mid-loop

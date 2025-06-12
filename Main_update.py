@@ -51,6 +51,8 @@ def loadFerieKasser():
         for feriekasse in os.listdir("data"):
             feriekasseDirectory = os.path.join("data", feriekasse)
             if os.path.isdir(feriekasseDirectory):
+                if (feriekasse == "unitTests"):
+                    continue
                 feriekasser.append(feriekasse)
         return feriekasser  
     elif userInput.lower()[0] == "-":
@@ -186,8 +188,10 @@ def sendPeriodicMail(players):
 
 #updates the latestMatchCovered file by replacing it with the one altered by the leagues when running the application
 def updateLatestMatchCovered():
-    oldLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCoveredToUpdate.json")
-    newLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCovered.json")
+    oldLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCovered.json")
+    newLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCoveredToUpdate.json")
+
+    
     
     # Remove the existing latestMatchCovered.json file
     if os.path.exists(oldLatestMatchCovered):
