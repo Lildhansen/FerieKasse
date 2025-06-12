@@ -24,6 +24,8 @@ def getAllLeagues():
 def listAllFeriekasser():
     for feriekasse in os.listdir("data"):
         feriekasseDirectory = os.path.join("data", feriekasse)
+        if "test" in feriekasse:
+            continue
         if os.path.isdir(feriekasseDirectory):
             print(feriekasse)
             
