@@ -191,15 +191,29 @@ def updateLatestMatchCovered():
     oldLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCovered.json")
     newLatestMatchCovered = os.path.join("data", const.FERIEKASSE_NAME, "latestMatchCoveredToUpdate.json")
 
-    
-    
-    # Remove the existing latestMatchCovered.json file
+    # Load old JSON (if it exists)
     if os.path.exists(oldLatestMatchCovered):
-        os.remove(oldLatestMatchCovered)
-    
-    # Rename latestMatchCoveredToUpdate.json to latestMatchCovered.json
-    os.rename(newLatestMatchCovered, oldLatestMatchCovered)
-    
+        with open(oldLatestMatchCovered, "r", encoding="utf-8") as f:
+            old_data = json.load(f)
+    else:
+        old_data = {}
+
+    # Load new JSON
+    if os.path.exists(newLatestMatchCovered):
+        with open(newLatestMatchCovered, "r", encoding="utf-8") as f:
+            new_data = json.load(f)
+    else:
+        raise FileNotFoundError(f"{newLatestMatchCovered} does not exist")
+
+    # Update old data with new data
+    old_data.update(new_data)
+
+    # Save merged JSON back to oldLatestMatchCovered
+    with open(oldLatestMatchCovered, "w", encoding="utf-8") as f:
+        json.dump(old_data, f, ensure_ascii=False)
+
+    # remove the temp file
+    os.remove(newLatestMatchCovered)
 
 #the main function of the file - updates an or multiple feriekasser
 def UpdateFerieKasse():
