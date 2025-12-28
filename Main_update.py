@@ -203,7 +203,7 @@ def updateLatestMatchCovered():
         with open(newLatestMatchCovered, "r", encoding="utf-8") as f:
             new_data = json.load(f)
     else:
-        raise FileNotFoundError(f"{newLatestMatchCovered} does not exist")
+        new_data = {}
 
     # Update old data with new data
     old_data.update(new_data)
@@ -213,7 +213,8 @@ def updateLatestMatchCovered():
         json.dump(old_data, f, ensure_ascii=False)
 
     # remove the temp file
-    os.remove(newLatestMatchCovered)
+    if os.path.exists(newLatestMatchCovered):
+        os.remove(newLatestMatchCovered)
 
 #the main function of the file - updates an or multiple feriekasser
 def UpdateFerieKasse():
