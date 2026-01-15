@@ -110,6 +110,7 @@ class Email:
     def connectToSmtpAndSendMail(self,message):
         smtp = smtplib.SMTP_SSL(self.server)
         smtp.connect(self.server,self.port)
+        smtp.ehlo("localhost")   # 👈 FORCE ASCII hostname
         smtp.login(self.sender,self.password)
         smtp.sendmail(to_addrs=self.receivers,msg=message.as_string(),from_addr=self.sender)
         smtp.quit()

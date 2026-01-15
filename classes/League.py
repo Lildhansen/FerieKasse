@@ -5,6 +5,7 @@ import json
 from classes.myJsonEncoder import MyJsonEncoder as Encoder
 import copy
 import os
+import requests
 
 #own libraries
 from classes.Match import Match
@@ -13,9 +14,9 @@ import utilities.constants as const
 import utilities.util as util
 
 class League:
-    def __init__(self,name,country):
-        self.name = name
-        self.country = country.lower()
+    def __init__(self,name):
+        self.name = name #the espn name of the league
+        self.prettyName = const.ESPN_LEAGUE_NAME_TO_PRETTY_LEAGUE_NAME[name]
         self.soup = None
         self.teams = []
         self.matches = []
@@ -33,41 +34,42 @@ class League:
         self.saveLatestMatchCovered()
         self.filterMatches()
 
-    def getMatchesAfterLatestMatchForSuperliga(self,match=Match()):
-        if match.date == None:
-            if datetime.datetime.now().month > 7:
-                match.date = datetime.date(datetime.datetime.now().year,7,15)
-            else:
-                match.date = datetime.date(datetime.datetime.now().year-1,7,15)
-        self.soup = Soup()
-        self.soup.getLinkContent(self.link)
-        self.matches = self.soup.getMatchesAfterLatestMatchForSuperliga(match)
-        self.saveLatestMatchCovered()
+    def getMatchesBetweenDates(self, fromDate, toDate):
+        if fromDate == None:
+            if toDate.month > 7: #if we are in the first half of the season we must get all matches from this year till now
+                fromDate = datetime.date(toDate.year,7,15)
+            else: #if we are in the final half of the season, we must get all matches from last year's season start till now
+                fromDate = datetime.date(toDate.year-1,7,15)
+        while fromDate <= toDate:
+            self.matches.extend(self.getMatchesOnDate(fromDate))
+            fromDate += datetime.timedelta(days=1)
         self.filterMatches()
-        
 
-    #saves the latest match covered for each league in a temporary json file (which will later replace the latestMatchCovered file)
-    def saveLatestMatchCovered(self):
-        if len(self.matches) == 0:
-            return
-        latestMatch = copy.deepcopy(self.matches[-1])
-        latestMatch.date = latestMatch.date.isoformat()
-        latestMatchJSON = json.dumps(latestMatch, cls=Encoder)
+    def getMatchesOnDate(self, date):
+        matches = []
+        date_str = date.strftime('%Y%m%d')
+        url = f"https://site.api.espn.com/apis/site/v2/sports/soccer/{self.name}/scoreboard?dates={date_str}"
+        resp = requests.get(url)
+        data = resp.json()
+        for event in data.get("events", []):
+            
+            competition = event["competitions"][0]
+            if competition["status"]["type"]["state"] != "post":
+                print("Skipping non-completed match")
+                continue
 
-        # reading
-        leaguesAndCountries = {}
-        if os.path.exists(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json"):
-            with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json", "r") as file:
-                leaguesAndCountries = json.load(file)
-
-        # updating
-        leaguesAndCountries[f"{self.name},{self.country}"] = latestMatchJSON
-
-        # Writing
-        with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCoveredToUpdate.json", "w") as file:
-            json.dump(leaguesAndCountries, file)
-
-
+            
+            home = competition["competitors"][0]
+            away = competition["competitors"][1]
+            match = Match(
+                date=date,
+                homeTeam=home['team']['displayName'],
+                homeGoals=int(home['score']),
+                awayTeam=away['team']['displayName'],
+                awayGoals=int(away['score'])
+            )
+            matches.append(match)
+        return matches
 
     #removes the matches that does not involve any of the teams (that is players' teams) in that league,
     def filterMatches(self):
@@ -83,6 +85,7 @@ class League:
                     TeamInMatch = True
                 continue #needs to go all the way through the list (even if one team is player team) - to make sure we check for if both teams are player teams
             if not TeamInMatch:
+                print(f"removing match {match.homeTeam} vs {match.awayTeam} as no player teams are involved")
                 self.matches.remove(match)
     #remove matches, where the losing team is not one of the players' teams
     def removeMatchesYielding0Points(self):

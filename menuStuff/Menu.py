@@ -8,10 +8,6 @@ import copy
 
 import utilities.constants as const
 
-#todo
-
-
-        
 
 class Menu:
     def __init__(self,players,title):
@@ -68,11 +64,10 @@ class Menu:
         self.printOptions()
     #Return the title of an option (in a prettier format)
     def getOptionTitle(self,league):
-        leagueList = league.split(",")
-        return leagueList[0] + "(" + leagueList[1] +")"
+        return const.ESPN_LEAGUE_NAME_TO_PRETTY_LEAGUE_NAME[league]
     #does the reverse of getOptionTitle - returns a string of the form "team,player"
     def unGetOptionTitle(self,league):
-        return league.replace("(",",").replace(")","")
+        return const.PRETTY_LEAGUE_NAME_TO_ESPN_LEAGUE_NAME[league]
     #Gets input from the user, and calls the appropriate functions based on key press
     def readInput(self):
         i = 0
