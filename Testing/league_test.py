@@ -7,7 +7,7 @@ import datetime
 import utilities.util as util
 
 def getMockLeagueForFindTeamTests():
-    mockLeague = League("testName","testCountry")
+    mockLeague = League("eng.1")
     mockLeague.teams.append(Team("name1","player1"))
     mockLeague.teams.append(Team("name2","player2"))
     mockLeague.teams.append(Team("name3","player3"))
@@ -16,7 +16,7 @@ def getMockLeagueForFindTeamTests():
     return mockLeague
 
 def test_filterMatches_filters_matches_not_involving_player_teams():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     
     match1 = Match()
     match1.awayTeam = "team1"
@@ -46,7 +46,7 @@ def test_filterMatches_filters_matches_not_involving_player_teams():
     assert myLeague.matches == [match1,match2,match3]
 
 def test_calculatePointsForMatches_calculates_points_correctly():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     match1 = Match(None,"team1",1,"team2",1)
     match1.homeTeamIsPlayerTeam = True
     match1.awayTeamIsPlayerTeam = True
@@ -73,7 +73,7 @@ def test_calculatePointsForMatches_calculates_points_correctly():
 
 def test_calculatePointsForMatches_calculates_bonus_points_correctly_for_4_goal_win_rule():
     const.FOUR_GOAL_WIN_RULE = True
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     match1 = Match(None,"team1",4,"team2",0)
     match1.homeTeamIsPlayerTeam = True
     match1.awayTeamIsPlayerTeam = True
@@ -104,7 +104,7 @@ def test_calculatePointsForMatches_calculates_bonus_points_correctly_for_4_goal_
 
 
 def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_player_team():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     
     newMatch = Match()
     team1 = Team("team1","player1")
@@ -122,7 +122,7 @@ def test_applyMatchMultipliers_applies_no_multipliers_if_only_1_teams_is_a_playe
     assert newMatch.points == 20
 
 def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_same_player():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     
     newMatch = Match()
     team1 = Team("team1","player1")
@@ -140,7 +140,7 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_same
     assert newMatch.points == 0
 
 def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_different_player():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     
     newMatch = Match()
     team1 = Team("team1","player1")
@@ -158,7 +158,7 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_both_teams_of_diff
     assert newMatch.points == 40
 
 def test_applyMatchMultipliers_applies_correct_multiplier_for_draw_for_superliga_slutspil():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     myLeague.name = "superliga"
     
     newMatch = Match()
@@ -179,7 +179,7 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_draw_for_superliga
     assert newMatch.points == 10
     
 def test_applyMatchMultipliers_applies_correct_multiplier_for_away_win_for_superliga_slutspil():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     myLeague.name = "superliga"
     
     newMatch = Match()
@@ -200,7 +200,7 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_away_win_for_super
     assert newMatch.points == 40
 
 def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_superliga_slutspil():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     myLeague.name = "superliga"
     
     newMatch = Match()
@@ -221,7 +221,7 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_super
     assert newMatch.points == 20    
     
 def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_superliga_grundspil():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     myLeague.name = "superliga"
     
     newMatch = Match()
@@ -242,7 +242,7 @@ def test_applyMatchMultipliers_applies_correct_multiplier_for_home_win_for_super
     assert newMatch.points == 40    
     
 def test_applyMatchMultipliers_applies_correct_multiplier_with_changed_INDBYRDES_MULTIPLIER_constant():
-    myLeague = League("league1","country1")
+    myLeague = League("eng.1")
     
     newMatch = Match()
     team1 = Team("team1","player1")
@@ -272,3 +272,62 @@ def test_findTeamByTeamName_raises_exception_if_team_is_not_there():
     newTeamNotThere = Team("raise","exception")
     with pytest.raises(Exception):
         util.findTeamByTeamName(mockLeague.teams,newTeamNotThere.name) == newTeamNotThere
+
+def test_getMatchesOnDate_returns_matches_on_date():
+    from datetime import date
+    
+    myLeague = League("eng.1")
+    testDate = date(2025,12,27)
+    
+    matches = myLeague.getMatchesOnDate(testDate)
+    
+    assert len(matches) == 7
+    
+    # Match 1: Nott'ham Forest 1–2 Manchester City
+    assert matches[0].date == testDate
+    assert matches[0].homeTeam == "Nottingham Forest"
+    assert matches[0].homeGoals == 1
+    assert matches[0].awayTeam == "Manchester City"
+    assert matches[0].awayGoals == 2
+
+    # Match 2: Arsenal 2–1 Brighton
+    assert matches[1].date == testDate
+    assert matches[1].homeTeam == "Arsenal"
+    assert matches[1].homeGoals == 2
+    assert matches[1].awayTeam == "Brighton & Hove Albion"
+    assert matches[1].awayGoals == 1
+
+    # Match 3: Brentford 4–1 Bournemouth
+    assert matches[2].date == testDate
+    assert matches[2].homeTeam == "Brentford"
+    assert matches[2].homeGoals == 4
+    assert matches[2].awayTeam == "AFC Bournemouth"
+    assert matches[2].awayGoals == 1
+
+    # Match 4: Burnley 0–0 Everton
+    assert matches[3].date == testDate
+    assert matches[3].homeTeam == "Burnley"
+    assert matches[3].homeGoals == 0
+    assert matches[3].awayTeam == "Everton"
+    assert matches[3].awayGoals == 0
+
+    # Match 5: Liverpool 2–1 Wolves
+    assert matches[4].date == testDate
+    assert matches[4].homeTeam == "Liverpool"
+    assert matches[4].homeGoals == 2
+    assert matches[4].awayTeam == "Wolverhampton Wanderers"
+    assert matches[4].awayGoals == 1
+
+    # Match 6: West Ham 0–1 Fulham
+    assert matches[5].date == testDate
+    assert matches[5].homeTeam == "West Ham United"
+    assert matches[5].homeGoals == 0
+    assert matches[5].awayTeam == "Fulham"
+    assert matches[5].awayGoals == 1
+
+    # Match 7: Chelsea 1–2 Aston Villa
+    assert matches[6].date == testDate
+    assert matches[6].homeTeam == "Chelsea"
+    assert matches[6].homeGoals == 1
+    assert matches[6].awayTeam == "Aston Villa"
+    assert matches[6].awayGoals == 2

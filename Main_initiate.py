@@ -34,11 +34,12 @@ def setupMenuInitiation():
     myMenu.run()
     myMenu.saveInJson()
 
-#sets up the default latest match covered file for each league - that is no match at all
-def setupDefaultLatestMatchCoveredForEachLeagueFile():
-    with codecs.open(fr"./data/{const.FERIEKASSE_NAME}/latestMatchCovered.json","wb") as file:
-        file.write(orjson.dumps(const.LeagueNationsDict))
-    
+
+
+#create empty file for latest date covered
+def setupDefaultLatestDateCoveredFile():
+    open(fr"./data/{const.FERIEKASSE_NAME}/latestDateCovered.txt","w").close()
+
 #sets up the extra rules file. Prompts the user whether or not they want different constants and/or new rules, or alternatively the user can choose to have no change.
 def setupExtraRulesFile():
     extraRulesDictionary = {}
@@ -176,7 +177,7 @@ def initiateFerieKasse():
         leagues = helperMain.getAllLeagues()
         myExcel = Excel(leagues)
         myExcel.setupExcelFile()
-        setupDefaultLatestMatchCoveredForEachLeagueFile()
+        setupDefaultLatestDateCoveredFile()
         print("successfully started feriekasse:",const.FERIEKASSE_NAME)
     #completes the setup if the user has added the folder themselves - and then added the leaguesAndTeams.json file
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
@@ -184,10 +185,8 @@ def initiateFerieKasse():
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx"):
         myExcel = Excel(leagues)
         myExcel.setupExcelFile()
-    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/latestMatchCovered.json"):
-        setupDefaultLatestMatchCoveredForEachLeagueFile()
-    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/extraRules.json"):
-        setupExtraRulesFile()
+    if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/latestDateCovered.txt"):
+        setupDefaultLatestDateCoveredFile()
     if not os.path.isfile(fr"data/{const.FERIEKASSE_NAME}/Email.ini"):
         setupEmailIniFile()
     config = configparser.ConfigParser()

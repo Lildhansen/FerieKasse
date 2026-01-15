@@ -1,9 +1,9 @@
 SEARCH_BAR_ICON = "#search-window"
-LeagueNationsDict = {"premier-league,england": {},
-    "bundesliga,tyskland": {},
-    "laliga,spanien": {},
-    "serie-a,italien": {},
-    "superliga,danmark": {}}
+LeagueNationsDict = {"eng.1": {},
+    "ger.1": {},
+    "esp.1": {},
+    "ita.1": {},
+    "den.1": {}}
 global POINTS_PER_GOAL
 POINTS_PER_GOAL = 5
 global DRAW_POINTS
@@ -31,3 +31,19 @@ SEND_MAIL_INTERVAL_DAYS = 14
 TRAILING_PERCENTAGE_THRESHOLD = 10 #as in, in order for 2 players to be trailing each other there must be no more than 10% point difference
 
 AVAILABLE_COLORS = ["ff0000","00ff00","0000ff","ff9933","000000","ff00ff"]
+
+ESPN_LEAGUE_NAME_TO_PRETTY_LEAGUE_NAME = {
+    "eng.1":"Premier League (England)",
+    "ger.1":"Bundesliga (Germany)",
+    "esp.1":"La Liga (Spain)",
+    "ita.1":"Serie A (Italy)",
+    "den.1":"Superliga (Denmark)"
+    }
+
+PRETTY_LEAGUE_NAME_TO_ESPN_LEAGUE_NAME = {
+    "Premier League (England)":"eng.1",
+    "Bundesliga (Germany)":"ger.1",
+    "La Liga (Spain)":"esp.1",
+    "Serie A (Italy)":"ita.1",
+    "Superliga (Denmark)":"den.1"
+}

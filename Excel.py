@@ -65,7 +65,7 @@ class Excel:
             column += 1
         for league in self.leagues:
             row += 1
-            ws.cell(row,column,league.name)
+            ws.cell(row,column,league.prettyName)
             ws[f"{util.numberToExcelColumn(column)}{row}"].font = Font(color=Color(self.leaguesAndColors[league.name]))
         
         #set widths:

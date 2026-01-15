@@ -11,11 +11,10 @@ def getAllLeagues():
     leagues = []
     file = codecs.open(fr"./data/{const.FERIEKASSE_NAME}/leaguesAndTeams.json","r",encoding='UTF-8')
     jsonData = orjson.loads(file.read())
-    for leagueAndCountry in jsonData:
-        league,country = leagueAndCountry.split(",")
-        league = League(league,country)
-        for teamName in jsonData[leagueAndCountry]:
-            player = jsonData[leagueAndCountry][teamName]
+    for leagueName in jsonData:
+        league = League(leagueName)
+        for teamName in jsonData[leagueName]:
+            player = jsonData[leagueName][teamName]
             league.teams.append(Team(teamName,player,league.name))
         leagues.append(league)
     return leagues

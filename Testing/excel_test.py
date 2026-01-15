@@ -11,9 +11,9 @@ def setupMockExcelFile():
     const.FERIEKASSE_NAME = "unitTests/excelTest"
     if os.path.exists(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx"):
         os.remove(fr"data/{const.FERIEKASSE_NAME}/Feriekasse.xlsx")
-    league1 = League("league1","country1")
-    league2 = League("league2","country2")
-    league3 = League("league3","country3")
+    league1 = League("eng.1")
+    league2 = League("den.1")
+    league3 = League("esp.1")
     return Excel([league1,league2,league3])
 
 def changeValuesForGetXXXScoreTeamAndReturnExcel():
@@ -43,9 +43,10 @@ def changeValuesForGetXXXScoreTeamAndReturnExcel():
 
 def test_excel_init_adds_colors_to_leagues():
     excel = setupMockExcelFile()
-    assert excel.leaguesAndColors["league1"] != None
-    assert excel.leaguesAndColors["league2"] != None
-    assert excel.leaguesAndColors["league3"] != None
+    print(excel.leaguesAndColors)
+    assert excel.leaguesAndColors["eng.1"] != None
+    assert excel.leaguesAndColors["den.1"] != None
+    assert excel.leaguesAndColors["esp.1"] != None
 
 def test_excel_file_can_be_deleted():
     excel = setupMockExcelFile()

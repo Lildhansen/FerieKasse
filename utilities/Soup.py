@@ -32,7 +32,7 @@ class Soup:
         except Exception as e:
             print(f'Unexpected error: {e}')
 
-    #takes the latest match that has been processed as input, and get all matches in that specific league between that match+1 and the last played match
+    #takes the latest match that has been processed as input, and get all match es in that specific league between that match+1 and the last played match
     def getMatchesAfterLatestMatch(self,latestMatch):
         allMatches = []
         body = self.soup.find('tbody')
@@ -58,7 +58,9 @@ class Soup:
                 continue
             allMatches.append(currentMatch)
         return allMatches
-    
+
+
+
     def getMatchesAfterLatestMatchForSuperliga(self,latestMatch):
         allMatches = []
         allRounds = self.soup.find_all('div',class_="box full blue multipleheader")
